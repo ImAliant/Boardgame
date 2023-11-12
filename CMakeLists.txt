@@ -12,6 +12,7 @@ set(SOURCES
     src/CheckersGame.cpp
     src/CheckersRules.cpp
     src/exception/FontNotFoundException.cpp
+    src/Menu.cpp
     # Add other source files here
 )
 
