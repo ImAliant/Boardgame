@@ -17,12 +17,12 @@ void launchCheckersGame() {
 void handleClickOnText(const Text& game, const Event& event, GameType gameType)
 {
     if (event.type == Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-        // Check if the mouse click is within the bounds of the text
+        // Verifie si le clic est sur le texte
         FloatRect textBounds = game.getGlobalBounds();
         auto mousePos = sf::Vector2f(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
         
         if (textBounds.contains(mousePos)) {
-            // Display a message in the console when the text is clicked
+            // Affiche le jeu correspondant
             switch (gameType) {
                 case GameType::Checkers:
                     cout << "Checkers" << endl;
@@ -80,7 +80,7 @@ void windowLoop(RenderWindow& window, const Text &titreFenetre, const vector<std
 
 int main()
 {
-    auto window = createWindow();
+    /*auto window = createWindow();
 
     Font font;
     try {
@@ -106,7 +106,7 @@ int main()
         offset += 50.0f;
     }
 
-    windowLoop(*window, titreFenetre, jeux);
+    windowLoop(*window, titreFenetre, jeux);*/
 
     return EXIT_SUCCESS;
 }
