@@ -1,0 +1,5 @@
+/home/alexandre/Projet/diamant-hamdi-cpp-boardgames/build/CMakeFiles/boardgame.dir
+/home/alexandre/Projet/diamant-hamdi-cpp-boardgames/build/CMakeFiles/package.dir
+/home/alexandre/Projet/diamant-hamdi-cpp-boardgames/build/CMakeFiles/package_source.dir
+/home/alexandre/Projet/diamant-hamdi-cpp-boardgames/build/CMakeFiles/edit_cache.dir
+/home/alexandre/Projet/diamant-hamdi-cpp-boardgames/build/CMakeFiles/rebuild_cache.dir

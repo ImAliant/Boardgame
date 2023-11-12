@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-g++"
+	BuildStamp="20231111-1407-Experimental"
+	Name="alexandre-VivoBook-ASUSLaptop-X509FA-X509FA"
+	Generator="ctest-3.27.7"
+	CompilerName="/usr/bin/g++"
+	CompilerVersion="11.4.0"
+	OSName="Linux"
+	Hostname="alexandre-VivoBook-ASUSLaptop-X509FA-X509FA"
+	OSRelease="6.2.0-36-generic"
+	OSVersion="#37~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Oct  9 15:34:04 UTC 2"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="142"
+	ProcessorCacheSize="6144"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="4"
+	TotalVirtualMemory="2047"
+	TotalPhysicalMemory="7783"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="1199.99"
+	>
+	<Testing>
+		<StartDateTime>Nov 12 00:49 CET</StartDateTime>
+		<StartTestTime>1699746580</StartTestTime>
+		<TestList/>
+		<EndDateTime>Nov 12 00:49 CET</EndDateTime>
+		<EndTestTime>1699746580</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
