@@ -1,5 +1,6 @@
 #include "../include/Menu.hpp"
 #include "../include/FontNotFoundException.hpp"
+#include "../include/GameTypeNotFoundException.hpp"
 #include "../include/CheckersGame.hpp"
 
 #include <iostream>
@@ -32,14 +33,14 @@ void Menu::windowLoop()
                 window.close();
 
             for (auto const &game : jeux)
-                handleClickOnText(game.first, event, game.second);
+                handleClickOnText(game, event);
         }
 
         display();
     }
 }
 
-void Menu::handleClickOnText(const sf::Text& game, const sf::Event& event, GameType gameType) const
+void Menu::handleClickOnText(const TextGame& game, const sf::Event& event) const
 {
     bool isButtonPressed = event.type == sf::Event::MouseButtonPressed;
     bool isMouseLeft = event.mouseButton.button == sf::Mouse::Left;
@@ -47,28 +48,22 @@ void Menu::handleClickOnText(const sf::Text& game, const sf::Event& event, GameT
     
     if (isMouseLeftButtonPressed)
     {
-        sf::FloatRect textBounds = game.getGlobalBounds();
+        sf::FloatRect textBounds = game.text.getGlobalBounds();
         auto x = static_cast<float>(event.mouseButton.x);
         auto y = static_cast<float>(event.mouseButton.y);
         auto mousePos = sf::Vector2f(x, y);
 
         if (textBounds.contains(mousePos))
         {
-            switch (gameType) 
-            {
-                case GameType::Checkers:
-                    cout << "Checkers" << endl;
-                    launchGame(gameType);
-                    break;
-                case GameType::Jeu2:
-                    cout << "Jeu 2" << endl;
-                    launchGame(gameType);
-                    break;
-                case GameType::Jeu3:
-                    cout << "Jeu 3" << endl;
-                    launchGame(gameType);
-                    break;
-            }
+            if (game.gameType == GameType::Checkers)
+                cout << "Checkers" << endl;
+            else if (game.gameType == GameType::Jeu2)
+                cout << "Jeu2" << endl;
+            else if (game.gameType == GameType::Jeu3)
+                cout << "Jeu3" << endl;
+            else throw GameTypeNotFoundException("GameType not found !");
+
+            launchGame(game.gameType);
         }
     }
 }
@@ -107,14 +102,14 @@ void Menu::loadTexts()
     titreFenetre.setString("BoardGame");
     initializeText(titreFenetre, sf::Color::White, _TITLE_TEXT_SIZE, (static_cast<float>(window.getSize().x) - titreFenetre.getGlobalBounds().width) / 2, 10);
     
-    jeux[0].first.setString("Jeu 1");
-    initializeText(jeux[0].first, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[0].first.getGlobalBounds().width) / 2, 50);
+    jeux[0].text.setString("Les Dames");
+    initializeText(jeux[0].text, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[0].text.getGlobalBounds().width) / 2, 50);
     
-    jeux[1].first.setString("Jeu 2");
-    initializeText(jeux[1].first, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[1].first.getGlobalBounds().width) / 2, 80);
+    jeux[1].text.setString("Jeu 2");
+    initializeText(jeux[1].text, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[1].text.getGlobalBounds().width) / 2, 80);
     
-    jeux[2].first.setString("Jeu 3");
-    initializeText(jeux[2].first, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[2].first.getGlobalBounds().width) / 2, 110);
+    jeux[2].text.setString("Jeu 3");
+    initializeText(jeux[2].text, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[2].text.getGlobalBounds().width) / 2, 110);
 }
 
 void Menu::loadWindow() 
@@ -132,35 +127,50 @@ void Menu::display()
     window.clear();
     window.draw(titreFenetre);
     for (auto const& jeu : jeux)
-        window.draw(jeu.first);
+        window.draw(jeu.text);
     window.display();
 }
 
 void Menu::loadGames() 
 {
-    jeux.emplace_back(sf::Text(), GameType::Checkers);
-    jeux.emplace_back(sf::Text(), GameType::Jeu2);
-    jeux.emplace_back(sf::Text(), GameType::Jeu3);
+    jeux.emplace_back(TextGame{sf::Text(), GameType::Checkers});
+    jeux.emplace_back(TextGame{sf::Text(), GameType::Jeu2});
+    jeux.emplace_back(TextGame{sf::Text(), GameType::Jeu3});
 }
 
 void Menu::launchGame(GameType gameType) const
 {
-    switch (gameType) 
+    Game* game;
+    try 
     {
-        case GameType::Checkers:
-            launchCheckersGame();
-            break;
-        case GameType::Jeu2:
-            break;
-        case GameType::Jeu3:
-            break;
+        game = createGame(gameType);
     }
+    catch (const GameTypeNotFoundException& e)
+    {
+        cerr << e.what() << endl;
+        exit(EXIT_FAILURE);
+    }
+    game->run();
 }
 
-void Menu::launchCheckersGame() const
+Game* Menu::createGame(GameType gameType)
 {
-    CheckersGame game;
-    game.run();
+    Game *game = nullptr;
+    switch (gameType)
+    {
+    case GameType::Checkers:
+        game = std::unique_ptr<CheckersGame>(new CheckersGame()).release();
+        break;
+    case GameType::Jeu2:
+        // TODO
+        break;
+    case GameType::Jeu3:
+        // TODO
+        break;
+    default:
+        throw GameTypeNotFoundException("GameType not found !");
+    }
+    return game;
 }
 
 void Menu::unload() 

@@ -1,14 +1,32 @@
 #include "../include/CheckersGame.hpp"
-#include "../include/CheckersRules.hpp"
+#include "../include/Player.hpp"
 
 #include <iostream>
 
-void CheckersGame::run() {
-    std::cout << "CheckersGame::run()" << std::endl;
-    rules = std::unique_ptr<CheckersRules>(new CheckersRules());
-    rules->isGameFinished();
+CheckersGame::CheckersGame() 
+{
+    std::cout << "CheckersGame::CheckersGame()" << std::endl;
 }
 
-CheckersGame::~CheckersGame() {
+// boucle du jeu
+void CheckersGame::run() 
+{
+    init();
+}
+
+void CheckersGame::init() 
+{
+    initPlayers();
+}
+
+void CheckersGame::initPlayers() 
+{
+    std::cout << "CheckersGame::initPlayers()" << std::endl;
+    players.push_back(Player(Players::P1));
+    players.push_back(Player(Players::P2));
+}
+
+CheckersGame::~CheckersGame() 
+{
     std::cout << "CheckersGame::~CheckersGame()" << std::endl;
 }

@@ -11,7 +11,9 @@ set(SOURCES
     src/BoardGame.cpp
     src/CheckersGame.cpp
     src/CheckersRules.cpp
+    src/Player.cpp
     src/exception/FontNotFoundException.cpp
+    src/exception/GameTypeNotFoundException.cpp
     src/Menu.cpp
     # Add other source files here
 )

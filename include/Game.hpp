@@ -1,8 +1,6 @@
 #ifndef _GAME
 #define _GAME
 
-#include "Rules.hpp"
-
 #include <memory>
 
 enum class GameType
@@ -16,11 +14,11 @@ enum class GameType
 class Game
 {
     public:
-        virtual void run() = 0;
         virtual ~Game() = default;
-    private:
-        // Une partie est composée de règles
-        std::unique_ptr<Rules> rules;
+
+        virtual void run() = 0;
+        virtual void init() = 0;
+        virtual void initPlayers() = 0;
 };
 
 #endif

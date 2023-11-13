@@ -2,18 +2,22 @@
 #define _CHECKERSGAME
 
 #include "Game.hpp"
-#include "CheckersRules.hpp"
+#include "Player.hpp"
 
 #include <memory>
+#include <vector>
 
 class CheckersGame : public Game
 {
     public:
-        void run() override;
+        CheckersGame();
         ~CheckersGame() override;
+
+        void run() override;
+        void init() override;
+        void initPlayers() override;
     private:
-        // Une partie est composée de règles
-        std::unique_ptr<CheckersRules> rules;
+        std::vector<Player> players;
 };
 
 #endif
