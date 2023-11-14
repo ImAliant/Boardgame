@@ -6,7 +6,7 @@
 class Piece
 {
     public:
-        explicit Piece(int x, int y, Player& player): x{x}, y{y}, player{player} {}
+        explicit Piece(int x, int y, Player& player): x{x}, y{y}, owner{player} {}
         virtual ~Piece() = default;
 
     protected:
@@ -17,13 +17,13 @@ class Piece
             return y;   
         }
         virtual Player& getPlayer() const {
-            return player;
+            return owner;
         }
 
     private:
         int x;
         int y;
-        Player& player;
+        Player& owner;
 };
 
 #endif
