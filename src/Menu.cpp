@@ -55,11 +55,11 @@ void Menu::handleClickOnText(const TextGame& game, const sf::Event& event) const
 
         if (textBounds.contains(mousePos))
         {
-            if (game.gameType == GameType::Checkers)
-                cout << "Checkers" << endl;
-            else if (game.gameType == GameType::Jeu2)
-                cout << "Jeu2" << endl;
-            else if (game.gameType == GameType::Jeu3)
+            if (game.gameType == GameType::JEU1)
+                cout << "Jeu1" << endl;
+            else if (game.gameType == GameType::CHECKERS)
+                cout << "Les Dames" << endl;
+            else if (game.gameType == GameType::JEU3)
                 cout << "Jeu3" << endl;
             else throw GameTypeNotFoundException("GameType not found !");
 
@@ -102,10 +102,10 @@ void Menu::loadTexts()
     titreFenetre.setString("BoardGame");
     initializeText(titreFenetre, sf::Color::White, _TITLE_TEXT_SIZE, (static_cast<float>(window.getSize().x) - titreFenetre.getGlobalBounds().width) / 2, 10);
     
-    jeux[0].text.setString("Les Dames");
+    jeux[0].text.setString("Jeu 1");
     initializeText(jeux[0].text, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[0].text.getGlobalBounds().width) / 2, 50);
     
-    jeux[1].text.setString("Jeu 2");
+    jeux[1].text.setString("Les Dames");
     initializeText(jeux[1].text, sf::Color::White, _GAME_TEXT_SIZE, (static_cast<float>(window.getSize().x) - jeux[1].text.getGlobalBounds().width) / 2, 80);
     
     jeux[2].text.setString("Jeu 3");
@@ -133,9 +133,9 @@ void Menu::display()
 
 void Menu::loadGames() 
 {
-    jeux.emplace_back(TextGame{sf::Text(), GameType::Checkers});
-    jeux.emplace_back(TextGame{sf::Text(), GameType::Jeu2});
-    jeux.emplace_back(TextGame{sf::Text(), GameType::Jeu3});
+    jeux.emplace_back(TextGame{sf::Text(), GameType::JEU1});
+    jeux.emplace_back(TextGame{sf::Text(), GameType::CHECKERS});
+    jeux.emplace_back(TextGame{sf::Text(), GameType::JEU3});
 }
 
 void Menu::launchGame(GameType gameType) const
@@ -158,22 +158,17 @@ Game* Menu::createGame(GameType gameType)
     Game *game = nullptr;
     switch (gameType)
     {
-    case GameType::Checkers:
+    case GameType::CHECKERS:
         game = std::unique_ptr<CheckersGame>(new CheckersGame()).release();
         break;
-    case GameType::Jeu2:
+    case GameType::JEU1:
         // TODO
         break;
-    case GameType::Jeu3:
+    case GameType::JEU3:
         // TODO
         break;
     default:
         throw GameTypeNotFoundException("GameType not found !");
     }
     return game;
-}
-
-void Menu::unload() 
-{
-    window.close();
 }

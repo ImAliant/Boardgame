@@ -8,9 +8,10 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})
 
 set(SOURCES 
-    src/BoardGame.cpp
+    src/main.cpp
     src/CheckersGame.cpp
-    src/CheckersRules.cpp
+    src/CheckersPiece.cpp
+    src/Board.cpp
     src/Player.cpp
     src/exception/FontNotFoundException.cpp
     src/exception/GameTypeNotFoundException.cpp

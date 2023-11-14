@@ -3,9 +3,9 @@
 
 #include "Game.hpp"
 #include "Player.hpp"
+#include "Board.hpp"
 
 #include <memory>
-#include <vector>
 
 class CheckersGame : public Game
 {
@@ -13,11 +13,13 @@ class CheckersGame : public Game
         CheckersGame();
         ~CheckersGame() override;
 
+        // Logic
         void run() override;
-        void init() override;
-        void initPlayers() override;
-    private:
-        std::vector<Player> players;
+        void startGame(Board& board, std::vector<Player>& players) override;
+        void playTurn(Board& board, Player& player) override;
+        // Rules
+
+        // UI
 };
 
 #endif

@@ -2,6 +2,7 @@
 
 Player::Player(Players player) : player(player) {}
 
-Players Player::getPlayer() const {
+Players Player::getPlayer() const
+{
     return player;
 }

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Game.hpp"
+#include "GameType.hpp"
 
 const std::string TITLE = "BoardGame - Menu";
 const std::string FONT_PATH = "../assets/fonts/DejaVuSansMono.ttf";
@@ -40,7 +41,6 @@ class Menu {
         void loadWindow();
         void loadGames();
         void load();
-        void unload();
 };
 
 #endif
