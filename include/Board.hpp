@@ -6,29 +6,32 @@
 #include "GameType.hpp"
 #include "CheckersPiece.hpp"
 #include "Player.hpp"
+#include <vector>
 
 class Game;
 
 class Board
 {
     public:
-        explicit Board(const int height, const int width, const GameType type, Player& player1, Player& player2);
+        explicit Board(const GameType type, std::vector<Player*> players);
         virtual ~Board();
 
         void init();
         void initCheckersBoard();
-
+        std::vector<Player*> initPlayersVector(GameType type);
+        std::tuple<int,int> initDimensions(GameType type);
         friend std::ostream& operator<<(std::ostream& os, const Board& board);
 
         int getHeight() const;
         int getWidth() const;
+        std::unique_ptr<CheckersPiece> getPieceAt(int x, int y) const;
+        std::vector<Player*> getPlayers() const;
     private:
-        const int height;
-        const int width;
+        int height;
+        int width;
         const GameType type;
-
-        Player player1;
-        Player player2;
+        
+        const std::vector<Player*> players;
 
         // TODO : a modififer pour utiliser des pointeurs intelligents
         CheckersPiece* board[10][10];

@@ -13,7 +13,7 @@ class Game
         virtual ~Game() = default;
 
         virtual void run() = 0;
-        virtual void startGame(Board& board, std::vector<Player>& players) = 0;
+        virtual void startGame(Board& board, std::vector<Player*>& players) = 0;
         virtual void playTurn(Board& board, Player& player) = 0;
 };
 

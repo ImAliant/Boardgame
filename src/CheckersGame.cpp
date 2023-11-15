@@ -12,23 +12,24 @@ void CheckersGame::run()
 {
     Player player1{Players::P1};
     Player player2{Players::P2};
-    Board board{10, 10, GameType::CHECKERS, player1, player2};
+    std::vector<Player*> players{&player1, &player2};
+    Board board{ GameType::CHECKERS, players};
 
     std::cout << board << std::endl;
 
-    std::vector<Player> players{player1, player2};
+    
 
-    startGame(board, players);
+    startGame(board,players);
 }
 
-void CheckersGame::startGame(Board& board, std::vector<Player>& players)
+void CheckersGame::startGame(Board& board, std::vector<Player*>& players)
 {
     bool isRunning = true;
     int turn{0};
     while (isRunning)
     {
-        if (turn % 2 == 0) playTurn(board, players[0]);
-        else playTurn(board, players[1]);
+        if (turn % 2 == 0) playTurn(board, *(players[0]));
+        else playTurn(board, *(players[1]));
 
         // TODO :check if game is over
             // TODO : if yes, check who won

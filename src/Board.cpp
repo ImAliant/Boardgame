@@ -2,13 +2,60 @@
 #include "../include/CheckersPiece.hpp"
 
 #include <iostream>
+#include <vector>
+#include <tuple>
 
-Board::Board(const int height, const int width, const GameType type, Player& player1, Player& player2):
-    height{height}, width{width}, type{type}, player1{player1}, player2{player2} 
+Board::Board( const GameType type, std::vector<Player*> players):
+      type{type}, players{players} 
     {
+        std::tie(height, width) = initDimensions(type);
         std::cout << "Board::Board()" << std::endl;
         init();
+        
     }
+
+
+std::tuple<int,int> Board::initDimensions(GameType type)
+{
+    height = 0;
+    width = 0;
+    switch ((type))
+    {
+    case GameType::JEU1:
+        break;
+    case GameType::CHECKERS:
+        height = 10;
+        width = 10;
+        break;
+    case GameType::JEU3:
+        break;
+    default: //TODO: HANDLE unknown game type
+        
+        break;
+    }
+    return std::make_tuple(height, width);
+}
+
+std::vector<Player*> Board::initPlayersVector(GameType type)
+{
+    std::vector<Player*> players;
+    size_t nbPlayers = 0;
+
+    switch ((type))
+    {
+    case GameType::JEU1:
+        break;
+    case GameType::CHECKERS:
+        nbPlayers = 2;
+        break;
+    case GameType::JEU3:
+        break;
+    default:
+        break;
+    }
+    return players;
+}
+
 
 void Board::init()
 {
@@ -25,19 +72,22 @@ void Board::init()
 
 void Board::initCheckersBoard()
 {
+    
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++)
         {
             if(i < 4 && (i + j) % 2 == 1) {
-                setValueAt(i, j, std::unique_ptr<CheckersPiece>(new CheckersPiece(i, j, player1)).release());
+                setValueAt(i, j, std::unique_ptr<CheckersPiece>(new CheckersPiece(i, j, *(players[0]))).release());
             } else if(i > 5 && (i + j) % 2 == 1) {
-                setValueAt(i, j, std::unique_ptr<CheckersPiece>(new CheckersPiece(i, j, player2)).release());
+                setValueAt(i, j, std::unique_ptr<CheckersPiece>(new CheckersPiece(i, j, *(players[1]))).release());
             } else {
                 board[i][j] = nullptr;
             }
         }
     }
 }
+
+
 
 std::ostream& operator<<(std::ostream& os, const Board& board)
 {
@@ -71,6 +121,16 @@ std::ostream& operator<<(std::ostream& os, const Board& board)
         os << std::endl;
     }
     return os;
+}
+
+std::unique_ptr<CheckersPiece> Board::getPieceAt(int x, int y) const
+{
+    return std::unique_ptr<CheckersPiece>(board[x][y]);
+}
+
+std::vector<Player*> Board::getPlayers() const
+{
+    return players;
 }
 
 Board::~Board()
