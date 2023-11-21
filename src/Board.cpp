@@ -123,10 +123,11 @@ std::ostream& operator<<(std::ostream& os, const Board& board)
     return os;
 }
 
-std::unique_ptr<CheckersPiece> Board::getPieceAt(int x, int y) const
+CheckersPiece* Board::getPieceAt(int x, int y) const
 {
-    return std::unique_ptr<CheckersPiece>(board[x][y]);
+    return board[x][y];
 }
+
 
 std::vector<Player*> Board::getPlayers() const
 {

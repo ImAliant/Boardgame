@@ -46,47 +46,55 @@ void CheckersGame::startGame(Board& board, std::vector<Player*>& players)
 
 void CheckersGame::playTurn(Board& board, Player& player)
 {
+    bool b = true;
     // TODO : movement choice
 
     std::cout << "Player " <<  player.getPlayerId() << "'s turn" << std::endl;
-    std::cout << "Entrez les coordonnées de la pièce à déplacer (ligne col)" << std::endl;
-    int ligne, col;
-    std::cin >> ligne >> col;
-    std::cout<<"before isCordValid"<<std::endl;
-    isCordValid(ligne,col);
-    std::cout<<"after isCordValid"<<std::endl;
-    if(board.getPieceAt(ligne,col) == nullptr)
+    while(b){
+        std::cout << "Entrez les coordonnées de la pièce à déplacer (ligne col)" << std::endl;
+        int ligne, col;
+        std::cin >> ligne >> col;
+    
+        if(!isCordValid(ligne,col)){b=false;break;}
+   
+        if(board.getPieceAt(ligne,col) == nullptr)
     {
         std::cout << "Pas de pièce à cet endroit" << std::endl;
-        return;
+        b=false;
     }
-    std::cout<<board.getPieceAt(ligne,col)<<std::endl;
-    std::cout<<"before getPlayer"<<std::endl;
-    if(board.getPieceAt(ligne,col)->getPlayer().getPlayerId() != player.getPlayerId())
+   
+    
+    if(board.getPieceAt(ligne,col)->getSymbol() != player.getPlayerChar())
+   // if(board.getPieceAt(ligne,col)->getPlayer().getPlayerId() != player.getPlayerId())
     {
-        std::cout<<"after getPlayer"<<std::endl;
+        
         std::cout << "Cette pièce ne vous appartient pas" << std::endl;
-        return;
+        continue;
     }
-    std::cout<<"before demade de Dest"<<std::endl;
+    
     std::cout << "Entrez les coordonnées de la case de destination (ligne col)" << std::endl;
     int ligne2, col2;
     std::cin >> ligne2 >> col2;
-    std::cout<<"before isDestValid"<<std::endl;
+    
     if(isDestValid(ligne,col,ligne2,col2,player,board)){
-        board.setValueAt(ligne2,col2,board.getPieceAt(ligne,col).release());
+        board.setValueAt(ligne2,col2,board.getPieceAt(ligne,col));
         board.setValueAt(ligne,col,nullptr);
+        std::cout<<board<<std::endl;
+        break;
     }else if(canPieceBeEaten(ligne,col,ligne2,col2,player,board))
     {
-        board.setValueAt(ligne2,col2,board.getPieceAt(ligne,col).release());
+        board.setValueAt(ligne2,col2,board.getPieceAt(ligne,col));
         board.setValueAt(ligne,col,nullptr);
+        std::cout<<board<<std::endl;
+        break;
     }
     else
     {
         std::cout << "Déplacement impossible" << std::endl;
-        return;
+        b=false;
+        break;
     }
-    
+    }
    
    
     
@@ -107,7 +115,7 @@ bool CheckersGame::isDestValid(int ligne1,int col1,int ligne2,int col2,
 {     
     if(isCordValid(ligne1,col1) && isCordValid(ligne2,col2))
     { 
-        if(board.getPieceAt(ligne2,col2) == nullptr && (ligne2==ligne1-1) && (col2==col1+1 || col2==col1-1) 
+        if(board.getPieceAt(ligne2,col2) == nullptr && (ligne2==ligne1-1) && (col2==col1+1 || col2==col1-1) ||( ligne2==ligne1+1 && (col2==col1+1 || col2==col1-1))
                                                 && !board.getPieceAt(ligne1,col1)->IsKing())
         {
             return true;
@@ -128,12 +136,22 @@ bool CheckersGame::canPieceBeEaten(int ligne1,int col1,int ligne2,int col2,Playe
         ;
         if(ligne2==ligne1-1 && col2==col1 + 1 && board.getPieceAt(ligne2-1,col2+1)!=nullptr ){
             
-            board.setValueAt(ligne2-1,col2+1,board.getPieceAt(ligne1,col1).release());
+            board.setValueAt(ligne2-1,col2+1,board.getPieceAt(ligne1,col1));
             board.setValueAt(ligne1,col1,nullptr);
             return true;
         }else if(ligne2==ligne1-1 && col2==col1 - 1 && board.getPieceAt(ligne2-1,col2-1)!=nullptr)
             {
-            board.setValueAt(ligne2-1,col2-1,board.getPieceAt(ligne1,col1).release());
+            board.setValueAt(ligne2-1,col2-1,board.getPieceAt(ligne1,col1) );
+            board.setValueAt(ligne1,col1,nullptr);
+            return true;
+        }else if(ligne2==ligne1+1 && col2==col1 - 1 && board.getPieceAt(ligne2+1,col2-1)!=nullptr)
+            {
+            board.setValueAt(ligne2-1,col2-1,board.getPieceAt(ligne1,col1) );
+            board.setValueAt(ligne1,col1,nullptr);
+            return true;
+        }else if(ligne2==ligne1+1 && col2==col1 +1 && board.getPieceAt(ligne2+1,col2+1)!=nullptr)
+            {
+            board.setValueAt(ligne2+1,col2+1,board.getPieceAt(ligne1,col1) );
             board.setValueAt(ligne1,col1,nullptr);
             return true;
             }

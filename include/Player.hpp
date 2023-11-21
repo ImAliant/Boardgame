@@ -15,6 +15,7 @@ class Player
         
         Players getPlayer() const;
         int getPlayerId() const;
+        char getPlayerChar() const;
     private:
         Players player;
         int id; 

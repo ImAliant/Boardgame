@@ -25,7 +25,7 @@ class Board
 
         int getHeight() const;
         int getWidth() const;
-        std::unique_ptr<CheckersPiece> getPieceAt(int x, int y) const;
+        CheckersPiece* getPieceAt(int x, int y) const;
         std::vector<Player*> getPlayers() const;
         void setValueAt(int x, int y, CheckersPiece* value) {
             this->board[x][y] = value;
