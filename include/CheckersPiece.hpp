@@ -3,7 +3,7 @@
 
 #include "Piece.hpp"
 
-class CheckersPiece: Piece
+class CheckersPiece: public Piece
 {
     public:
         using Piece::Piece;
@@ -11,6 +11,7 @@ class CheckersPiece: Piece
 
         char getSymbol() const;
         bool IsKing() const;
+       
     private:
         bool isKing = false;
 };

@@ -17,3 +17,4 @@ bool CheckersPiece::IsKing() const
 {
     return isKing;
 }
+

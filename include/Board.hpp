@@ -12,6 +12,7 @@ class Game;
 
 class Board
 {
+    friend class checkersGame;
     public:
         explicit Board(const GameType type, std::vector<Player*> players);
         virtual ~Board();
@@ -26,6 +27,9 @@ class Board
         int getWidth() const;
         std::unique_ptr<CheckersPiece> getPieceAt(int x, int y) const;
         std::vector<Player*> getPlayers() const;
+        void setValueAt(int x, int y, CheckersPiece* value) {
+            this->board[x][y] = value;
+        }
     private:
         int height;
         int width;
@@ -33,11 +37,10 @@ class Board
         
         const std::vector<Player*> players;
 
+    protected:    
         // TODO : a modififer pour utiliser des pointeurs intelligents
         CheckersPiece* board[10][10];
-        void setValueAt(int x, int y, CheckersPiece* value) {
-            this->board[x][y] = value;
-        }
+        
 };
 
 #endif
