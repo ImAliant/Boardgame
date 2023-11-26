@@ -1,33 +1,39 @@
-#ifndef _PIECE
-#define _PIECE
+#pragma once
+
+#include <iostream>
+#include <memory>
+#include <SFML/Graphics/Color.hpp>
 
 #include "Player.hpp"
+#include "Board.hpp"
 
-class Piece
-{   
-    friend class CheckersGame;
-    public:
-        explicit Piece(int x, int y, Player& player): x{x}, y{y}, owner{player} {}
-        virtual ~Piece() = default;
-        virtual Player& getPlayer() const { //car on l'utilise dans la classe CheckersGame
-                                            //erreur d'innacessibilité avec protected
-            return owner;
-        }
+class Board;
 
-
-    protected:
-        virtual int getX() const {
-            return x;
-        }
-        virtual int getY() const {
-            return y;   
-        }
-       
-
+class Piece 
+{
     private:
-        int x;
-        int y;
-        Player& owner;
-};
+        int m_x;
+        int m_y;
+        sf::Color m_color;
+        std::shared_ptr<Player> m_owner;
 
-#endif
+        std::vector<std::tuple<int, int>> m_possibleMoves;
+
+        char m_symbol;
+    public:
+        Piece();
+        Piece(int x, int y, std::shared_ptr<Player> owner, sf::Color color, char symbol);
+        ~Piece();
+
+        Piece& operator=(const Piece& piece);
+        friend std::ostream& operator<<(std::ostream& os, const Piece& piece);
+
+        void findPossibleMoves(const Board& board);
+
+        std::vector<std::tuple<int, int>> getPossibleMoves() const;
+
+        std::tuple<int, int> getPosition() const;
+        Player& getOwner() const;
+        sf::Color getColor() const;
+        char getSymbol() const;
+};

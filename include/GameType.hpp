@@ -1,5 +1,4 @@
-#ifndef _GAMETYPE
-#define _GAMETYPE
+#pragma once
 
 enum class GameType
 {
@@ -7,5 +6,3 @@ enum class GameType
     CHECKERS,
     JEU3
 };
-
-#endif 

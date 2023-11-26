@@ -1,46 +1,41 @@
-#ifndef _BOARD
-#define _BOARD
+#pragma once
 
+#include <iostream>
 #include <memory>
-
-#include "GameType.hpp"
-#include "CheckersPiece.hpp"
-#include "Player.hpp"
 #include <vector>
 
-class Game;
+#include "GameType.hpp"
+#include "Piece.hpp"
+
+class Piece;
 
 class Board
 {
-    friend class checkersGame;
-    public:
-        explicit Board(const GameType type, std::vector<Player*> players);
-        virtual ~Board();
+    private:
+        int rows = -1;
+        int cols = -1;
 
-        void init();
-        void initCheckersBoard();
-        std::vector<Player*> initPlayersVector(GameType type);
-        std::tuple<int,int> initDimensions(GameType type);
+        std::vector<std::vector<std::unique_ptr<Piece>>> board;
+        std::vector<std::shared_ptr<Player>> players;
+    public:
+        Board() = default;
+        explicit Board(GameType gameType, std::vector<std::shared_ptr<Player>> players);
+        ~Board();
+
         friend std::ostream& operator<<(std::ostream& os, const Board& board);
 
-        int getHeight() const;
-        int getWidth() const;
-        CheckersPiece* getPieceAt(int x, int y) const;
-        std::vector<Player*> getPlayers() const;
-        void setValueAt(int x, int y, CheckersPiece* value) {
-            this->board[x][y] = value;
-        }
-    private:
-        int height;
-        int width;
-        const GameType type;
-        
-        const std::vector<Player*> players;
+        void init(GameType gameType);
+        void initBoard(GameType gameType);
+        void initCheckersBoard();
 
-    protected:    
-        // TODO : a modififer pour utiliser des pointeurs intelligents
-        CheckersPiece* board[10][10];
-        
+        void fillBoardWithEmptyPieces();
+        void setPiecesOnBoard();
+
+        void setDimensions(int rows, int cols);
+
+        Piece *getValueAt(int x, int y) const;
+        void setValueAt(int x, int y, const Piece &piece);
+
+        int getRows() const;
+        int getCols() const;
 };
-
-#endif

@@ -1,19 +1,43 @@
 #include "../include/Player.hpp"
 
-int Player::idCount = 1;
+#include <iostream>
 
-Player::Player(Players player) : player(player) , id(idCount++){}
+int Player::m_idCounter = 0;
+
+Player::Player(Players player): m_player(player)
+{
+    m_id = m_idCounter++;
+}
+
+Player::~Player() {}
+
+std::ostream& operator<<(std::ostream& os, const Player& player)
+{
+    switch (player.getPlayer())
+    {
+        case Players::PLAYER_ONE:
+            os << "PLAYER_ONE";
+            break;
+        case Players::PLAYER_TWO:
+            os << "PLAYER_TWO";
+            break;
+        case Players::PLAYER_THREE:
+            os << "PLAYER_THREE";
+            break;
+        case Players::NONE:
+            os << "NONE";
+            break;
+    }
+    return os;
+}
 
 Players Player::getPlayer() const
 {
-    return player;
-}
-char Player::getPlayerChar() const {
-    return (getPlayerId() == 1) ? 'x' : 'o';
+    return m_player;
 }
 
-
-int Player::getPlayerId() const
+int Player::getId() const
 {
-    return id;
+    return m_id;
 }
+

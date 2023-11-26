@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(boardgame VERSION 0.1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
@@ -9,13 +9,20 @@ include_directories(${SFML_INCLUDE_DIR})
 
 set(SOURCES 
     src/main.cpp
-    src/CheckersGame.cpp
-    src/CheckersPiece.cpp
+    src/AssetManager.cpp
+    src/StateManager.cpp
+    src/State.cpp
+    src/Launcher.cpp
+    src/MainMenu.cpp
+    src/exception/PathNotFoundException.cpp
+    src/exception/GameTypeInvalidException.cpp
+    src/exception/InitializationException.cpp
+    src/GameChoice.cpp
     src/Board.cpp
+    src/Piece.cpp
     src/Player.cpp
-    src/exception/FontNotFoundException.cpp
-    src/exception/GameTypeNotFoundException.cpp
-    src/Menu.cpp
+    src/game/Checkers.cpp
+
     # Add other source files here
 )
 

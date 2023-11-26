@@ -1,14 +1,12 @@
-#include <SFML/Graphics.hpp>
+#include <iostream>
 
-#include "../include/Menu.hpp"
+#include "../include/Launcher.hpp"
 
-using namespace std;
-using namespace sf;
+#include "../include/Board.hpp"
 
-int main()
-{
-    Menu menu;
-    menu.run();
+int main() {
+    Launcher game;
+    game.Run();
 
     return EXIT_SUCCESS;
 }

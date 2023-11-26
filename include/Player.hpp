@@ -1,25 +1,27 @@
-#ifndef _PLAYER
-#define _PLAYER
+#pragma once
+
+#include <iostream>
 
 enum class Players
 {
-    P1,
-    P2
+    PLAYER_ONE,
+    PLAYER_TWO,
+    PLAYER_THREE,
+    NONE
 };
 
 class Player
 {
+    private:
+        Players m_player;
+        int m_id;
+        static int m_idCounter;
     public:
         explicit Player(Players player);
-        ~Player() = default;
-        
-        Players getPlayer() const;
-        int getPlayerId() const;
-        char getPlayerChar() const;
-    private:
-        Players player;
-        int id; 
-        static int idCount;
-};
+        ~Player();
 
-#endif
+        friend std::ostream& operator<<(std::ostream& os, const Player& player);
+
+        Players getPlayer() const;
+        int getId() const;
+};

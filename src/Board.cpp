@@ -1,159 +1,144 @@
-#include "../include/Board.hpp"
-#include "../include/CheckersPiece.hpp"
-
 #include <iostream>
-#include <vector>
-#include <tuple>
 
-Board::Board( const GameType type, std::vector<Player*> players):
-      type{type}, players{players} 
-    {
-        std::tie(height, width) = initDimensions(type);
-        std::cout << "Board::Board()" << std::endl;
-        init();
-        
-    }
+#include "../include/Board.hpp"
+#include "../include/exception/GameTypeInvalidException.hpp"
+#include "../include/exception/InitializationException.hpp"
 
-
-std::tuple<int,int> Board::initDimensions(GameType type)
+Board::Board(GameType gameType, std::vector<std::shared_ptr<Player>> players): players(std::move(players))
 {
-    height = 0;
-    width = 0;
-    switch ((type))
-    {
-    case GameType::JEU1:
-        break;
-    case GameType::CHECKERS:
-        height = 10;
-        width = 10;
-        break;
-    case GameType::JEU3:
-        break;
-    default: //TODO: HANDLE unknown game type
-        
-        break;
-    }
-    return std::make_tuple(height, width);
+    init(gameType);
 }
 
-std::vector<Player*> Board::initPlayersVector(GameType type)
-{
-    std::vector<Player*> players;
-    size_t nbPlayers = 0;
+Board::~Board() {};
 
-    switch ((type))
+void Board::init(GameType gameType)
+{
+    try 
     {
-    case GameType::JEU1:
-        break;
-    case GameType::CHECKERS:
-        nbPlayers = 2;
-        break;
-    case GameType::JEU3:
-        break;
-    default:
-        break;
+        switch (gameType)
+        {
+            case GameType::JEU1:
+                //setDimensions(?, ?);
+                break;
+            case GameType::CHECKERS:
+                setDimensions(10, 10);
+                break;
+            case GameType::JEU3:
+                //setDimensions(?, ?);
+                break;
+            default:
+                throw GameTypeInvalidException("GameType is invalid\n");
+                break;
+        }
     }
-    return players;
+    catch (GameTypeInvalidException &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    initBoard(gameType);
 }
 
+void Board::initBoard(GameType gameType)
+{ 
+    if (rows < 0 || cols < 0)
+    {
+        throw InitializationException("The size of the board is invalid\n");
+    }
 
-void Board::init()
-{
-    switch(type) {
-        case GameType::JEU1:
-            break;
-        case GameType::CHECKERS:
-            initCheckersBoard();
-            break;
-        case GameType::JEU3:
-            break;
+    // initialize the piece on the board
+    if (gameType == GameType::CHECKERS)
+    {
+        initCheckersBoard();
     }
 }
 
 void Board::initCheckersBoard()
 {
-    
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++)
+    // initialize the board with empty pieces
+    fillBoardWithEmptyPieces();
+
+    // Set the pieces on the board
+    setPiecesOnBoard();
+}
+
+void Board::fillBoardWithEmptyPieces()
+{
+    for (int i = 0; i < rows; i++)
+    {
+        std::vector<std::unique_ptr<Piece>> row;
+        for (int j = 0; j < cols; j++)
         {
-            if(i < 4 && (i + j) % 2 == 1) {
-                setValueAt(i, j, std::unique_ptr<CheckersPiece>(new CheckersPiece(i, j, *(players[0]))).release());
-            } else if(i > 5 && (i + j) % 2 == 1) {
-                setValueAt(i, j, std::unique_ptr<CheckersPiece>(new CheckersPiece(i, j, *(players[1]))).release());
-            } else {
-                board[i][j] = nullptr;
+            row.push_back(std::make_unique<Piece>(i, j, players[2], sf::Color::Transparent, ' '));
+        }
+        board.push_back(std::move(row));
+    }
+}
+
+// Checkers pour l'instant
+void Board::setPiecesOnBoard()
+{
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            if (i < 4 && (i + j) % 2 != 0)
+            {
+                setValueAt(i, j, Piece(i, j, players[0], sf::Color::Black, 'X'));
             }
+            else if (i > 5 && (i + j) % 2 != 0)
+            {
+                setValueAt(i, j, Piece(i, j, players[1], sf::Color::White, 'O'));
+            }
+            else
+                continue;
         }
     }
 }
 
-
-
-std::ostream& operator<<(std::ostream& os, const Board& board)
+std::ostream &operator<<(std::ostream &os, const Board &board)
 {
-    os << "  ";
-    for (int i = 0; i < board.width; i++) 
+    for (int i = 0; i < board.getRows(); i++)
     {
-        os << i << " "; 
-    }
-    os << std::endl;
-    os << "  ";
-    for (int i = 0; i < board.width*2; i++) 
-    {
-        os << "_";
-    }
-    os << std::endl;
-
-    for (int i = 0; i < board.height; i++) 
-    {
-        os << i << "|";
-        for (int j = 0; j < board.width; j++) 
+        for (int j = 0; j < board.getCols(); j++)
         {
-            if (board.board[i][j] == nullptr) 
-            {
-                os << "* ";
-            } 
-            else 
-            {
-                os << board.board[i][j]->getSymbol() << " ";
-            }
+            os << *board.getValueAt(i, j) << " ";
         }
         os << std::endl;
     }
     return os;
 }
 
-CheckersPiece* Board::getPieceAt(int x, int y) const
+void Board::setDimensions(int newRows, int newCols)
 {
-    return board[x][y];
+    this->rows = newRows;
+    this->cols = newCols;
 }
 
-
-std::vector<Player*> Board::getPlayers() const
+Piece* Board::getValueAt(int x, int y) const
 {
-    return players;
+    if (x < 0 || x >= rows || y < 0 || y >= cols)
+        throw std::out_of_range("x or y is out of range");
+
+    return board[x][y].get();
 }
 
-Board::~Board()
+void Board::setValueAt(int x, int y, const Piece& piece)
 {
-    std::cout << "Board::~Board()" << std::endl;
-    // Nettoyer le tableau
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++)
-        {
-            if(board[i][j] != nullptr) {
-                delete board[i][j];
-            }
-        }
+    if (x < 0 || x >= rows || y < 0 || y >= cols)
+    {
+        throw std::out_of_range("x or y is out of range");
     }
+
+    board[x][y] = std::make_unique<Piece>(piece);
 }
 
-int Board::getHeight() const
+int Board::getRows() const
 {
-    return height;
+    return rows;
 }
 
-int Board::getWidth() const
+int Board::getCols() const
 {
-    return width;
+    return cols;
 }
