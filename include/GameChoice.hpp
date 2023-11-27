@@ -6,9 +6,9 @@
 #include "State.hpp"
 #include "Launcher.hpp"
 #include "UI.hpp"
-#include "InputHandler.hpp"
+#include "EventHandler.hpp"
 
-class GameChoice: public Engine::State, public UI::UIInitializer, public InputHandler
+class GameChoice: public Engine::State, public UI::UIHandler, public EventHandler
 {
     private:
         std::shared_ptr<Context> m_context;

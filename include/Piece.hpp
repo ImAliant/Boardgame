@@ -17,7 +17,7 @@ class Piece
         sf::Color m_color;
         std::shared_ptr<Player> m_owner;
 
-        std::vector<std::tuple<int, int>> m_possibleMoves;
+        std::vector<std::pair<int, int>> m_possibleMoves;
 
         char m_symbol;
     public:
@@ -30,9 +30,11 @@ class Piece
 
         void findPossibleMoves(const Board& board);
 
-        std::vector<std::tuple<int, int>> getPossibleMoves() const;
+        void setPosition(int x, int y);
 
-        std::tuple<int, int> getPosition() const;
+        std::vector<std::pair<int, int>> getPossibleMoves() const;
+
+        std::pair<int, int> getPosition() const;
         Player& getOwner() const;
         sf::Color getColor() const;
         char getSymbol() const;

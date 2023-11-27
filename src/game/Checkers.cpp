@@ -58,27 +58,18 @@ void Checkers::ProcessInput()
     {
         if (event.type == sf::Event::Closed)
         {
-            m_context->m_states->PopAll();
-            m_context->m_window->close();
+            closeWindow();
         }
 
-        m_isExitButtonHovered = m_exitButton.getGlobalBounds().contains(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y));
-        m_isLaunchgameButtonHovered = m_lauchgameButton.getGlobalBounds().contains(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y));
+        UpdateButtonHoverState(event);
 
         if (event.type == sf::Event::MouseMoved)
         {
-            if (m_isExitButtonHovered) m_isExitButtonSelected = true;
-            else m_isExitButtonSelected = false;
-
-            if (m_isLaunchgameButtonHovered) m_isLaunchgameButtonSelected = true;
-            else m_isLaunchgameButtonSelected = false;
+            UpdateButtonSelectionState();
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
-            bool isMouseLeftButtonPressed = event.mouseButton.button == sf::Mouse::Left;
-            if (isMouseLeftButtonPressed && m_isExitButtonSelected) m_isExitButtonPressed = true;
-
-            if (isMouseLeftButtonPressed && m_isLaunchgameButtonSelected) m_isLaunchgameButtonPressed = true;
+            HandleMousePressed(event);
         }
     }
 }
@@ -86,12 +77,28 @@ void Checkers::ProcessInput()
 void Checkers::Update() 
 {
     UpdateButtonState(m_exitButton, m_isExitButtonSelected, m_isExitButtonHovered, m_wasExitButtonHovered);
-    UpdateButtonState(m_lauchgameButton, m_isLaunchgameButtonSelected, m_isLaunchgameButtonHovered, m_wasLaunchgameButtonHovered);
+    UpdateButtonState(m_lauchgameButton, m_isLaunchgameButtonSelected, m_isLaunchgameButtonHovered, m_wasLaunchgameButtonHovered, m_isLaunchgameButtonVisible);
 
     if (m_isLaunchgameButtonPressed)
     {
         m_isLaunchgameButtonPressed = false;
-        startGame();
+        m_isGameStarted = true;
+        m_isLaunchgameButtonVisible = false;
+
+        // random player to start
+        /*std::mt19937 rng(std::random_device{}());
+        int randomPlayer = rng() % 2;*/
+
+        //m_currentPlayer = m_players[randomPlayer];
+        m_currentPlayer = m_players[0];
+
+        updatePossibleMoves();
+    }
+
+    if (m_boardNeedUpdate)
+    {
+        UpdateBoard();
+        m_boardNeedUpdate = false;
     }
 
     if (m_isExitButtonPressed) {
@@ -150,52 +157,96 @@ void Checkers::Start()
     }
 }
 
-void Checkers::startGame() 
+void Checkers::doPlayerTurn(const sf::Event::MouseButtonEvent &event)
 {
-    // random player to start
-    std::mt19937 rng(std::random_device{}());
-    int randomPlayer = rng() % 2;
+    std::cout << "doPlayerTurn()\n";
 
-    // init possible moves for each piece
-    updatePossibleMoves();
+    // if the click is on the board (not on the buttons)
+    // so if the click is between 10,10 and 480, 480 the player can play
+    if (event.x < 10 || event.x > 480 || event.y < 10 || event.y > 480) return;
 
-    m_currentPlayer = m_players[randomPlayer];
+    sf::Vector2f boardPos = m_context->m_window->mapPixelToCoords(sf::Vector2i(event.x, event.y));
+    auto x = static_cast<int>(boardPos.x / 50.f);
+    auto y = static_cast<int>(boardPos.y / 50.f);
 
-    bool isGameOver = false;
-    while (!isGameOver)
+    std::cout << "x: " << y << " y: " << x << std::endl;
+
+    // select or deselect a piece
+    if (m_selectedPiece.first == -1 && m_selectedPiece.second == -1) 
+        selectPiece(boardPos, x, y);
+    else deselectPiece(x, y);
+
+    // move the piece
+    if (m_selectedPiece.first != -1 && m_selectedPiece.second != -1 && m_isPieceSelected) 
     {
-        // TODO : select piece
-        // TODO : move piece
-            // TODO : check if the movement is valid
-        // TODO : check for win
-        
-        // TODO : switch player
+        std::cout << "debug" << std::endl;
+        if (m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves().empty()) return;
+        movePiece(event);
     }
 }
 
-void Checkers::movePiece(const sf::Vector2i &position) 
+void Checkers::movePiece(const sf::Event::MouseButtonEvent &event) 
 {
+    std::cout << "movePiece() << x: " << m_selectedPiece.first << " y: " << m_selectedPiece.second << std::endl;
+    // select the cell where the piece will be moved
+    //if (m_boardCell[y][x].getGlobalBounds().contains(boardPos))
+    //{
+    //    // on test si la case où on veut déplacer la pièce est une case où la pièce peut se déplacer
+    //    std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
+    //    for (auto const &move : possibleMoves)
+    //    {
+    //        if (move.first == x && move.second == y)
+    //        {
+    //            m_board.get()->movePiece(m_selectedPiece.first, m_selectedPiece.second, y, x);
+    //            m_boardNeedUpdate = true;
 
+                // on enlève la couleur verte des cases où la pièce pouvait se déplacer
+    //            for (auto const &move : possibleMoves)
+    //            {
+    //                if ((move.first + move.second) % 2 == 0) m_boardCell[move.second][move.first].setFillColor(WHITECELL_COLOR);
+    //                else m_boardCell[move.second][move.first].setFillColor(BLACKCELL_COLOR);
+    //            }
+
+    //            m_selectedPiece = std::make_pair(-1, -1);
+    //            m_isPieceSelected = false;
+    //        }
+    //    }
+    //}
 }
 
-void Checkers::selectPiece(const sf::Vector2i &position) 
+void Checkers::selectPiece(sf::Vector2f boardPos, int x, int y)
 {
+    if (m_boardPiece[y][x].getGlobalBounds().contains(boardPos))
+    {
+        if (m_board.get()->getValueAt(y, x)->getOwner().getId() == m_currentPlayer.get()->getId())
+        {
+            m_selectedPiece = std::make_pair(y, x);
+            
+            std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
+            for (const auto &move : possibleMoves)
+            {
+                m_boardCell[move.second][move.first].setFillColor(sf::Color::Green);
+            }
 
+            m_isPieceSelected = true;
+        }
+    }
 }
 
-void Checkers::deselectPiece(const sf::Vector2i &position) 
+void Checkers::deselectPiece(int x, int y) 
 {
+    if (m_selectedPiece.first == y && m_selectedPiece.second == x)
+    {
+        std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
+        for (auto const &move : possibleMoves)
+        {
+            if ((move.first + move.second) % 2 == 0) m_boardCell[move.second][move.first].setFillColor(WHITECELL_COLOR);
+            else m_boardCell[move.second][move.first].setFillColor(BLACKCELL_COLOR);
+        }
 
-}
-
-void Checkers::movePieceTo(const sf::Vector2i &position) 
-{
-
-}
-
-void Checkers::removePiece(const sf::Vector2i &position) 
-{
-
+        m_selectedPiece = std::make_pair(-1, -1);
+        m_isPieceSelected = false;
+    }
 }
 
 void Checkers::promotePiece(const sf::Vector2i &position) 
@@ -213,6 +264,23 @@ void Checkers::switchPlayer()
     
 }
 
+void Checkers::UpdateBoard()
+{
+    // update the board pieces
+    for (int i = 0; i < BOARD_SIZE; i++)
+    {
+        for (int j = 0; j < BOARD_SIZE; j++) 
+        {
+            if (m_board.get()->getValueAt(i, j)->getColor() == sf::Color::Black)
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
+            else if (m_board.get()->getValueAt(i, j)->getColor() == sf::Color::White)
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
+            else
+                m_boardPiece[i][j].setFillColor(sf::Color::Transparent);
+        }
+    }
+}
+
 void Checkers::updatePossibleMoves() const
 {
     for (int i = 0; i < BOARD_SIZE; i++)
@@ -223,7 +291,6 @@ void Checkers::updatePossibleMoves() const
         }
     }
 }
-
 
 void Checkers::initPlayers()
 {
@@ -306,4 +373,33 @@ void Checkers::InitText(sf::Text &object, const std::string &text, const sf::Vec
     object.setCharacterSize(characterSize);
     object.setOrigin(object.getGlobalBounds().width / 2, object.getGlobalBounds().height / 2);
     object.setPosition(position);
+}
+
+void Checkers::closeWindow() const
+{
+    m_context->m_states->PopAll();
+    m_context->m_window->close();
+}
+
+void Checkers::UpdateButtonHoverState(const sf::Event& event) 
+{
+    m_isExitButtonHovered = m_exitButton.getGlobalBounds().contains(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y));
+    m_isLaunchgameButtonHovered = m_lauchgameButton.getGlobalBounds().contains(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y));
+}
+
+void Checkers::UpdateButtonSelectionState() 
+{
+    m_isExitButtonSelected = m_isExitButtonHovered;
+    m_isLaunchgameButtonSelected = m_isLaunchgameButtonHovered;
+}
+
+void Checkers::HandleMousePressed(const sf::Event& event)
+{
+    bool isMouseLeftButtonPressed = event.mouseButton.button == sf::Mouse::Left;
+    if (isMouseLeftButtonPressed)
+    {
+        if (m_isExitButtonSelected) m_isExitButtonPressed = true;
+        if (m_isLaunchgameButtonSelected) m_isLaunchgameButtonPressed = true;
+        if (m_isGameStarted) doPlayerTurn(event.mouseButton);
+    }
 }

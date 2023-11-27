@@ -70,14 +70,20 @@ void Piece::findPossibleMoves(const Board& board)
     }
 }
 
-std::vector<std::tuple<int, int>> Piece::getPossibleMoves() const
+void Piece::setPosition(int x, int y)
+{
+    m_x = x;
+    m_y = y;
+}
+
+std::vector<std::pair<int, int>> Piece::getPossibleMoves() const
 {
     return m_possibleMoves;
 }
 
-std::tuple<int, int> Piece::getPosition() const
+std::pair<int, int> Piece::getPosition() const
 {
-    return std::make_tuple(m_x, m_y);
+    return std::make_pair(m_x, m_y);
 }
 
 Player& Piece::getOwner() const

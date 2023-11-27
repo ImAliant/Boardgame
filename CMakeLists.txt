@@ -22,6 +22,7 @@ set(SOURCES
     src/Piece.cpp
     src/Player.cpp
     src/game/Checkers.cpp
+    src/EventHandler.cpp
 
     # Add other source files here
 )

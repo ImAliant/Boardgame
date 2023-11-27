@@ -5,6 +5,7 @@
 #include "../Board.hpp"
 #include "../Launcher.hpp"
 #include "../AssetManager.hpp"
+#include "../EventHandler.hpp"
 
 #include <memory>
 #include <vector>
@@ -19,7 +20,7 @@ const sf::Color BACKGROUND_COLOR = sf::Color(46, 24, 3);
 const sf::Color BLACKCELL_COLOR = sf::Color(112, 74, 39);
 const sf::Color WHITECELL_COLOR = sf::Color(209, 183, 151);
 
-class Checkers : public Engine::State, public UI::UIInitializer
+class Checkers : public Engine::State, public UI::UIHandler, public EventHandler
 {
     private:
         std::shared_ptr<Context> m_context;
@@ -30,6 +31,7 @@ class Checkers : public Engine::State, public UI::UIInitializer
 
         // game logic
         std::shared_ptr<Player> m_currentPlayer;
+        std::pair<int, int> m_selectedPiece = {-1, -1};
 
         // ui
         sf::RectangleShape m_boardBackgroud;
@@ -45,10 +47,17 @@ class Checkers : public Engine::State, public UI::UIInitializer
         sf::Text m_exitButton;
 
         // boolean
+        bool m_isGameStarted = false;
+
+        bool m_isPieceSelected = false;
+
+        bool m_boardNeedUpdate = false;
+
         bool m_isLaunchgameButtonSelected = false;
         bool m_isLaunchgameButtonPressed = false;
         bool m_isLaunchgameButtonHovered = false;
         bool m_wasLaunchgameButtonHovered = false;
+        bool m_isLaunchgameButtonVisible = true;
 
         bool m_isExitButtonSelected = false;
         bool m_isExitButtonPressed = false;
@@ -66,12 +75,10 @@ class Checkers : public Engine::State, public UI::UIInitializer
         void Start() override;
 
         // game methods
-        void startGame();
-        void movePiece(const sf::Vector2i &position);
-        void selectPiece(const sf::Vector2i &position);
-        void deselectPiece(const sf::Vector2i &position);
-        void movePieceTo(const sf::Vector2i &position);
-        void removePiece(const sf::Vector2i &position);
+        void doPlayerTurn(const sf::Event::MouseButtonEvent &event);
+        void movePiece(const sf::Event::MouseButtonEvent &event);
+        void selectPiece(sf::Vector2f boardPos, int x, int y);
+        void deselectPiece(int x, int y);
         void promotePiece(const sf::Vector2i &position);
         void checkForWin();
         void switchPlayer();
@@ -87,5 +94,14 @@ class Checkers : public Engine::State, public UI::UIInitializer
         void DrawBoardCells();
         void DrawBoardPieces();
 
+        // ui methods
         void InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize = 30) override;
+        void UpdateBoard();
+
+        // event handler methods
+        void UpdateButtonHoverState(const sf::Event& event) override;
+        void UpdateButtonSelectionState() override;
+        void HandleMousePressed(const sf::Event& event) override;
+
+        void closeWindow() const;
 };

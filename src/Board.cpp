@@ -62,6 +62,17 @@ void Board::initCheckersBoard()
     setPiecesOnBoard();
 }
 
+void Board::movePiece(int x, int y, int newX, int newY)
+{
+    if (x < 0 || x >= rows || y < 0 || y >= cols || newX < 0 || newX >= rows || newY < 0 || newY >= cols)
+    {
+        throw std::out_of_range("x or y is out of range");
+    }
+
+    setValueAt(newX, newY, *getValueAt(x, y));
+    setValueAt(x, y, Piece(x, y, players[2], sf::Color::Transparent, ' '));
+}
+
 void Board::fillBoardWithEmptyPieces()
 {
     for (int i = 0; i < rows; i++)

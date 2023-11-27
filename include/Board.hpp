@@ -28,6 +28,8 @@ class Board
         void initBoard(GameType gameType);
         void initCheckersBoard();
 
+        void movePiece(int x, int y, int newX, int newY);
+
         void fillBoardWithEmptyPieces();
         void setPiecesOnBoard();
 
