@@ -5,7 +5,7 @@
 
 #include "State.hpp"
 #include "Launcher.hpp"
-#include "UI.hpp"
+#include "UIHandler.hpp"
 #include "EventHandler.hpp"
 
 class MainMenu: public Engine::State, public UI::UIHandler, public EventHandler

@@ -147,18 +147,9 @@ void Checkers::Draw()
     m_context->m_window->display();
 }
 
-void Checkers::Start() 
-{
-    while (m_context->m_window->isOpen())
-    {
-        ProcessInput();
-        Update();
-        Draw();
-    }
-}
-
 void Checkers::doPlayerTurn(const sf::Event::MouseButtonEvent &event)
 {
+    //m_isPlayerTurn = true;
     std::cout << "doPlayerTurn()\n";
 
     // if the click is on the board (not on the buttons)
@@ -174,45 +165,43 @@ void Checkers::doPlayerTurn(const sf::Event::MouseButtonEvent &event)
     // select or deselect a piece
     if (m_selectedPiece.first == -1 && m_selectedPiece.second == -1) 
         selectPiece(boardPos, x, y);
-    else deselectPiece(x, y);
-
-    // move the piece
-    if (m_selectedPiece.first != -1 && m_selectedPiece.second != -1 && m_isPieceSelected) 
+    else if (m_selectedPiece.first != -1 && m_selectedPiece.second != -1 && m_pieceCanBeMoved && m_selectedPiece.first != y && m_selectedPiece.second != x) 
     {
-        std::cout << "debug" << std::endl;
         if (m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves().empty()) return;
-        movePiece(event);
+        
+        movePiece(event, x, y);
     }
+    else deselectPiece(x, y);
 }
 
-void Checkers::movePiece(const sf::Event::MouseButtonEvent &event) 
+void Checkers::movePiece(const sf::Event::MouseButtonEvent &event, int x, int y) 
 {
     std::cout << "movePiece() << x: " << m_selectedPiece.first << " y: " << m_selectedPiece.second << std::endl;
-    // select the cell where the piece will be moved
-    //if (m_boardCell[y][x].getGlobalBounds().contains(boardPos))
-    //{
-    //    // on test si la case où on veut déplacer la pièce est une case où la pièce peut se déplacer
-    //    std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
-    //    for (auto const &move : possibleMoves)
-    //    {
-    //        if (move.first == x && move.second == y)
-    //        {
-    //            m_board.get()->movePiece(m_selectedPiece.first, m_selectedPiece.second, y, x);
-    //            m_boardNeedUpdate = true;
+    std::cout << "move to : x: " << y << " y: " << x << std::endl;
 
-                // on enlève la couleur verte des cases où la pièce pouvait se déplacer
-    //            for (auto const &move : possibleMoves)
-    //            {
-    //                if ((move.first + move.second) % 2 == 0) m_boardCell[move.second][move.first].setFillColor(WHITECELL_COLOR);
-    //                else m_boardCell[move.second][move.first].setFillColor(BLACKCELL_COLOR);
-    //            }
+    // We verify if the click is on a possible move
+    /*std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
+    bool isPossibleMove = false;
+    for (const auto &move : possibleMoves)
+    {
+        if (move.first == y && move.second == x)
+        {
+            isPossibleMove = true;
+            break;
+        }
+    }
 
-    //            m_selectedPiece = std::make_pair(-1, -1);
-    //            m_isPieceSelected = false;
-    //        }
-    //    }
-    //}
+    if (!isPossibleMove) return;
+
+    // We move the piece
+    m_board.get()->movePiece(m_selectedPiece.first, m_selectedPiece.second, y, x);
+    m_boardNeedUpdate = true;
+
+    std::cout << *m_board << std::endl;*/
+
+    deselectPiece(m_selectedPiece.second, m_selectedPiece.first);
 }
+
 
 void Checkers::selectPiece(sf::Vector2f boardPos, int x, int y)
 {
@@ -221,6 +210,7 @@ void Checkers::selectPiece(sf::Vector2f boardPos, int x, int y)
         if (m_board.get()->getValueAt(y, x)->getOwner().getId() == m_currentPlayer.get()->getId())
         {
             m_selectedPiece = std::make_pair(y, x);
+            m_boardCell[x][y].setFillColor(sf::Color::Red);
             
             std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
             for (const auto &move : possibleMoves)
@@ -229,23 +219,44 @@ void Checkers::selectPiece(sf::Vector2f boardPos, int x, int y)
             }
 
             m_isPieceSelected = true;
+            m_pieceCanBeMoved = true;
         }
     }
+
+    std::cout << m_isPieceSelected << std::endl;
+    std::cout << m_selectedPiece.first << " " << m_selectedPiece.second << std::endl;   
 }
 
 void Checkers::deselectPiece(int x, int y) 
 {
+    std::cout << "deselectPiece()\n";
     if (m_selectedPiece.first == y && m_selectedPiece.second == x)
     {
-        std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
-        for (auto const &move : possibleMoves)
+        //std::vector<std::pair<int, int>> possibleMoves = m_board.get()->getValueAt(m_selectedPiece.first, m_selectedPiece.second)->getPossibleMoves();
+        
+        if ((x + y) % 2 == 0) m_boardCell[x][y].setFillColor(WHITECELL_COLOR);
+        else m_boardCell[x][y].setFillColor(BLACKCELL_COLOR);
+        
+        // We update the color of the neighbors cells
+        int direction[4][2] = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        for (auto const &dir : direction)
+        {
+            int xNeighbor = x + dir[0];
+            int yNeighbor = y + dir[1];
+            if (xNeighbor < 0 || xNeighbor >= BOARD_SIZE || yNeighbor < 0 || yNeighbor >= BOARD_SIZE) continue;
+            if ((xNeighbor + yNeighbor) % 2 == 0) m_boardCell[xNeighbor][yNeighbor].setFillColor(WHITECELL_COLOR);
+            else m_boardCell[xNeighbor][yNeighbor].setFillColor(BLACKCELL_COLOR);
+        }
+
+        /*for (auto const &move : possibleMoves)
         {
             if ((move.first + move.second) % 2 == 0) m_boardCell[move.second][move.first].setFillColor(WHITECELL_COLOR);
             else m_boardCell[move.second][move.first].setFillColor(BLACKCELL_COLOR);
-        }
+        }*/
 
         m_selectedPiece = std::make_pair(-1, -1);
         m_isPieceSelected = false;
+        m_pieceCanBeMoved = false;
     }
 }
 
@@ -277,6 +288,8 @@ void Checkers::UpdateBoard()
                 m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
             else
                 m_boardPiece[i][j].setFillColor(sf::Color::Transparent);
+
+            m_board.get()->getValueAt(i, j)->findPossibleMoves(*m_board.get());
         }
     }
 }
@@ -400,6 +413,6 @@ void Checkers::HandleMousePressed(const sf::Event& event)
     {
         if (m_isExitButtonSelected) m_isExitButtonPressed = true;
         if (m_isLaunchgameButtonSelected) m_isLaunchgameButtonPressed = true;
-        if (m_isGameStarted) doPlayerTurn(event.mouseButton);
+        if (m_isGameStarted /*&& !m_isPlayerTurn*/) doPlayerTurn(event.mouseButton);
     }
 }

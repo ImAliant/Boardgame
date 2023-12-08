@@ -5,7 +5,7 @@
 
 #include "State.hpp"
 #include "Launcher.hpp"
-#include "UI.hpp"
+#include "UIHandler.hpp"
 #include "EventHandler.hpp"
 
 class GameChoice: public Engine::State, public UI::UIHandler, public EventHandler
@@ -36,7 +36,6 @@ class GameChoice: public Engine::State, public UI::UIHandler, public EventHandle
         void Init() override;
         void ProcessInput() override;
         void Update() override;
-        
         void Draw() override;
 
         void InputUp() override;

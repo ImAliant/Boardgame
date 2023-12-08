@@ -65,23 +65,27 @@ void GameChoice::Update()
 
 void GameChoice::ActionButinButtonSelected()
 {
+    // TODO controller si le bouton est bien selectionné
     m_butinButton.setFillColor(sf::Color::Red);
     m_checkersButton.setFillColor(sf::Color::White);
 }
 void GameChoice::ActionCheckersButtonSelected()
 {
+    // TODO controller si le bouton est bien selectionné
     m_checkersButton.setFillColor(sf::Color::Red);
     m_butinButton.setFillColor(sf::Color::White);
     m_bulltrickerButton.setFillColor(sf::Color::White);
 }
 void GameChoice::ActionBulltrickerButtonSelected()
 {
+    // TODO controller si le bouton est bien selectionné
     m_bulltrickerButton.setFillColor(sf::Color::Red);
     m_checkersButton.setFillColor(sf::Color::White);
     m_exitButton.setFillColor(sf::Color::White);
 }
 void GameChoice::ActionExitButtonSelected()
 {
+    // TODO controller si le bouton est bien selectionné
     m_exitButton.setFillColor(sf::Color::Red);
     m_bulltrickerButton.setFillColor(sf::Color::White);
 }

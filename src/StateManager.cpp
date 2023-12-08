@@ -25,18 +25,18 @@ void Engine::StateManager::ProcessStateChange()
 {
     if (m_removeAll)
     {
-        while (!m_stateS.empty())
+        while (!IsEmpty())
         {
             m_stateS.pop();
         }
 
         m_removeAll = false;
     }
-    else if (m_remove && !m_stateS.empty())
+    else if (m_remove && !IsEmpty())
     {
         m_stateS.pop();
 
-        if (!m_stateS.empty())
+        if (!IsEmpty())
         {
             m_stateS.top()->Start();
         }
@@ -46,13 +46,13 @@ void Engine::StateManager::ProcessStateChange()
 
     if (m_add)
     {
-        if (m_replace && !m_stateS.empty())
+        if (m_replace && !IsEmpty())
         {
             m_stateS.pop();
             m_replace = false;
         }
 
-        if (!m_stateS.empty())
+        if (!IsEmpty())
         {
             m_stateS.top()->Pause();
         }

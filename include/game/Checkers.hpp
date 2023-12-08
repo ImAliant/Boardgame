@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../State.hpp"
-#include "../UI.hpp"
+#include "../UIHandler.hpp"
 #include "../Board.hpp"
 #include "../Launcher.hpp"
 #include "../AssetManager.hpp"
@@ -50,6 +50,7 @@ class Checkers : public Engine::State, public UI::UIHandler, public EventHandler
         bool m_isGameStarted = false;
 
         bool m_isPieceSelected = false;
+        bool m_pieceCanBeMoved = false;
 
         bool m_boardNeedUpdate = false;
 
@@ -72,11 +73,11 @@ class Checkers : public Engine::State, public UI::UIHandler, public EventHandler
         void ProcessInput() override;
         void Update() override;
         void Draw() override;
-        void Start() override;
+        //void Start() override;
 
         // game methods
         void doPlayerTurn(const sf::Event::MouseButtonEvent &event);
-        void movePiece(const sf::Event::MouseButtonEvent &event);
+        void movePiece(const sf::Event::MouseButtonEvent &event, int x, int y);
         void selectPiece(sf::Vector2f boardPos, int x, int y);
         void deselectPiece(int x, int y);
         void promotePiece(const sf::Vector2i &position);
