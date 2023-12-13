@@ -1,5 +1,4 @@
 #include "../include/GameChoice.hpp"
-//#include "../include/game/Checkers.hpp"
 #include "../include/game/checkers/CheckersController.hpp"
 
 #include <iostream>
@@ -46,15 +45,13 @@ void GameChoice::Update()
 
     if(m_isButinButtonPressed)
     {
-        // TODO : Change the current state to Game1
+        // TODO : Change the current state to Butin
         std::cout << "Butin" << std::endl;
 
         m_isButinButtonPressed = false;
     }
     else if(m_isCheckersButtonPressed)
     {
-        //m_context->m_states->Add(std::make_unique<Checkers>(m_context), true);
-        // TODO
         m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true);
 
         m_isCheckersButtonPressed = false;
@@ -62,7 +59,7 @@ void GameChoice::Update()
     else if(m_isBulltrickerButtonPressed)
     {
         std::cout << "Bulltricker" << std::endl;
-        // TODO : Change the current state to Game3
+        // TODO : Change the current state to Bulltricker
 
         m_isBulltrickerButtonPressed = false;
     }
@@ -75,27 +72,23 @@ void GameChoice::Update()
 
 void GameChoice::ActionButinButtonSelected()
 {
-    // TODO controller si le bouton est bien selectionné
     m_butinButton.setFillColor(sf::Color::Red);
     m_checkersButton.setFillColor(sf::Color::White);
 }
 void GameChoice::ActionCheckersButtonSelected()
 {
-    // TODO controller si le bouton est bien selectionné
     m_checkersButton.setFillColor(sf::Color::Red);
     m_butinButton.setFillColor(sf::Color::White);
     m_bulltrickerButton.setFillColor(sf::Color::White);
 }
 void GameChoice::ActionBulltrickerButtonSelected()
 {
-    // TODO controller si le bouton est bien selectionné
     m_bulltrickerButton.setFillColor(sf::Color::Red);
     m_checkersButton.setFillColor(sf::Color::White);
     m_exitButton.setFillColor(sf::Color::White);
 }
 void GameChoice::ActionExitButtonSelected()
 {
-    // TODO controller si le bouton est bien selectionné
     m_exitButton.setFillColor(sf::Color::Red);
     m_bulltrickerButton.setFillColor(sf::Color::White);
 }
@@ -204,19 +197,3 @@ void GameChoice::Draw()
     m_context->m_window->draw(m_exitButton);
     m_context->m_window->display();
 }
-
-/*void GameChoice::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize)
-{
-    sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT); 
-    if (font == nullptr)
-    {
-        std::cout << "The font of is not loaded" << std::endl;
-        return;
-    }
-
-    object.setFont(*font);
-    object.setString(text);
-    object.setCharacterSize(characterSize);
-    object.setOrigin(object.getGlobalBounds().width / 2, object.getGlobalBounds().height / 2);
-    object.setPosition(position);
-}*/

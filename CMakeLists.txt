@@ -13,11 +13,6 @@ set(SOURCES
     src/StateManager.cpp
     src/Launcher.cpp
     src/MainMenu.cpp
-    src/exception/PathNotFoundException.cpp
-    src/exception/GameTypeInvalidException.cpp
-    src/exception/InitializationException.cpp
-    src/exception/InvalidUsageException.cpp
-    src/exception/InvalidCoordinatesException.cpp
     src/GameChoice.cpp
     src/Piece.cpp
     src/Player.cpp
@@ -28,6 +23,12 @@ set(SOURCES
     src/game/checkers/CheckersView.cpp
     src/CheckersBoard.cpp
     src/CheckersPiece.cpp
+
+    src/exception/PathNotFoundException.cpp
+    src/exception/InitializationException.cpp
+    src/exception/InvalidUsageException.cpp
+    src/exception/InvalidCoordinatesException.cpp
+    src/exception/AssetNotFoundException.cpp
 
     # Add other source files here
 )

@@ -5,6 +5,7 @@
 #include "../../Launcher.hpp"
 #include "../../AssetManager.hpp"
 #include "../../EventHandler.hpp"
+#include "../../Constants.hpp"
 #include "Checkers.hpp"
 #include "CheckersView.hpp"
 

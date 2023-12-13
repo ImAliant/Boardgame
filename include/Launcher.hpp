@@ -4,6 +4,7 @@
 
 #include "AssetManager.hpp"
 #include "StateManager.hpp"
+#include "Constants.hpp"
 
 struct Context
 {
@@ -18,8 +19,6 @@ struct Context
         m_states = std::make_unique<Engine::StateManager>();
     }
 };
-
-const sf::Vector2u WINDOW_SIZE = sf::Vector2u{500, 600};
 
 class Launcher
 {

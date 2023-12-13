@@ -1,13 +1,11 @@
 #pragma once
 
 #include "CheckersPiece.hpp"
+#include "Constants.hpp"
 
 #include <vector>
 
 class CheckersPiece;
-
-const int CHECKERSROWS = 10;
-const int CHECKERSCOLS = 10;
 
 class CheckersBoard: public Board
 {

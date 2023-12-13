@@ -39,7 +39,7 @@ void Checkers::Turn(std::pair<int, int> coord) {
     if (IsPieceOfCurrentPlayer(coord)) {
         SelectPiece(coord);
     }
-    else if (IsMovePossible(coord))
+    else if (IsMovePossible(coord) && IsPieceSelected())
     {
         // Si le mouvement est possible alors on déplace la piece
         ApplyMove(coord);

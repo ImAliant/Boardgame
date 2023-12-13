@@ -1,5 +1,7 @@
 #include "../include/CheckersBoard.hpp"
 
+using namespace CheckersConstants;
+
 CheckersBoard::CheckersBoard(std::vector<std::shared_ptr<Player>> players)
 : Board(std::move(players))
 {

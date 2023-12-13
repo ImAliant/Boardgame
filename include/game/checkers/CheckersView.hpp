@@ -3,29 +3,47 @@
 #include "../../UIHandler.hpp"
 #include "../../Launcher.hpp"
 #include "../../CheckersBoard.hpp"
+#include "../../Constants.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+struct flags_t {
+    bool m_boardNeedUpdate = false;
+    bool m_isLaunchgameButtonSelected = false;
+    bool m_isLaunchgameButtonPressed = false;
+    bool m_isLaunchgameButtonHovered = false;
+    bool m_wasLaunchgameButtonHovered = false;
+    bool m_isLaunchgameButtonVisible = true;
+    bool m_isExitButtonSelected = false;
+    bool m_isExitButtonPressed = false;
+    bool m_isExitButtonHovered = false;
+    bool m_wasExitButtonHovered = false;
+    bool m_hasHighLightedCell = false;
+};
+
+/*struct button_t {
+    sf::Text m_text;
+    sf::Vector2f m_position;
+    sf::Vector2f m_size;
+    sf::Color m_color;
+    sf::Color m_hoverColor;
+    sf::Color m_selectedColor;
+    sf::Color m_pressedColor;
+    sf::Color m_textColor;
+    sf::Color m_textHoverColor;
+    sf::Color m_textSelectedColor;
+    sf::Color m_textPressedColor;
+    bool m_isSelected = false;
+    bool m_isPressed = false;
+    bool m_isHovered = false;
+    bool m_wasHovered = false;
+    bool m_isVisible = true;
+};*/
+
 class CheckersView: public UI::UIHandler
 {
     private:
-        const sf::Color BLACKCELL_COLOR = sf::Color{112, 74, 39};
-        const sf::Color WHITECELL_COLOR = sf::Color{209, 183, 151};
-        const sf::Color BOARDBACKGROUND_COLOR = sf::Color{46, 24, 3};
-        const sf::Vector2f BOARDBACKGROUND_SIZE = 
-            sf::Vector2f{static_cast<float>(WINDOW_SIZE.x) - 10.f, 
-                         static_cast<float>(WINDOW_SIZE.y) - 110.f};
-        const sf::Vector2f BOARDBACKGROUND_POSITION = sf::Vector2f{5.f, 5.f};
-        const sf::Vector2f BOARDCELL_SIZE = 
-            sf::Vector2f{(BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(CHECKERSROWS),
-                         (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(CHECKERSCOLS)};
-        const sf::Vector2f BOARDPIECE_SIZE =
-            sf::Vector2f{BOARDCELL_SIZE.x - 10.f, BOARDCELL_SIZE.y - 10.f};
-        const sf::Vector2f BOARDOFFSET = sf::Vector2f{10.f, 10.f};
-        const int BLACKPIECE_TEXTUREID = 0;
-        const int WHITEPIECE_TEXTUREID = 1;
-
         sf::RectangleShape m_boardBackgroud;
 
         std::vector<sf::Texture> m_pieceTexture;
@@ -33,33 +51,26 @@ class CheckersView: public UI::UIHandler
         std::vector<std::vector<sf::RectangleShape>> m_boardCell;
         std::vector<std::vector<sf::RectangleShape>> m_boardPiece;
 
-        sf::RectangleShape m_lineSeparator1;
+        sf::RectangleShape m_lineSeparator;
 
         sf::Text m_lauchgameButton;
         sf::Text m_exitButton;
 
-        // boolean flags related to UI state
-        bool m_boardNeedUpdate = false;
-        bool m_isLaunchgameButtonSelected = false;
-        bool m_isLaunchgameButtonPressed = false;
-        bool m_isLaunchgameButtonHovered = false;
-        bool m_wasLaunchgameButtonHovered = false;
-        bool m_isLaunchgameButtonVisible = true;
-        bool m_isExitButtonSelected = false;
-        bool m_isExitButtonPressed = false;
-        bool m_isExitButtonHovered = false;
-        bool m_wasExitButtonHovered = false;
-        bool m_hasHighLightedCell = false;
+        flags_t m_flags;
+
+        void InitPieceTexture(std::shared_ptr<Context> context);
+        void LoadTexture(int textureID, std::shared_ptr<Context> context);
+
+        void InitBoardBackground();
+        void InitBoardCell(const CheckersBoard& board);
+        sf::Vector2f CalculatePosition(float offset, int i, int j) const;
+
+        void InitBoardPiece(const CheckersBoard& board);
     public:
         CheckersView();
         ~CheckersView() override;
 
         void Init(std::shared_ptr<Context> context, const CheckersBoard& board);
-
-        void InitPieceTexture(std::shared_ptr<Context> context);
-        void InitBoardBackground();
-        void InitBoardCell(const CheckersBoard& board);
-        void InitBoardPiece(const CheckersBoard& board);
 
         void Draw(sf::RenderWindow& window);
         void DrawBoardCells(sf::RenderWindow& window);
@@ -73,7 +84,7 @@ class CheckersView: public UI::UIHandler
         void HideLaunchgameButton();
         void RenderButton();
 
-        std::pair<int, int> GetBoardCoord(int x, int y/*, const sf::RenderWindow& window*/) const;
+        std::pair<int, int> GetBoardCoord(int x, int y) const;
 
         void UpdateFlag(bool& flagToUpdate, bool newValue) const;
 
@@ -81,6 +92,7 @@ class CheckersView: public UI::UIHandler
         sf::Text& GetLaunchgameButton();
         sf::Text& GetExitButton();
         std::vector<std::vector<sf::RectangleShape>>& GetBoardCell();
+
         // getters for boolean flags
         bool& GetBoardNeedUpdate();
         bool& GetIsLaunchgameButtonSelected();

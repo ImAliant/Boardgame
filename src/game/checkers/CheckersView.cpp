@@ -1,4 +1,7 @@
 #include "../../../include/game/checkers/CheckersView.hpp"
+#include "../../../include/exception/AssetNotFoundException.hpp"
+
+using namespace CheckersConstants;
 
 CheckersView::CheckersView() {}
 
@@ -18,28 +21,31 @@ void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& b
         return;
     }
 
-    InitSizeAndPositionRectangleShape(m_lineSeparator1, sf::Vector2f(static_cast<float>(WINDOW_SIZE.x), 2), sf::Vector2f(0.f, static_cast<float>(WINDOW_SIZE.y) - 100.f));
+    InitSizeAndPositionRectangleShape(m_lineSeparator, UIConstants::LINESEPARATOR_SIZE, UIConstants::LINESEPARATOR_POSITION);
 
-    InitText(m_lauchgameButton, "Lancer la partie", sf::Vector2f(static_cast<float>(WINDOW_SIZE.x) / 2, static_cast<float>(WINDOW_SIZE.y) - 80.f), *font, 20);
-    InitText(m_exitButton, "Quitter", sf::Vector2f(static_cast<float>(WINDOW_SIZE.x) / 2, static_cast<float>(WINDOW_SIZE.y) - 30.f), *font, 20);
+    InitText(m_lauchgameButton, "Lancer la partie", UIConstants::LAUNCHBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
+    InitText(m_exitButton, "Quitter", UIConstants::EXITBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
 }
 
 void CheckersView::InitPieceTexture(std::shared_ptr<Context> context)
 {
-    if (!context->m_assets->HasTexture(CHECKERS_BLACK_PIECE)) {
-        std::cout << "Texture not found: CHECKERS_BLACK_PIECE" << std::endl;
-        // TODO: use a dedicated exception
-        throw std::runtime_error("Texture not found");
+    try 
+    {
+        LoadTexture(CHECKERS_BLACK_PIECE, context);
+        LoadTexture(CHECKERS_WHITE_PIECE, context);
     }
-    if (!context->m_assets->HasTexture(CHECKERS_WHITE_PIECE)) {
-        std::cout << "Texture not found: CHECKERS_WHITE_PIECE" << std::endl;
-        // TODO : use a dedicated exception
-        throw std::runtime_error("Texture not found");
+    catch (AssetNotFoundException& e)
+    {
+        std::cerr << e.what() << '\n';
     }
-    else {
-        m_pieceTexture.push_back(context->m_assets->GetTexture(CHECKERS_BLACK_PIECE));
-        m_pieceTexture.push_back(context->m_assets->GetTexture(CHECKERS_WHITE_PIECE));
+}
+void CheckersView::LoadTexture(int textureID, std::shared_ptr<Context> context) 
+{
+    if (!context->m_assets->HasTexture(textureID)) {
+        throw AssetNotFoundException("Texture not found" + std::to_string(textureID));
     }
+
+    m_pieceTexture.push_back(context->m_assets->GetTexture(textureID));
 }
 
 void CheckersView::InitBoardBackground()
@@ -67,10 +73,7 @@ void CheckersView::InitBoardCell(const CheckersBoard& board)
             InitSizeAndPositionRectangleShape(
                 m_boardCell[i][j],
                 BOARDCELL_SIZE,
-                sf::Vector2f(
-                    10.f + (BOARDCELL_SIZE.x * static_cast<float>(j)),
-                    10.f + (BOARDCELL_SIZE.y * static_cast<float>(i))
-                )
+                CalculatePosition(10.f, i, j)
             );
 
             if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(WHITECELL_COLOR);
@@ -94,20 +97,24 @@ void CheckersView::InitBoardPiece(const CheckersBoard& board)
             InitSizeAndPositionRectangleShape(
                 m_boardPiece[i][j],
                 BOARDPIECE_SIZE,
-                sf::Vector2f(
-                    15.f + (BOARDCELL_SIZE.x * static_cast<float>(j)),
-                    15.f + (BOARDCELL_SIZE.y * static_cast<float>(i))
-                )
+                CalculatePosition(15.f, i, j)
             );
 
             auto color = board.GetValueAt(i, j)->GetColor();
             if (color == sf::Color::Black)
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]); // ID TEXTURE NOIRE
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
             else if (color == sf::Color::White) 
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]); // ID TEXTURE BLANCHE
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
             else m_boardPiece[i][j].setFillColor(sf::Color::Transparent);
         }
     }
+}
+sf::Vector2f CheckersView::CalculatePosition(float offset, int i, int j) const
+{
+    return sf::Vector2f(
+        offset + (BOARDCELL_SIZE.x * static_cast<float>(j)),
+        offset + (BOARDCELL_SIZE.y * static_cast<float>(i))
+    );
 }
 
 void CheckersView::Draw(sf::RenderWindow& window)
@@ -116,7 +123,7 @@ void CheckersView::Draw(sf::RenderWindow& window)
     window.draw(m_boardBackgroud);
     DrawBoardCells(window);
     DrawBoardPiece(window);
-    window.draw(m_lineSeparator1);
+    window.draw(m_lineSeparator);
     window.draw(m_exitButton);
     window.draw(m_lauchgameButton);
     window.display();
@@ -171,13 +178,13 @@ void CheckersView::RemoveHighlightPossibleMoves(const std::vector<std::pair<int,
 
 void CheckersView::HideLaunchgameButton()
 {
-    m_isLaunchgameButtonVisible = false;
+    m_flags.m_isLaunchgameButtonVisible = false;
 }
 
 void CheckersView::RenderButton()
 {
-    UpdateButtonState(m_exitButton, m_isExitButtonSelected, m_isExitButtonHovered, m_wasExitButtonHovered);
-    UpdateButtonState(m_lauchgameButton, m_isLaunchgameButtonSelected, m_isLaunchgameButtonHovered, m_wasLaunchgameButtonHovered, m_isLaunchgameButtonVisible);
+    UpdateButtonState(m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered);
+    UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
 }
 
 std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const 
@@ -210,45 +217,45 @@ std::vector<std::vector<sf::RectangleShape>>& CheckersView::GetBoardCell()
 
 bool& CheckersView::GetBoardNeedUpdate() 
 {
-    return m_boardNeedUpdate;
+    return m_flags.m_boardNeedUpdate;
 }
 bool& CheckersView::GetIsLaunchgameButtonSelected() 
 {
-    return m_isLaunchgameButtonSelected;
+    return m_flags.m_isLaunchgameButtonSelected;
 }
 bool& CheckersView::GetIsLaunchgameButtonPressed() 
 {
-    return m_isLaunchgameButtonPressed;
+    return m_flags.m_isLaunchgameButtonPressed;
 }
 bool& CheckersView::GetIsLaunchgameButtonHovered() 
 {
-    return m_isLaunchgameButtonHovered;
+    return m_flags.m_isLaunchgameButtonHovered;
 }
 bool& CheckersView::GetWasLaunchgameButtonHovered() 
 {
-    return m_wasLaunchgameButtonHovered;
+    return m_flags.m_wasLaunchgameButtonHovered;
 }
 bool& CheckersView::GetIsLaunchgameButtonVisible() 
 {
-    return m_isLaunchgameButtonVisible;
+    return m_flags.m_isLaunchgameButtonVisible;
 }
 bool& CheckersView::GetIsExitButtonSelected() 
 {
-    return m_isExitButtonSelected;
+    return m_flags.m_isExitButtonSelected;
 }
 bool& CheckersView::GetIsExitButtonPressed() 
 {
-    return m_isExitButtonPressed;
+    return m_flags.m_isExitButtonPressed;
 }
 bool& CheckersView::GetIsExitButtonHovered() 
 {
-    return m_isExitButtonHovered;
+    return m_flags.m_isExitButtonHovered;
 }
 bool& CheckersView::GetWasExitButtonHovered() 
 {
-    return m_wasExitButtonHovered;
+    return m_flags.m_wasExitButtonHovered;
 }
 bool& CheckersView::GetHasHighLightedCell()
 {
-    return m_hasHighLightedCell;
+    return m_flags.m_hasHighLightedCell;
 }

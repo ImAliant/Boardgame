@@ -137,7 +137,8 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
             auto x = event.mouseButton.x;
             auto y = event.mouseButton.y;
 
-            if (x < 10 || x > 480 || y < 10 || y > 480)
+            using namespace CheckersConstants;
+            if (x < CLICKABLE_ZONE.first || x > CLICKABLE_ZONE.second || y < CLICKABLE_ZONE.first || y > CLICKABLE_ZONE.second)
                 return;
 
             std::pair<int, int> coord = m_view->GetBoardCoord(x, y);
