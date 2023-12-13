@@ -28,26 +28,18 @@ class Piece
         state_t m_state;
 
         std::vector<std::pair<int, int>> m_possibleMoves;
-
-        /*sf::Color m_color;
-        std::shared_ptr<Player> m_owner;
-        char m_symbol;*/
     public:
         Piece();
         Piece(int x, int y, std::shared_ptr<Player> owner, sf::Color color, char symbol);
         virtual ~Piece() = default;
 
-        /*Piece& operator=(const Piece& piece);
-        friend std::ostream& operator<<(std::ostream& os, const Piece& piece);*/
+        virtual void FindPossibleMoves(const Board& board) = 0;
 
-        //void findPossibleMoves(const Board& board);
-        virtual void findPossibleMoves(const Board& board) = 0;
+        void SetPosition(int x, int y);
 
-        void setPosition(int x, int y);
-
-        std::vector<std::pair<int, int>> getPossibleMoves() const;
-        std::pair<int, int> getPosition() const;
-        Player& getOwner() const;
-        sf::Color getColor() const;
-        char getSymbol() const;
+        std::vector<std::pair<int, int>> GetPossibleMoves() const;
+        std::pair<int, int> GetPosition() const;
+        Player& GetOwner() const;
+        sf::Color GetColor() const;
+        char GetSymbol() const;
 };

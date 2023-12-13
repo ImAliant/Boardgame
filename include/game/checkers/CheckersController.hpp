@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../State.hpp"
-#include "../UIHandler.hpp"
-#include "../Launcher.hpp"
-#include "../AssetManager.hpp"
-#include "../EventHandler.hpp"
+#include "../../State.hpp"
+#include "../../UIHandler.hpp"
+#include "../../Launcher.hpp"
+#include "../../AssetManager.hpp"
+#include "../../EventHandler.hpp"
 #include "Checkers.hpp"
 #include "CheckersView.hpp"
 

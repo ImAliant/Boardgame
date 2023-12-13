@@ -1,7 +1,7 @@
 #include "../../../include/game/checkers/Checkers.hpp"
-#include "../../include/GameType.hpp"
-#include "../../include/exception/InvalidUsageException.hpp"
-#include "../../include/exception/InvalidCoordinatesException.hpp"
+#include "../../../include/GameType.hpp"
+#include "../../../include/exception/InvalidUsageException.hpp"
+#include "../../../include/exception/InvalidCoordinatesException.hpp"
 
 #include <algorithm>
 
@@ -53,9 +53,9 @@ void Checkers::Turn(std::pair<int, int> coord) {
 bool Checkers::IsPieceOfCurrentPlayer(std::pair<int, int> coord) const
 {
     auto currentPlayer = m_currentPlayer->getPlayer();
-    auto piece = m_board->getValueAt(coord.first, coord.second);
+    auto piece = m_board->GetValueAt(coord.first, coord.second);
 
-    if (piece->getOwner().getPlayer() == currentPlayer) return true;
+    if (piece->GetOwner().getPlayer() == currentPlayer) return true;
     
     return false;
 }
@@ -65,7 +65,7 @@ bool Checkers::IsMovePossible(std::pair<int, int> coord) const
     std::cout << "IsMovePossible" << std::endl;
     // On teste si la piece est selectionnée
     if (!IsPieceSelected()) {
-        throw InvalidCoordinatesException("Checkers::IsMovePossible() : m_selectedPiece is invalid");
+        return false;
     }
 
     // On teste si la piece peut se déplacer à la coordonnée
@@ -112,17 +112,16 @@ void Checkers::ApplyMove(std::pair<int, int> coord)
     }
 
     // Si la piece est un pion, on teste si elle peut se promouvoir
-    if (GetPieceType(m_selectedPiece.first, m_selectedPiece.second) == PieceType::PAWN)
+    /*if (!IsPromoted(m_selectedPiece.first, m_selectedPiece.second))
     {
         if (CanPromotePiece(coord))
         {
             PromotePiece();
         }
-    }
+    }*/
 
     // On déplace la piece
-    auto piece = m_board->getValueAt(m_selectedPiece.first, m_selectedPiece.second);
-    m_board->movePiece(m_selectedPiece.first, m_selectedPiece.second, coord.first, coord.second);
+    m_board->MovePiece(m_selectedPiece.first, m_selectedPiece.second, coord.first, coord.second);
 }
 void Checkers::PromotePiece(/**/)
 {
@@ -135,6 +134,16 @@ void Checkers::CapturePiece(int x, int y)
 void Checkers::RemovePiece(int x, int y)
 {
 
+}
+
+bool Checkers::IsPromoted(int x, int y) const
+{
+    return m_board->GetValueAt(x, y)->IsPromoted();
+}
+bool Checkers::CanPromotePiece(std::pair<int, int> coord) const
+{
+    // TODO
+    return false;
 }
 
 void Checkers::InitPlayers() {
@@ -162,10 +171,11 @@ void Checkers::InitBoard() {
         throw std::runtime_error("Checkers::InitBoard() : m_players is empty");
     }
 
-    m_board = std::make_unique<Board>(GameType::CHECKERS, m_players);
+    //m_board = std::make_unique<Board>(GameType::CHECKERS, m_players);
+    m_board = std::make_unique<CheckersBoard>(m_players);
 
-    int row = m_board->getRows();
-    int col = m_board->getCols();
+    int row = m_board->GetRows();
+    int col = m_board->GetCols();
 
     if (row != 10 || col != 10) {
         throw std::runtime_error("Checkers::InitBoard() : row and col have incorrect values");
@@ -174,13 +184,13 @@ void Checkers::InitBoard() {
 
 void Checkers::UpdatePossibleMoves() const
 {
-    auto rows = m_board->getRows();
-    auto cols = m_board->getCols();
+    auto rows = m_board->GetRows();
+    auto cols = m_board->GetCols();
 
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++) {
-            m_board->getValueAt(i, j)->findPossibleMoves(*m_board);
+            m_board->GetValueAt(i, j)->FindPossibleMoves(*m_board);
         }
     }
 }
@@ -211,7 +221,7 @@ std::shared_ptr<Player> Checkers::GetPlayer(Players player) const
 }
 Piece& Checkers::GetPiece(int x, int y) const
 {
-    return *m_board->getValueAt(x, y);
+    return *m_board->GetValueAt(x, y);
 }
 std::vector<std::pair<int, int>> Checkers::GetPossibleMoves(int x, int y) const
 {
@@ -219,13 +229,13 @@ std::vector<std::pair<int, int>> Checkers::GetPossibleMoves(int x, int y) const
     std::cout << "GetPossibleMoves" << std::endl;
     std::cout << "x: " << x << ", y: " << y << std::endl;
 
-    return m_board->getValueAt(x, y)->getPossibleMoves();
+    return m_board->GetValueAt(x, y)->GetPossibleMoves();
 }
 /*std::vector<std::pair<int, int>> Checkers::GetPossibleCaptures(int x, int y) const
 {
     // TODO
 }*/
-std::unique_ptr<Board>& Checkers::GetBoard()
+std::unique_ptr<CheckersBoard>& Checkers::GetBoard()
 {
     return m_board;
 }

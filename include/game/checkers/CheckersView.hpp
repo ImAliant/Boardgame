@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../UIHandler.hpp"
-#include "../Launcher.hpp"
-#include "../Board.hpp"
+#include "../../UIHandler.hpp"
+#include "../../Launcher.hpp"
+#include "../../CheckersBoard.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -18,11 +18,13 @@ class CheckersView: public UI::UIHandler
                          static_cast<float>(WINDOW_SIZE.y) - 110.f};
         const sf::Vector2f BOARDBACKGROUND_POSITION = sf::Vector2f{5.f, 5.f};
         const sf::Vector2f BOARDCELL_SIZE = 
-            sf::Vector2f{(BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(10),  // TODO: BOARD_SIZE
-                         (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(10)};
+            sf::Vector2f{(BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(CHECKERSROWS),
+                         (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(CHECKERSCOLS)};
         const sf::Vector2f BOARDPIECE_SIZE =
             sf::Vector2f{BOARDCELL_SIZE.x - 10.f, BOARDCELL_SIZE.y - 10.f};
         const sf::Vector2f BOARDOFFSET = sf::Vector2f{10.f, 10.f};
+        const int BLACKPIECE_TEXTUREID = 0;
+        const int WHITEPIECE_TEXTUREID = 1;
 
         sf::RectangleShape m_boardBackgroud;
 
@@ -52,12 +54,12 @@ class CheckersView: public UI::UIHandler
         CheckersView();
         ~CheckersView() override;
 
-        void Init(std::shared_ptr<Context> context, const Board& board);
+        void Init(std::shared_ptr<Context> context, const CheckersBoard& board);
 
         void InitPieceTexture(std::shared_ptr<Context> context);
         void InitBoardBackground();
-        void InitBoardCell(const Board& board);
-        void InitBoardPiece(const Board& board);
+        void InitBoardCell(const CheckersBoard& board);
+        void InitBoardPiece(const CheckersBoard& board);
 
         void Draw(sf::RenderWindow& window);
         void DrawBoardCells(sf::RenderWindow& window);

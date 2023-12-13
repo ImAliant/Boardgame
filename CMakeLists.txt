@@ -19,7 +19,6 @@ set(SOURCES
     src/exception/InvalidUsageException.cpp
     src/exception/InvalidCoordinatesException.cpp
     src/GameChoice.cpp
-    src/Board.cpp
     src/Piece.cpp
     src/Player.cpp
     src/EventHandler.cpp
@@ -27,6 +26,8 @@ set(SOURCES
     src/game/checkers/Checkers.cpp
     src/game/checkers/CheckersController.cpp
     src/game/checkers/CheckersView.cpp
+    src/CheckersBoard.cpp
+    src/CheckersPiece.cpp
 
     # Add other source files here
 )

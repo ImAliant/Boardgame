@@ -4,7 +4,7 @@ CheckersView::CheckersView() {}
 
 CheckersView::~CheckersView() {}
 
-void CheckersView::Init(std::shared_ptr<Context> context, const Board& board)
+void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& board)
 {
     InitPieceTexture(context);
     InitBoardBackground();
@@ -52,10 +52,10 @@ void CheckersView::InitBoardBackground()
     m_boardBackgroud.setFillColor(BOARDBACKGROUND_COLOR);
 }
 
-void CheckersView::InitBoardCell(const Board& board)
+void CheckersView::InitBoardCell(const CheckersBoard& board)
 {
-    auto rows = board.getRows();
-    auto cols = board.getCols();
+    auto rows = board.GetRows();
+    auto cols = board.GetCols();
 
     m_boardCell.resize(rows);
     for (int i = 0; i < rows; i++) {
@@ -79,10 +79,10 @@ void CheckersView::InitBoardCell(const Board& board)
     }
 }
 
-void CheckersView::InitBoardPiece(const Board& board)
+void CheckersView::InitBoardPiece(const CheckersBoard& board)
 {
-    auto rows = board.getRows();
-    auto cols = board.getCols();
+    auto rows = board.GetRows();
+    auto cols = board.GetCols();
 
     m_boardPiece.resize(rows);
     for (int i = 0; i < rows; i++) {
@@ -100,11 +100,11 @@ void CheckersView::InitBoardPiece(const Board& board)
                 )
             );
 
-            auto color = board.getValueAt(i, j)->getColor();
+            auto color = board.GetValueAt(i, j)->GetColor();
             if (color == sf::Color::Black)
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[0]); // ID TEXTURE NOIRE
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]); // ID TEXTURE NOIRE
             else if (color == sf::Color::White) 
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[1]); // ID TEXTURE BLANCHE
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]); // ID TEXTURE BLANCHE
             else m_boardPiece[i][j].setFillColor(sf::Color::Transparent);
         }
     }

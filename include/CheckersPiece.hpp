@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Piece.hpp"
+#include "CheckersBoard.hpp"
 
-class Board; // TODO: CheckersBoard
+class CheckersBoard;
 
 enum PieceType
 {
@@ -18,8 +19,10 @@ class CheckersPiece: public Piece
         CheckersPiece(int x, int y, std::shared_ptr<Player> owner, sf::Color color, char symbol);
         ~CheckersPiece() override;
 
-        void findPossibleMoves(const Board& board) override;
+        friend std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece);
 
-        void promote();
-        bool isPromoted() const;
+        void FindPossibleMoves(const Board& board) override;
+
+        void Promote();
+        bool IsPromoted() const;
 };

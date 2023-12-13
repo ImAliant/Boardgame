@@ -1,6 +1,6 @@
 #include "../include/GameChoice.hpp"
 //#include "../include/game/Checkers.hpp"
-#include "../include/game/CheckersController.hpp"
+#include "../include/game/checkers/CheckersController.hpp"
 
 #include <iostream>
 #include <SFML/Window/Event.hpp>

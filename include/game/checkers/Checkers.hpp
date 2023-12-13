@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Board.hpp"
+#include "../../CheckersBoard.hpp"
 #include "../../Player.hpp"
 
 #include <memory>
@@ -10,7 +10,7 @@
 class Checkers
 {
     private:
-        std::unique_ptr<Board> m_board;
+        std::unique_ptr<CheckersBoard> m_board;
         std::vector<std::shared_ptr<Player>> m_players;
         std::shared_ptr<Player> m_currentPlayer;
 
@@ -44,7 +44,7 @@ class Checkers
         void PromotePiece(/**/);
         void CapturePiece(int x, int y);
         void RemovePiece(int x, int y);
-        bool GetPieceType(int x, int y) const;
+        bool IsPromoted(int x, int y) const;
         bool CanPromotePiece(std::pair<int, int> coord) const;
 
         // initialization
@@ -56,13 +56,14 @@ class Checkers
         void GameStart();
         void ResetSelectedPieceFlag();
         bool AreCoordinatesValid(std::pair<int, int> coord) const;
+        
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;
         std::shared_ptr<Player> GetPlayer(Players player) const;
         Piece& GetPiece(int x, int y) const;
         std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y) const;
         //std::vector<std::pair<int, int>> GetPossibleCaptures(int x, int y) const;
-        std::unique_ptr<Board>& GetBoard();
+        std::unique_ptr<CheckersBoard>& GetBoard();
         bool& IsGameStarted();
         bool& IsGameFinished();
         std::pair<int, int> GetSelectedPiece() const;

@@ -8,8 +8,10 @@ CheckersPiece::CheckersPiece(int x, int y, std::shared_ptr<Player> owner, sf::Co
 
 CheckersPiece::~CheckersPiece() {}
 
-void CheckersPiece::findPossibleMoves(const Board& board)
+void CheckersPiece::FindPossibleMoves(const Board& board)
 {
+    const auto& checkersBoard = dynamic_cast<const CheckersBoard&>(board);
+
     m_possibleMoves.clear();
 
     std::vector<std::pair<int, int>> directionsUp = {{-1, -1}, {-1, 1}};
@@ -22,9 +24,9 @@ void CheckersPiece::findPossibleMoves(const Board& board)
             int x = m_x + dx;
             int y = m_y + dy;
 
-            if (x >= 0 && x < board.getRows() && y >= 0 && y < board.getCols())
+            if (x >= 0 && x < board.GetRows() && y >= 0 && y < board.GetCols())
             {
-                if (board.getValueAt(x, y)->getColor() == sf::Color::Transparent)
+                if (checkersBoard.GetValueAt(x, y)->GetColor() == sf::Color::Transparent)
                 {
                     m_possibleMoves.push_back(std::make_pair(x, y));
                 }
@@ -38,9 +40,9 @@ void CheckersPiece::findPossibleMoves(const Board& board)
             int x = m_x + dx;
             int y = m_y + dy;
 
-            if (x >= 0 && x < board.getRows() && y >= 0 && y < board.getCols())
+            if (x >= 0 && x < board.GetRows() && y >= 0 && y < board.GetCols())
             {
-                if (board.getValueAt(x, y)->getColor() == sf::Color::Transparent)
+                if (checkersBoard.GetValueAt(x, y)->GetColor() == sf::Color::Transparent)
                 {
                     m_possibleMoves.push_back(std::make_pair(x, y));
                 }
@@ -49,13 +51,20 @@ void CheckersPiece::findPossibleMoves(const Board& board)
     }
 }
 
-void CheckersPiece::promote()
+void CheckersPiece::Promote()
 {
     m_state.type = PieceType::QUEEN;
     m_state.m_symbol = 'Q';
 }
 
-bool CheckersPiece::isPromoted() const
+bool CheckersPiece::IsPromoted() const
 {
     return m_state.type == PieceType::QUEEN;
+}
+
+std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece)
+{
+    os << piece.m_state.m_symbol;
+
+    return os;
 }

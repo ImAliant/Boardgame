@@ -7,37 +7,22 @@
 #include "GameType.hpp"
 #include "Piece.hpp"
 
-class Piece;
-
 class Board
 {
-    private:
-        int rows = -1;
-        int cols = -1;
+    protected:
+        int m_rows = -1;
+        int m_cols = -1;
 
-        std::vector<std::vector<std::unique_ptr<Piece>>> board;
-        std::vector<std::shared_ptr<Player>> players;
+        std::vector<std::shared_ptr<Player>> m_players;
     public:
-        Board() = default;
-        explicit Board(GameType gameType, std::vector<std::shared_ptr<Player>> players);
-        ~Board();
+        explicit Board(std::vector<std::shared_ptr<Player>> players) : m_players(std::move(players)) {}
+        virtual ~Board() = default;
 
-        friend std::ostream& operator<<(std::ostream& os, const Board& board);
+        virtual void Init() = 0;
+        virtual void FillBoardWithEmptyPieces() = 0;
+        virtual void SetPieceOnBoard() = 0;
+        virtual void MovePiece(int x, int y, int newX, int newY) = 0;
 
-        void init(GameType gameType);
-        void initBoard(GameType gameType);
-        void initCheckersBoard();
-
-        void movePiece(int x, int y, int newX, int newY);
-
-        void fillBoardWithEmptyPieces();
-        void setPiecesOnBoard();
-
-        void setDimensions(int rows, int cols);
-
-        Piece *getValueAt(int x, int y) const;
-        void setValueAt(int x, int y, Piece &piece);
-
-        int getRows() const;
-        int getCols() const;
+        int GetRows() const { return m_rows; };
+        int GetCols() const { return m_cols; };
 };
