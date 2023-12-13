@@ -44,8 +44,9 @@ void Checkers::Turn(std::pair<int, int> coord) {
         // On teste si la partie est terminée
         CheckForWin();
 
-        // On change de joueur
-        SwitchPlayer();
+        // On change de joueur si aucune piece n'a été capturée
+        if (!m_flags.m_isPieceCaptured)
+            SwitchPlayer();
     }
     else {
         if (m_flags.m_isPieceSelected)
@@ -125,7 +126,9 @@ void Checkers::ApplyMove(std::pair<int, int> coord)
     m_board->MovePiece(m_selectedPiece.first, m_selectedPiece.second, coord.first, coord.second);
     m_flags.m_boardNeedUpdate = true;
 
-    // TODO
+    // TODO: capture
+    // Si il y a une capture, on supprime la piece capturée
+    // Le joueur courant peut rejouer
 
     // On met à jour les mouvements possibles
     UpdatePossibleMoves();

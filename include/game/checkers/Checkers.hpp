@@ -13,6 +13,7 @@ struct flagsmodel_t {
     bool m_isPieceSelected = false;
     bool m_selectedPieceChanged = false;
     bool m_boardNeedUpdate = false;
+    bool m_isPieceCaptured = false;
 };
 
 class Checkers
