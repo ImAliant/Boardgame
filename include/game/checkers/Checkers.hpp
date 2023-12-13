@@ -7,6 +7,14 @@
 #include <vector>
 #include <SFML/System/Vector2.hpp>
 
+struct flagsmodel_t {
+    bool m_isGameStarted = false;
+    bool m_isGameFinished = false;
+    bool m_isPieceSelected = false;
+    bool m_selectedPieceChanged = false;
+    bool m_boardNeedUpdate = false;
+};
+
 class Checkers
 {
     private:
@@ -19,11 +27,7 @@ class Checkers
 
         std::vector<std::pair<int, int>> m_lastPossibleMoves;
 
-        bool m_isGameStarted = false;
-        bool m_isGameFinished = false;
-
-        bool m_isPieceSelected = false;
-        bool m_selectedPieceChanged = false;
+        flagsmodel_t m_flags;
     public:
         Checkers();
         ~Checkers();
@@ -55,6 +59,7 @@ class Checkers
 
         void GameStart();
         void ResetSelectedPieceFlag();
+        void ResetBoardNeedUpdateFlag();
         bool AreCoordinatesValid(std::pair<int, int> coord) const;
         
         // getters
@@ -71,4 +76,5 @@ class Checkers
         bool IsPieceSelected() const;
         bool IsSelectedPieceChanged() const;
         std::vector<std::pair<int, int>> GetLastPossibleMoves() const;
+        bool IsBoardNeedUpdate() const;
 };

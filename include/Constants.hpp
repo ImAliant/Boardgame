@@ -35,6 +35,7 @@ namespace CheckersConstants
     const int CHECKERSCOLS = 10;
     const int BLACKPIECE_TEXTUREID = 0;
     const int WHITEPIECE_TEXTUREID = 1;
+    const int EMPTY_TEXTUREID = 2;
     const auto CLICKABLE_ZONE = std::make_pair(10, 480);
 
     const sf::Color BLACKCELL_COLOR = sf::Color{112, 74, 39};

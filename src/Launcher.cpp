@@ -39,4 +39,5 @@ void Launcher::InitAssets() const
     m_context->m_assets->AddFont(MAIN_FONT, "../assets/fonts/DejaVuSansMono.ttf");
     m_context->m_assets->AddTexture(CHECKERS_BLACK_PIECE, "../assets/images/checkers/black_piece.png");
     m_context->m_assets->AddTexture(CHECKERS_WHITE_PIECE, "../assets/images/checkers/white_piece.png");
+    m_context->m_assets->AddTexture(EMPTY_ASSET, "../assets/images/empty.png");
 }

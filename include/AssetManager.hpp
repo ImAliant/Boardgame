@@ -11,7 +11,8 @@ enum AssetID
 {
     MAIN_FONT = 0,
     CHECKERS_BLACK_PIECE,
-    CHECKERS_WHITE_PIECE
+    CHECKERS_WHITE_PIECE,
+    EMPTY_ASSET
 };
 
 namespace Engine

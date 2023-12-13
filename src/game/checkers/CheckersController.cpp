@@ -48,12 +48,12 @@ void CheckersController::Update() {
     m_view->RenderButton();
 
     // On change de couleur la case lorsqu'un pion est sélectionné
-    if (m_model->IsPieceSelected() && !m_view->GetHasHighLightedCell())
+    if (m_model->IsPieceSelected() && !m_view->HasHighLightedCell())
     {
         m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Yellow);
         auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
         m_view->HighlightPossibleMoves(possibleMoves);
-        m_view->UpdateFlag(m_view->GetHasHighLightedCell(), true);
+        m_view->UpdateFlag(m_view->HasHighLightedCell(), true);
     }
     if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 
@@ -64,15 +64,20 @@ void CheckersController::Update() {
         auto lastPossibleMoves = m_model->GetLastPossibleMoves();
         m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
         m_model->ResetSelectedPieceFlag();
-        m_view->UpdateFlag(m_view->GetHasHighLightedCell(), false);
+        m_view->UpdateFlag(m_view->HasHighLightedCell(), false);
+    }
+    if (m_model->IsBoardNeedUpdate())
+    {
+        m_view->UpdateBoard(*m_model->GetBoard());
+        m_model->ResetBoardNeedUpdateFlag();
     }
 
-    if (m_view->GetIsLaunchgameButtonPressed())
+    if (m_view->IsLaunchgameButtonPressed())
     {
         Start();
     }
 
-    if (m_view->GetIsExitButtonPressed())
+    if (m_view->IsExitButtonPressed())
     {
         CloseWindow();
     }
@@ -83,7 +88,7 @@ void CheckersController::Draw() {
 }
 
 void CheckersController::Start() {
-    m_view->UpdateFlag(m_view->GetIsLaunchgameButtonPressed(), false);
+    m_view->UpdateFlag(m_view->IsLaunchgameButtonPressed(), false);
     m_view->HideLaunchgameButton();
     m_model->GameStart();
 
@@ -104,8 +109,8 @@ void CheckersController::UpdateButtonHoverState(const sf::Event& event) {
         static_cast<float>(event.mouseButton.y)
     );
 
-    m_view->UpdateFlag(m_view->GetIsExitButtonHovered(), isExitHovered);
-    m_view->UpdateFlag(m_view->GetIsLaunchgameButtonHovered(), isLaunchgameHovered);
+    m_view->UpdateFlag(m_view->IsExitButtonHovered(), isExitHovered);
+    m_view->UpdateFlag(m_view->IsLaunchgameButtonHovered(), isLaunchgameHovered);
 }
 
 void CheckersController::UpdateButtonSelectionState() {
@@ -119,8 +124,8 @@ void CheckersController::UpdateButtonSelectionState() {
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
     );
 
-    m_view->UpdateFlag(m_view->GetIsExitButtonSelected(), isExitSelected);
-    m_view->UpdateFlag(m_view->GetIsLaunchgameButtonSelected(), isLaunchgameSelected);
+    m_view->UpdateFlag(m_view->IsExitButtonSelected(), isExitSelected);
+    m_view->UpdateFlag(m_view->IsLaunchgameButtonSelected(), isLaunchgameSelected);
 }
 
 void CheckersController::HandleMousePressed(const sf::Event& event) {
@@ -128,10 +133,10 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
 
     if (isMousePressed)
     {
-        if (m_view->GetIsLaunchgameButtonSelected())
-            m_view->UpdateFlag(m_view->GetIsLaunchgameButtonPressed(), true);
-        if (m_view->GetIsExitButtonSelected())
-            m_view->UpdateFlag(m_view->GetIsExitButtonPressed(), true);
+        if (m_view->IsLaunchgameButtonSelected())
+            m_view->UpdateFlag(m_view->IsLaunchgameButtonPressed(), true);
+        if (m_view->IsExitButtonSelected())
+            m_view->UpdateFlag(m_view->IsExitButtonPressed(), true);
         if (m_model->IsGameStarted())
         {
             auto x = event.mouseButton.x;

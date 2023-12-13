@@ -8,8 +8,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-struct flags_t {
-    bool m_boardNeedUpdate = false;
+struct flagsview_t {
     bool m_isLaunchgameButtonSelected = false;
     bool m_isLaunchgameButtonPressed = false;
     bool m_isLaunchgameButtonHovered = false;
@@ -56,7 +55,7 @@ class CheckersView: public UI::UIHandler
         sf::Text m_lauchgameButton;
         sf::Text m_exitButton;
 
-        flags_t m_flags;
+        flagsview_t m_flags;
 
         void InitPieceTexture(std::shared_ptr<Context> context);
         void LoadTexture(int textureID, std::shared_ptr<Context> context);
@@ -75,6 +74,7 @@ class CheckersView: public UI::UIHandler
         void Draw(sf::RenderWindow& window);
         void DrawBoardCells(sf::RenderWindow& window);
         void DrawBoardPiece(sf::RenderWindow& window);
+        void UpdateBoard(const CheckersBoard& board);
 
         void HighlightCell(std::pair<int, int> coord, sf::Color color);
         void RemoveHighlightCell(std::pair<int, int> coord);
@@ -94,15 +94,14 @@ class CheckersView: public UI::UIHandler
         std::vector<std::vector<sf::RectangleShape>>& GetBoardCell();
 
         // getters for boolean flags
-        bool& GetBoardNeedUpdate();
-        bool& GetIsLaunchgameButtonSelected();
-        bool& GetIsLaunchgameButtonPressed();
-        bool& GetIsLaunchgameButtonHovered();
-        bool& GetWasLaunchgameButtonHovered();
-        bool& GetIsLaunchgameButtonVisible();
-        bool& GetIsExitButtonSelected();
-        bool& GetIsExitButtonPressed();
-        bool& GetIsExitButtonHovered();
-        bool& GetWasExitButtonHovered();
-        bool& GetHasHighLightedCell();
+        bool& IsLaunchgameButtonSelected();
+        bool& IsLaunchgameButtonPressed();
+        bool& IsLaunchgameButtonHovered();
+        bool& WasLaunchgameButtonHovered();
+        bool& IsLaunchgameButtonVisible();
+        bool& IsExitButtonSelected();
+        bool& IsExitButtonPressed();
+        bool& IsExitButtonHovered();
+        bool& WasExitButtonHovered();
+        bool& HasHighLightedCell();
 };
