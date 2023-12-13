@@ -1,4 +1,4 @@
-#include "../../include/game/Checkers.hpp"
+#include "../../../include/game/checkers/Checkers.hpp"
 #include "../../include/GameType.hpp"
 #include "../../include/exception/InvalidUsageException.hpp"
 #include "../../include/exception/InvalidCoordinatesException.hpp"
@@ -39,12 +39,11 @@ void Checkers::Turn(std::pair<int, int> coord) {
     if (IsPieceOfCurrentPlayer(coord)) {
         SelectPiece(coord);
     }
-    /*else if (IsMovePossible(coord))
+    else if (IsMovePossible(coord))
     {
         // Si le mouvement est possible alors on déplace la piece
-        //ApplyMove(coord);
-        std::cout << "Move is possible" << std::endl;
-    }*/
+        ApplyMove(coord);
+    }
     else {
         if (m_isPieceSelected)
             DeselectPiece();
@@ -53,10 +52,10 @@ void Checkers::Turn(std::pair<int, int> coord) {
 
 bool Checkers::IsPieceOfCurrentPlayer(std::pair<int, int> coord) const
 {
-    auto cPlayer = m_currentPlayer->getPlayer();
+    auto currentPlayer = m_currentPlayer->getPlayer();
     auto piece = m_board->getValueAt(coord.first, coord.second);
 
-    if (piece->getOwner().getPlayer() == cPlayer) return true;
+    if (piece->getOwner().getPlayer() == currentPlayer) return true;
     
     return false;
 }
@@ -112,10 +111,18 @@ void Checkers::ApplyMove(std::pair<int, int> coord)
         return;
     }
 
+    // Si la piece est un pion, on teste si elle peut se promouvoir
+    if (GetPieceType(m_selectedPiece.first, m_selectedPiece.second) == PieceType::PAWN)
+    {
+        if (CanPromotePiece(coord))
+        {
+            PromotePiece();
+        }
+    }
+
     // On déplace la piece
     auto piece = m_board->getValueAt(m_selectedPiece.first, m_selectedPiece.second);
-    m_board->setValueAt(coord.first, coord.second, *piece);
-    auto emptyPiece = std::make_shared<Piece>(coord.first, coord.second, m_players[2], sf::Color::Transparent, ' ');
+    m_board->movePiece(m_selectedPiece.first, m_selectedPiece.second, coord.first, coord.second);
 }
 void Checkers::PromotePiece(/**/)
 {

@@ -24,9 +24,9 @@ set(SOURCES
     src/Player.cpp
     src/EventHandler.cpp
 
-    src/game/Checkers.cpp
-    src/game/CheckersController.cpp
-    src/game/CheckersView.cpp
+    src/game/checkers/Checkers.cpp
+    src/game/checkers/CheckersController.cpp
+    src/game/checkers/CheckersView.cpp
 
     # Add other source files here
 )

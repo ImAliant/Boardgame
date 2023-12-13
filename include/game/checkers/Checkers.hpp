@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Board.hpp"
-#include "../Player.hpp"
+#include "../../Board.hpp"
+#include "../../Player.hpp"
 
 #include <memory>
 #include <vector>
@@ -44,6 +44,8 @@ class Checkers
         void PromotePiece(/**/);
         void CapturePiece(int x, int y);
         void RemovePiece(int x, int y);
+        bool GetPieceType(int x, int y) const;
+        bool CanPromotePiece(std::pair<int, int> coord) const;
 
         // initialization
         void InitBoard();

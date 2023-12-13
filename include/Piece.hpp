@@ -9,31 +9,43 @@
 
 class Board;
 
-class Piece 
-{
-    private:
-        int m_x;
-        int m_y;
+struct state_t {
+        int type;
         sf::Color m_color;
         std::shared_ptr<Player> m_owner;
+        char m_symbol;
+};
+
+/*
+ * Piece interface
+ */
+class Piece 
+{
+    protected:
+        int m_x;
+        int m_y;
+
+        state_t m_state;
 
         std::vector<std::pair<int, int>> m_possibleMoves;
 
-        char m_symbol;
+        /*sf::Color m_color;
+        std::shared_ptr<Player> m_owner;
+        char m_symbol;*/
     public:
         Piece();
         Piece(int x, int y, std::shared_ptr<Player> owner, sf::Color color, char symbol);
-        ~Piece();
+        virtual ~Piece() = default;
 
-        Piece& operator=(const Piece& piece);
-        friend std::ostream& operator<<(std::ostream& os, const Piece& piece);
+        /*Piece& operator=(const Piece& piece);
+        friend std::ostream& operator<<(std::ostream& os, const Piece& piece);*/
 
-        void findPossibleMoves(const Board& board);
+        //void findPossibleMoves(const Board& board);
+        virtual void findPossibleMoves(const Board& board) = 0;
 
         void setPosition(int x, int y);
 
         std::vector<std::pair<int, int>> getPossibleMoves() const;
-
         std::pair<int, int> getPosition() const;
         Player& getOwner() const;
         sf::Color getColor() const;

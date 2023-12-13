@@ -36,7 +36,7 @@ class Board
         void setDimensions(int rows, int cols);
 
         Piece *getValueAt(int x, int y) const;
-        void setValueAt(int x, int y, const Piece &piece);
+        void setValueAt(int x, int y, Piece &piece);
 
         int getRows() const;
         int getCols() const;

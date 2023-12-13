@@ -134,13 +134,14 @@ Piece* Board::getValueAt(int x, int y) const
     return board[x][y].get();
 }
 
-void Board::setValueAt(int x, int y, const Piece& piece)
+void Board::setValueAt(int x, int y, Piece& piece)
 {
     if (x < 0 || x >= rows || y < 0 || y >= cols)
     {
         throw std::out_of_range("x or y is out of range");
     }
 
+    piece.setPosition(x, y);
     board[x][y] = std::make_unique<Piece>(piece);
 }
 

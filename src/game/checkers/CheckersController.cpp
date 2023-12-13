@@ -1,4 +1,4 @@
-#include "../../include/game/CheckersController.hpp"
+#include "../../../include/game/checkers/CheckersController.hpp"
 
 CheckersController::CheckersController(std::shared_ptr<Context> context)
     : m_context(context)
@@ -140,8 +140,8 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
             if (x < 10 || x > 480 || y < 10 || y > 480)
                 return;
 
-            std::pair<int, int> coord = m_view->GetBoardCoord(x, y, *m_context->m_window);
-
+            std::pair<int, int> coord = m_view->GetBoardCoord(x, y);
+        
             m_model->Turn(coord);
         }
     }

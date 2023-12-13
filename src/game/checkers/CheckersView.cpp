@@ -1,4 +1,4 @@
-#include "../../include/game/CheckersView.hpp"
+#include "../../../include/game/checkers/CheckersView.hpp"
 
 CheckersView::CheckersView() {}
 
@@ -10,7 +10,7 @@ void CheckersView::Init(std::shared_ptr<Context> context, const Board& board)
     InitBoardBackground();
     InitBoardCell(board);
     InitBoardPiece(board);
-    
+
     sf::Font const* font = &context->m_assets->GetFont(MAIN_FONT);
     if (font == nullptr)
     {
@@ -180,11 +180,10 @@ void CheckersView::RenderButton()
     UpdateButtonState(m_lauchgameButton, m_isLaunchgameButtonSelected, m_isLaunchgameButtonHovered, m_wasLaunchgameButtonHovered, m_isLaunchgameButtonVisible);
 }
 
-std::pair<int, int> CheckersView::GetBoardCoord(int x, int y, const sf::RenderWindow& window) const 
+std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const 
 {
-    sf::Vector2f boardPos = window.mapPixelToCoords(sf::Vector2i(x, y));
-    auto cX = static_cast<int>(boardPos.x / BOARDCELL_SIZE.x);
-    auto cY = static_cast<int>(boardPos.y / BOARDCELL_SIZE.y);
+    auto cX = static_cast<int>((x - BOARDOFFSET.x) / BOARDCELL_SIZE.x);
+    auto cY = static_cast<int>((y - BOARDOFFSET.y) / BOARDCELL_SIZE.y);
 
     return std::make_pair(cY, cX);
 }
@@ -203,6 +202,10 @@ sf::Text& CheckersView::GetLaunchgameButton()
 sf::Text& CheckersView::GetExitButton()
 {
     return m_exitButton;
+}
+std::vector<std::vector<sf::RectangleShape>>& CheckersView::GetBoardCell()
+{
+    return m_boardCell;
 }
 
 bool& CheckersView::GetBoardNeedUpdate() 

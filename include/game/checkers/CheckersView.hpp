@@ -22,6 +22,7 @@ class CheckersView: public UI::UIHandler
                          (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(10)};
         const sf::Vector2f BOARDPIECE_SIZE =
             sf::Vector2f{BOARDCELL_SIZE.x - 10.f, BOARDCELL_SIZE.y - 10.f};
+        const sf::Vector2f BOARDOFFSET = sf::Vector2f{10.f, 10.f};
 
         sf::RectangleShape m_boardBackgroud;
 
@@ -70,13 +71,14 @@ class CheckersView: public UI::UIHandler
         void HideLaunchgameButton();
         void RenderButton();
 
-        std::pair<int, int> GetBoardCoord(int x, int y, const sf::RenderWindow& window) const;
+        std::pair<int, int> GetBoardCoord(int x, int y/*, const sf::RenderWindow& window*/) const;
 
         void UpdateFlag(bool& flagToUpdate, bool newValue) const;
 
         // getters
         sf::Text& GetLaunchgameButton();
         sf::Text& GetExitButton();
+        std::vector<std::vector<sf::RectangleShape>>& GetBoardCell();
         // getters for boolean flags
         bool& GetBoardNeedUpdate();
         bool& GetIsLaunchgameButtonSelected();
