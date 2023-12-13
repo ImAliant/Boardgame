@@ -1,6 +1,6 @@
 #include "../include/StateManager.hpp"
 
-Engine::StateManager::StateManager(): m_add(false), m_replace(false), m_remove(false) {}
+Engine::StateManager::StateManager() {}
 Engine::StateManager::~StateManager() {}
 
 void Engine::StateManager::Add(std::unique_ptr<State> toAdd, bool replace) 
@@ -36,11 +36,6 @@ void Engine::StateManager::ProcessStateChange()
     {
         m_stateS.pop();
 
-        if (!IsEmpty())
-        {
-            m_stateS.top()->Start();
-        }
-
         m_remove = false;
     }
 
@@ -52,14 +47,8 @@ void Engine::StateManager::ProcessStateChange()
             m_replace = false;
         }
 
-        if (!IsEmpty())
-        {
-            m_stateS.top()->Pause();
-        }
-
         m_stateS.push(std::move(m_newState));
         m_stateS.top()->Init();
-        m_stateS.top()->Start();
         m_add = false;
     }
 }

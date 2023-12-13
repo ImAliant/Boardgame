@@ -12,7 +12,16 @@ namespace UI
     public:
         virtual ~UIHandler() = default;
 
-        virtual void InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize = 30) = 0;
+        virtual void InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const sf::Font& font, const int &characterSize = 30) {
+            object.setFont(font);
+            object.setString(text);
+            object.setCharacterSize(characterSize);
+            object.setOrigin(
+                object.getGlobalBounds().width / 2,
+                object.getGlobalBounds().height / 2
+            );
+            object.setPosition(position);
+        };
         virtual void InitSizeAndPositionRectangleShape(sf::RectangleShape &object, const sf::Vector2f &size, const sf::Vector2f &position) {
             object.setSize(size);
             object.setPosition(position);

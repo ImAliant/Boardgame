@@ -49,5 +49,5 @@ class GameChoice: public Engine::State, public UI::UIHandler, public EventHandle
         void ActionExitButtonSelected();
         void resetButtonValues();
 
-        void InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize = 30) override;
+        //void InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize = 30) override;
 };

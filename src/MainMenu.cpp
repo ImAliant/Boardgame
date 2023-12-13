@@ -12,14 +12,21 @@ void MainMenu::Init()
     auto width = static_cast<float>(m_context->m_window->getSize().x);
     auto height = static_cast<float>(m_context->m_window->getSize().y);
 
+    sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT);
+    if (font == nullptr)
+    {
+        std::cout << "The font of is not loaded" << std::endl;
+        return;
+    }
+
     // Title
-    InitText(m_gameTitle, "Boardgame", sf::Vector2f(width / 2, height / 2 - 150.f));
+    InitText(m_gameTitle, "Boardgame", sf::Vector2f(width / 2, height / 2 - 150.f), *font);
 
     // Play button
-    InitText(m_choiceButton, "Jeux", sf::Vector2f(width / 2, height / 2), 20);
+    InitText(m_choiceButton, "Jeux", sf::Vector2f(width / 2, height / 2), *font, 20);
 
     // Exit button
-    InitText(m_exitButton, "Quitter", sf::Vector2f(width / 2, height / 2 + 250.f), 20);
+    InitText(m_exitButton, "Quitter", sf::Vector2f(width / 2, height / 2 + 250.f), *font, 20);
 }
 
 void MainMenu::Update()
@@ -120,7 +127,7 @@ void MainMenu::InputEscape()
     m_context->m_window->close();
 }
 
-void MainMenu::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize)
+/*void MainMenu::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize)
 {
     sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT); 
     if (font == nullptr)
@@ -134,4 +141,4 @@ void MainMenu::InitText(sf::Text &object, const std::string &text, const sf::Vec
     object.setCharacterSize(characterSize);
     object.setOrigin(object.getGlobalBounds().width / 2, object.getGlobalBounds().height / 2);
     object.setPosition(position);
-}
+}*/

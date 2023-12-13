@@ -19,6 +19,8 @@ struct Context
     }
 };
 
+const sf::Vector2u WINDOW_SIZE = sf::Vector2u{500, 600};
+
 class Launcher
 {
     private:
