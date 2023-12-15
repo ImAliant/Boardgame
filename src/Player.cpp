@@ -11,6 +11,27 @@ Player::Player(Players player): m_player(player)
 
 Player::~Player() {}
 
+std::string Player::ToString() const
+{
+    std::string str;
+    switch (m_player)
+    {
+        case Players::PLAYER_ONE:
+            str = "PLAYER_ONE";
+            break;
+        case Players::PLAYER_TWO:
+            str = "PLAYER_TWO";
+            break;
+        case Players::PLAYER_THREE:
+            str = "PLAYER_THREE";
+            break;
+        case Players::NONE:
+            str = "NONE";
+            break;
+    }
+    return str;
+}
+
 std::ostream& operator<<(std::ostream& os, const Player& player)
 {
     switch (player.getPlayer())

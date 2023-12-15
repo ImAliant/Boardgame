@@ -20,6 +20,8 @@ class Player
         explicit Player(Players player);
         ~Player();
 
+        std::string ToString() const;
+
         friend std::ostream& operator<<(std::ostream& os, const Player& player);
 
         Players getPlayer() const;

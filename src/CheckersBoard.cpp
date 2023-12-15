@@ -19,8 +19,6 @@ void CheckersBoard::Init()
         m_board[i].resize(m_cols);
     }
 
-    /*FillBoardWithEmptyPieces();
-    SetPieceOnBoard();*/
     FillBoard();
 }
 
@@ -43,37 +41,6 @@ void CheckersBoard::FillBoard()
         }
     }
 }
-
-/*void CheckersBoard::FillBoardWithEmptyPieces()
-{
-    for (int i = 0; i < m_rows; i++)
-    {
-        for (int j = 0; j < m_cols; j++)
-        {
-            m_board[i][j] = CreatePiece(i, j, 'T');
-        }
-    }
-}
-
-void CheckersBoard::SetPieceOnBoard()
-{
-    for (int i = 0; i < m_rows; i++)
-    {
-        for (int j = 0; j < m_cols; j++)
-        {
-            if (i < 4 && (i + j) % 2 != 0)
-            {
-                m_board[i][j] = CreatePiece(i, j, 'B');
-            }
-            else if (i > 5 && (i + j) % 2 != 0)
-            {
-                m_board[i][j] = CreatePiece(i, j, 'W');
-            }
-            else
-                continue;
-        }
-    }
-}*/
 
 void CheckersBoard::MovePiece(int x, int y, int newX, int newY)
 {

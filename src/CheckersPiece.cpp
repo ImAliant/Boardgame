@@ -15,6 +15,7 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
     if (m_state.m_symbol == 'T') return;
 
     m_possibleMoves.clear();
+    m_possibleCaptures.clear();
 
     SimpleMoves(checkersBoard);
     CaptureMoves(checkersBoard);
@@ -56,9 +57,9 @@ void CheckersPiece::CaptureMoves(const CheckersBoard& board)
 
         if (IsWithinBoard(board, x, y) && IsOpponentPiece(board, m_x + dx, m_y + dy) && EmptyCell(board, x, y))
         {
-            m_possibleMoves.push_back(std::make_pair(x, y));
-            board.GetValueAt(m_x + dx, m_y + dy)->SetCanBeCaptured();
             //m_possibleCaptures.push_back(std::make_pair(x, y));
+            m_possibleMoves.push_back(std::make_pair(x, y));
+            m_possibleCaptures.push_back(std::make_pair(dx, dy));
         }
     }
 }

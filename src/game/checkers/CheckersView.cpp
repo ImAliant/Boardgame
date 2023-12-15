@@ -24,6 +24,7 @@ void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& b
     InitSizeAndPositionRectangleShape(m_lineSeparator, UIConstants::LINESEPARATOR_SIZE, UIConstants::LINESEPARATOR_POSITION);
 
     InitText(m_lauchgameButton, "Lancer la partie", UIConstants::LAUNCHBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
+    //InitText(m_playerturnText, "Tour du joueur", UIConstants::PLAYERTEXT_POSITION, *font, UIConstants::CHARACTER_SIZE);
     InitText(m_exitButton, "Quitter", UIConstants::EXITBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
 }
 
@@ -101,13 +102,6 @@ void CheckersView::InitBoardPiece(const CheckersBoard& board)
                 CalculatePosition(15.f, i, j)
             );
 
-            /*auto color = board.GetValueAt(i, j)->GetColor();
-            if (color == sf::Color::Black)
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
-            else if (color == sf::Color::White) 
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
-            else m_boardPiece[i][j].setTexture(&m_pieceTexture[EMPTY_TEXTUREID]);*/
-
             auto color = board.GetValueAt(i, j)->GetSymbol();
             if (color == 'B')
                 m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
@@ -134,6 +128,7 @@ void CheckersView::Draw(sf::RenderWindow& window)
     window.draw(m_lineSeparator);
     window.draw(m_exitButton);
     window.draw(m_lauchgameButton);
+    //window.draw(m_playerturnText);
     window.display();
 }
 
@@ -176,13 +171,7 @@ void CheckersView::UpdateBoard(const CheckersBoard& board)
                 CalculatePosition(15.f, i, j)
             );
 
-            //auto color = board.GetValueAt(i, j)->GetColor();
             auto color = board.GetValueAt(i, j)->GetSymbol();
-            /*if (color == sf::Color::Black)
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
-            else if (color == sf::Color::White) 
-                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
-            else m_boardPiece[i][j].setTexture(&m_pieceTexture[EMPTY_TEXTUREID]);*/
             if (color == 'B')
                 m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
             else if (color == 'W') 
@@ -202,14 +191,11 @@ void CheckersView::RemoveHighlightCell(std::pair<int, int> coord)
     else m_boardCell[coord.first][coord.second].setFillColor(BLACKCELL_COLOR);
 }
 
-void CheckersView::HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves/*, const std::vector<std::pair<int, int>>& possibleCaptures*/)
+void CheckersView::HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves)
 {
     for (const auto move : possibleMoves) {
         HighlightCell(move, sf::Color::Green);
     }
-    /*for (const auto capture : possibleCaptures) {
-        HighlightCell(capture, sf::Color::Red);
-    }*/
 }
 void CheckersView::RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves)
 {
@@ -222,11 +208,16 @@ void CheckersView::HideLaunchgameButton()
 {
     m_flags.m_isLaunchgameButtonVisible = false;
 }
+/*void CheckersView::ShowPlayerTurnText()
+{
+    m_flags.m_isLaunchgameButtonVisible = true;
+}*/
 
-void CheckersView::RenderButton()
+void CheckersView::Render()
 {
     UpdateButtonState(m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered);
     UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
+    //UpdateTextState(m_playerturnText, m_flags.m_isPlayerturnTextVisible);
 }
 
 std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const 
@@ -243,6 +234,11 @@ void CheckersView::UpdateFlag(bool& flagToUpdate, bool newValue) const
         flagToUpdate = newValue;
     }
 }
+
+/*void CheckersView::UpdateCurrentPlayerText(const std::string& player)
+{
+    m_playerturnText.setString("Tour du joueur " + player);
+}*/
 
 sf::Text& CheckersView::GetLaunchgameButton()
 {

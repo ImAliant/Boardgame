@@ -45,15 +45,14 @@ void CheckersController::ProcessInput()
 }
 
 void CheckersController::Update() {
-    m_view->RenderButton();
+    m_view->Render();
 
     // On change de couleur la case lorsqu'un pion est sélectionné
     if (m_model->IsPieceSelected() && !m_view->HasHighLightedCell())
     {
         m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Yellow);
         auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
-        //auto possibleCaptures = m_model->GetPossibleCaptures(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
-        m_view->HighlightPossibleMoves(possibleMoves/*, possibleCaptures*/);
+        m_view->HighlightPossibleMoves(possibleMoves);
         m_view->UpdateFlag(m_view->HasHighLightedCell(), true);
     }
     if (m_model->IsSelectedPieceChanged() && 
@@ -63,22 +62,23 @@ void CheckersController::Update() {
     {
         m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
         auto lastPossibleMoves = m_model->GetLastPossibleMoves();
-        // debug 
-        std::cout << "lastPossibleMoves: " << std::endl;
-        for (const auto& [x, y]: lastPossibleMoves)
-        {
-            std::cout << x << ", " << y << std::endl;
-        }
-        //  
         m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
         m_model->ResetSelectedPieceFlag();
         m_view->UpdateFlag(m_view->HasHighLightedCell(), false);
     }
+
     if (m_model->IsBoardNeedUpdate())
     {
         m_view->UpdateBoard(*m_model->GetBoard());
         m_model->ResetBoardNeedUpdateFlag();
     }
+
+    /*if (m_model->IsPlayerChanged())
+    {
+        std::string player = m_model->GetCurrentPlayer()->ToString();
+        m_view->UpdateCurrentPlayerText(player);
+        m_model->ResetPlayerChangedFlag();
+    }*/
 
     if (m_view->IsLaunchgameButtonPressed())
     {
@@ -98,6 +98,7 @@ void CheckersController::Draw() {
 void CheckersController::Start() {
     m_view->UpdateFlag(m_view->IsLaunchgameButtonPressed(), false);
     m_view->HideLaunchgameButton();
+    //m_view->ShowPlayerTurnText();
     m_model->GameStart();
 
     // TODO: random player

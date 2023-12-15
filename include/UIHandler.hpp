@@ -58,5 +58,13 @@ namespace UI
                 }
             }
         };
+        virtual void UpdateTextState(sf::Text& text, bool visible) const {
+            if (visible) {
+                text.setFillColor(sf::Color::White);
+            }
+            else {
+                text.setFillColor(sf::Color::Transparent);
+            }
+        };
     };
 };

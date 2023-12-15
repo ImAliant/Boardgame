@@ -19,6 +19,7 @@ struct flagsview_t {
     bool m_isExitButtonHovered = false;
     bool m_wasExitButtonHovered = false;
     bool m_hasHighLightedCell = false;
+    //bool m_isPlayerturnTextVisible = false;
 };
 
 /*struct button_t {
@@ -52,6 +53,8 @@ class CheckersView: public UI::UIHandler
 
         sf::RectangleShape m_lineSeparator;
 
+        //sf::Text m_playerturnText;
+
         sf::Text m_lauchgameButton;
         sf::Text m_exitButton;
 
@@ -59,7 +62,6 @@ class CheckersView: public UI::UIHandler
 
         void InitPieceTexture(std::shared_ptr<Context> context);
         void LoadTexture(int textureID, std::shared_ptr<Context> context);
-
         void InitBoardBackground();
         void InitBoardCell(const CheckersBoard& board);
         sf::Vector2f CalculatePosition(float offset, int i, int j) const;
@@ -78,16 +80,19 @@ class CheckersView: public UI::UIHandler
 
         void HighlightCell(std::pair<int, int> coord, sf::Color color);
         void RemoveHighlightCell(std::pair<int, int> coord);
-        void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves/*, 
-                                    const std::vector<std::pair<int, int>>& possibleCaptures*/);
+        void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
         void RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
 
         void HideLaunchgameButton();
-        void RenderButton();
+        //void ShowPlayerTurnText();
+        void Render();
 
         std::pair<int, int> GetBoardCoord(int x, int y) const;
 
+        // TODO remplacer tous les utilisations de UpdateFlag par une fonction attitrée
         void UpdateFlag(bool& flagToUpdate, bool newValue) const;
+
+        //void UpdateCurrentPlayerText(const std::string& player);
 
         // getters
         sf::Text& GetLaunchgameButton();

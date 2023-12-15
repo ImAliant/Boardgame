@@ -24,8 +24,6 @@ class CheckersBoard: public Board
         friend std::ostream& operator<<(std::ostream& os, const CheckersBoard& board);
 
         void Init() override;
-        /*void FillBoardWithEmptyPieces() override;
-        void SetPieceOnBoard() override;*/
         void FillBoard() override;
         void MovePiece(int x, int y, int newX, int newY) override;
         void RemovePiece(int x, int y) override;

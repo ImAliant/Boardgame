@@ -22,6 +22,10 @@ namespace UIConstants {
         static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
         static_cast<float>(WindowConstants::WINDOW_SIZE.y) - 80.f
     );
+    const sf::Vector2f PLAYERTEXT_POSITION = sf::Vector2f(
+        static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 8, 
+        static_cast<float>(WindowConstants::WINDOW_SIZE.y) - 50.f
+    );
     const sf::Vector2f EXITBUTTON_POSITION = sf::Vector2f(
         static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
         static_cast<float>(WindowConstants::WINDOW_SIZE.y) - 30.f

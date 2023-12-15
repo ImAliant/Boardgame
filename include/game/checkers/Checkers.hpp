@@ -14,6 +14,7 @@ struct flagsmodel_t {
     bool m_selectedPieceChanged = false;
     bool m_boardNeedUpdate = false;
     bool m_isPieceCaptured = false;
+    bool m_playerChanged = false;
 };
 
 class Checkers
@@ -65,13 +66,14 @@ class Checkers
 
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
+        void ResetPlayerChangedFlag();
         
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;
         std::shared_ptr<Player> GetPlayer(Players player) const;
         Piece& GetPiece(int x, int y) const;
         std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y) const;
-        //std::vector<std::pair<int, int>> GetPossibleCaptures(int x, int y) const;
+        std::vector<std::pair<int, int>> GetPossibleCaptures(int x, int y) const;
         std::unique_ptr<CheckersBoard>& GetBoard();
         bool& IsGameStarted();
         bool& IsGameFinished();
@@ -79,6 +81,7 @@ class Checkers
         std::pair<int, int> GetLastSelectedPiece() const;
         bool IsPieceSelected() const;
         bool IsSelectedPieceChanged() const;
+        bool IsPlayerChanged() const;
         std::vector<std::pair<int, int>> GetLastPossibleMoves() const;
         bool IsBoardNeedUpdate() const;
 };

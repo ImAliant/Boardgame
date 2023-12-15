@@ -10,14 +10,11 @@ Checkers::Checkers() {}
 Checkers::~Checkers() {}
 
 void Checkers::SwitchPlayer() {
-    if (m_currentPlayer == m_players[static_cast<int>(Players::PLAYER_ONE)]) {
+    if (m_currentPlayer == m_players[static_cast<int>(Players::PLAYER_ONE)])
         m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_TWO)];
-        std::cout << "Player two turn" << std::endl;
-    }
-    else {
-        m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
-        std::cout << "Player one turn" << std::endl;
-    }
+    else m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
+    
+    m_flags.m_playerChanged = true;
 }
 
 void Checkers::Turn(std::pair<int, int> coord) {
@@ -86,6 +83,7 @@ void Checkers::CheckForWin() {
 void Checkers::SelectPiece(std::pair<int, int> coord)
 {
     std::cout << "SelectPiece: " << coord.first << ", " << coord.second << std::endl;
+
     // On teste si la piece est selectionnée
     if (m_flags.m_isPieceSelected) {
         DeselectPiece();
@@ -146,35 +144,7 @@ void Checkers::ApplyMove(std::pair<int, int> coord)
 }
 bool Checkers::CheckCapture(std::pair<int, int> coord)
 {
-    bool capture = false;
-
-    // On verifie si la piece qui a effectué le mouvement a capturé une piece
-    // Si une case voisine possède un pion avec le flag m_canBeCaptured, on supprime la piece
-
-    std::vector<std::pair<int, int>> directions = { {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
-
-    for (const auto& [dx, dy] : directions)
-    {
-        int x = coord.first + dx;
-        int y = coord.second + dy;
-
-        if (!AreCoordinatesValid(std::make_pair(x, y))) continue;
-
-        if (m_board->GetValueAt(x, y)->CanBeCaptured())
-        {
-            // debug 
-            std::cout << "Piece captured at " << x << ", " << y << std::endl;
-            //
-
-            CapturePiece(x, y);
-            capture = true;
-            break;
-        }
-    }
-
-    return capture;
-
-    /*bool capt = false;
+    bool capt = false;
 
     auto piece = m_board->GetValueAt(coord.first, coord.second);
     if (piece->GetPossibleCaptures().empty())
@@ -184,8 +154,8 @@ bool Checkers::CheckCapture(std::pair<int, int> coord)
 
     for (const auto& capture: piece->GetPossibleCaptures())
     {
-        int x = coord.first + capture.first;
-        int y = coord.second + capture.second;
+        int x = coord.first - capture.first;
+        int y = coord.second - capture.second;
 
         if (!AreCoordinatesValid(std::make_pair(x, y))) continue;
 
@@ -196,7 +166,7 @@ bool Checkers::CheckCapture(std::pair<int, int> coord)
         }
     }
 
-    return capt;*/
+    return capt;
 }
 void Checkers::CapturePiece(int x, int y)
 {
@@ -206,7 +176,7 @@ void Checkers::CapturePiece(int x, int y)
         throw InvalidCoordinatesException("Checkers::RemovePiece() : coord are invalid");
     }
 
-    if (m_board->GetValueAt(x, y)->GetSymbol() == ' ')
+    if (m_board->GetValueAt(x, y)->GetSymbol() == 'T')
     {
         return;
     }
@@ -296,6 +266,10 @@ void Checkers::ResetBoardNeedUpdateFlag()
 {
     m_flags.m_boardNeedUpdate = false;
 }
+void Checkers::ResetPlayerChangedFlag()
+{
+    m_flags.m_playerChanged = false;
+}
 
 bool Checkers::AreCoordinatesValid(std::pair<int, int> coord) const
 {
@@ -319,15 +293,10 @@ std::vector<std::pair<int, int>> Checkers::GetPossibleMoves(int x, int y) const
 {
     return m_board->GetValueAt(x, y)->GetPossibleMoves();
 }
-/*std::vector<std::pair<int, int>> Checkers::GetPossibleCaptures(int x, int y) const
+std::vector<std::pair<int, int>> Checkers::GetPossibleCaptures(int x, int y) const
 {
     return m_board->GetValueAt(x, y)->GetPossibleCaptures();
-}*/
-
-/*std::vector<std::pair<int, int>> Checkers::GetPossibleCaptures(int x, int y) const
-{
-    // TODO
-}*/
+}
 std::unique_ptr<CheckersBoard>& Checkers::GetBoard()
 {
     return m_board;
@@ -363,4 +332,8 @@ bool& Checkers::IsGameFinished()
 bool Checkers::IsBoardNeedUpdate() const
 {
     return m_flags.m_boardNeedUpdate;
+}
+bool Checkers::IsPlayerChanged() const
+{
+    return m_flags.m_playerChanged;
 }
