@@ -14,7 +14,7 @@ void Checkers::SwitchPlayer() {
         m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_TWO)];
     else m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
 
-    std::cout << "SwitchPlayer: " << m_currentPlayer->ToString() << std::endl;
+    CurrentPlayerChanged();
 }
 
 void Checkers::Turn(std::pair<int, int> coord) {
@@ -254,6 +254,15 @@ void Checkers::GameStart()
     m_flags.m_isGameStarted = true;
 }
 
+void Checkers::CurrentPlayerChanged()
+{
+    m_flags.m_currentPlayerChanged = true;
+}
+void Checkers::ResetCurrentPlayerChangedFlag()
+{
+    m_flags.m_currentPlayerChanged = false;
+}
+
 void Checkers::ResetPieceCapturedFlag()
 {
     m_flags.m_isPieceCaptured = false;
@@ -328,4 +337,8 @@ bool& Checkers::IsGameFinished()
 bool Checkers::IsBoardNeedUpdate() const
 {
     return m_flags.m_boardNeedUpdate;
+}
+bool Checkers::IsCurrentPlayerChanged() const
+{
+    return m_flags.m_currentPlayerChanged;
 }

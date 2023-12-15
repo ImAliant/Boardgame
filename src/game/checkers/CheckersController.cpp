@@ -73,6 +73,12 @@ void CheckersController::Update() {
         m_model->ResetBoardNeedUpdateFlag();
     }
 
+    if (m_model->IsCurrentPlayerChanged())
+    {
+        m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
+        m_model->ResetCurrentPlayerChangedFlag();
+    }
+
     if (m_view->IsLaunchgameButtonPressed())
     {
         Start();
@@ -89,14 +95,14 @@ void CheckersController::Draw() {
 }
 
 void CheckersController::Start() {
-    m_view->LauchButtonPressed();
     m_view->HideLaunchgameButton();
     m_model->GameStart();
-
-    // TODO: random player
+    m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
 
     // update possible moves
     m_model->UpdatePossibleMoves();
+
+    m_view->ResetLaunchPressedFlag();
 }
 
 void CheckersController::UpdateButtonHoverState(const sf::Event& event) {

@@ -14,6 +14,7 @@ struct flagsmodel_t {
     bool m_selectedPieceChanged = false;
     bool m_boardNeedUpdate = false;
     bool m_isPieceCaptured = false;
+    bool m_currentPlayerChanged = false;
 };
 
 class Checkers
@@ -63,6 +64,9 @@ class Checkers
 
         void GameStart();
 
+        void CurrentPlayerChanged();
+        void ResetCurrentPlayerChangedFlag();
+
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
 
@@ -82,4 +86,5 @@ class Checkers
         bool IsSelectedPieceChanged() const;
         std::vector<std::pair<int, int>> GetLastPossibleMoves() const;
         bool IsBoardNeedUpdate() const;
+        bool IsCurrentPlayerChanged() const;
 };

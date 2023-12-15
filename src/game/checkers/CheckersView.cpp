@@ -24,7 +24,6 @@ void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& b
     InitSizeAndPositionRectangleShape(m_lineSeparator, UIConstants::LINESEPARATOR_SIZE, UIConstants::LINESEPARATOR_POSITION);
 
     InitText(m_lauchgameButton, "Lancer la partie", UIConstants::LAUNCHBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
-    //InitText(m_playerturnText, "Tour du joueur", UIConstants::PLAYERTEXT_POSITION, *font, UIConstants::CHARACTER_SIZE);
     InitText(m_exitButton, "Quitter", UIConstants::EXITBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
 }
 
@@ -213,6 +212,11 @@ void CheckersView::Render()
         UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
 }
 
+void CheckersView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer)
+{
+    std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
+}
+
 std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const 
 {
     auto cX = static_cast<int>((x - BOARDOFFSET.x) / BOARDCELL_SIZE.x);
@@ -257,6 +261,11 @@ void CheckersView::LauchButtonPressed()
 void CheckersView::ExitButtonPressed()
 {
     m_flags.m_isExitButtonPressed = true;
+}
+
+void CheckersView::ResetLaunchPressedFlag()
+{
+    m_flags.m_isLaunchgameButtonPressed = false;
 }
 
 sf::Text& CheckersView::GetLaunchgameButton()

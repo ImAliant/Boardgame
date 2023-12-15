@@ -64,6 +64,8 @@ class CheckersView: public UI::UIHandler
 
         void Render();
 
+        void PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer);
+
         std::pair<int, int> GetBoardCoord(int x, int y) const;
 
         void UpdateExitSelectedFlag(bool newValue);
@@ -76,6 +78,8 @@ class CheckersView: public UI::UIHandler
         void RemoveHighlight();
         void LauchButtonPressed();
         void ExitButtonPressed();
+
+        void ResetLaunchPressedFlag();
 
         // getters
         sf::Text& GetLaunchgameButton();
