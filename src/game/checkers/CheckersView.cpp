@@ -212,7 +212,7 @@ void CheckersView::Render()
         UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
 }
 
-void CheckersView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer)
+void CheckersView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const
 {
     std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
 }
