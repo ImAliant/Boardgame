@@ -19,27 +19,8 @@ struct flagsview_t {
     bool m_isExitButtonHovered = false;
     bool m_wasExitButtonHovered = false;
     bool m_hasHighLightedCell = false;
-    //bool m_isPlayerturnTextVisible = false;
+    bool m_isPlayerturnTextVisible = false;
 };
-
-/*struct button_t {
-    sf::Text m_text;
-    sf::Vector2f m_position;
-    sf::Vector2f m_size;
-    sf::Color m_color;
-    sf::Color m_hoverColor;
-    sf::Color m_selectedColor;
-    sf::Color m_pressedColor;
-    sf::Color m_textColor;
-    sf::Color m_textHoverColor;
-    sf::Color m_textSelectedColor;
-    sf::Color m_textPressedColor;
-    bool m_isSelected = false;
-    bool m_isPressed = false;
-    bool m_isHovered = false;
-    bool m_wasHovered = false;
-    bool m_isVisible = true;
-};*/
 
 class CheckersView: public UI::UIHandler
 {
@@ -52,8 +33,6 @@ class CheckersView: public UI::UIHandler
         std::vector<std::vector<sf::RectangleShape>> m_boardPiece;
 
         sf::RectangleShape m_lineSeparator;
-
-        //sf::Text m_playerturnText;
 
         sf::Text m_lauchgameButton;
         sf::Text m_exitButton;
@@ -83,16 +62,20 @@ class CheckersView: public UI::UIHandler
         void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
         void RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
 
-        void HideLaunchgameButton();
-        //void ShowPlayerTurnText();
         void Render();
 
         std::pair<int, int> GetBoardCoord(int x, int y) const;
 
-        // TODO remplacer tous les utilisations de UpdateFlag par une fonction attitrée
-        void UpdateFlag(bool& flagToUpdate, bool newValue) const;
+        void UpdateExitSelectedFlag(bool newValue);
+        void UpdateLaunchSelectedFlag(bool newValue);
+        void UpdateExitHoveredFlag(bool newValue);
+        void UpdateLaunchHoveredFlag(bool newValue);
 
-        //void UpdateCurrentPlayerText(const std::string& player);
+        void HideLaunchgameButton();
+        void NeedHighlight();
+        void RemoveHighlight();
+        void LauchButtonPressed();
+        void ExitButtonPressed();
 
         // getters
         sf::Text& GetLaunchgameButton();

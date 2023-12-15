@@ -13,8 +13,8 @@ void Checkers::SwitchPlayer() {
     if (m_currentPlayer == m_players[static_cast<int>(Players::PLAYER_ONE)])
         m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_TWO)];
     else m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
-    
-    m_flags.m_playerChanged = true;
+
+    std::cout << "SwitchPlayer: " << m_currentPlayer->ToString() << std::endl;
 }
 
 void Checkers::Turn(std::pair<int, int> coord) {
@@ -59,9 +59,9 @@ void Checkers::Turn(std::pair<int, int> coord) {
 bool Checkers::IsPieceOfCurrentPlayer(std::pair<int, int> coord) const
 {
     auto currentPlayer = m_currentPlayer->getPlayer();
-    auto piece = m_board->GetValueAt(coord.first, coord.second);
+    auto piece = GetPiece(coord.first, coord.second);
 
-    return piece->GetOwner().getPlayer() == currentPlayer;
+    return piece.GetOwner().getPlayer() == currentPlayer;
 }
 
 bool Checkers::IsMovePossible(std::pair<int, int> coord) const
@@ -266,10 +266,6 @@ void Checkers::ResetBoardNeedUpdateFlag()
 {
     m_flags.m_boardNeedUpdate = false;
 }
-void Checkers::ResetPlayerChangedFlag()
-{
-    m_flags.m_playerChanged = false;
-}
 
 bool Checkers::AreCoordinatesValid(std::pair<int, int> coord) const
 {
@@ -285,7 +281,7 @@ std::shared_ptr<Player> Checkers::GetPlayer(Players player) const
 {
     return m_players[static_cast<int>(player)];
 }
-Piece& Checkers::GetPiece(int x, int y) const
+CheckersPiece& Checkers::GetPiece(int x, int y) const
 {
     return *m_board->GetValueAt(x, y);
 }
@@ -332,8 +328,4 @@ bool& Checkers::IsGameFinished()
 bool Checkers::IsBoardNeedUpdate() const
 {
     return m_flags.m_boardNeedUpdate;
-}
-bool Checkers::IsPlayerChanged() const
-{
-    return m_flags.m_playerChanged;
 }

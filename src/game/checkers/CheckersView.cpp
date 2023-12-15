@@ -122,13 +122,14 @@ sf::Vector2f CheckersView::CalculatePosition(float offset, int i, int j) const
 void CheckersView::Draw(sf::RenderWindow& window)
 {
     window.clear();
+
     window.draw(m_boardBackgroud);
     DrawBoardCells(window);
     DrawBoardPiece(window);
     window.draw(m_lineSeparator);
     window.draw(m_exitButton);
-    window.draw(m_lauchgameButton);
-    //window.draw(m_playerturnText);
+    if (IsLaunchgameButtonVisible())
+        window.draw(m_lauchgameButton);
     window.display();
 }
 
@@ -204,20 +205,12 @@ void CheckersView::RemoveHighlightPossibleMoves(const std::vector<std::pair<int,
     }
 }
 
-void CheckersView::HideLaunchgameButton()
-{
-    m_flags.m_isLaunchgameButtonVisible = false;
-}
-/*void CheckersView::ShowPlayerTurnText()
-{
-    m_flags.m_isLaunchgameButtonVisible = true;
-}*/
-
 void CheckersView::Render()
 {
     UpdateButtonState(m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered);
-    UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
-    //UpdateTextState(m_playerturnText, m_flags.m_isPlayerturnTextVisible);
+    //
+    if (IsLaunchgameButtonVisible()) //
+        UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
 }
 
 std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const 
@@ -228,17 +221,43 @@ std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const
     return std::make_pair(cY, cX);
 }
 
-void CheckersView::UpdateFlag(bool& flagToUpdate, bool newValue) const
+void CheckersView::UpdateExitSelectedFlag(bool newValue)
 {
-    if (flagToUpdate != newValue) {
-        flagToUpdate = newValue;
-    }
+    m_flags.m_isExitButtonSelected = newValue;
+}
+void CheckersView::UpdateLaunchSelectedFlag(bool newValue)
+{
+    m_flags.m_isLaunchgameButtonSelected = newValue;
+}
+void CheckersView::UpdateExitHoveredFlag(bool newValue)
+{
+    m_flags.m_isExitButtonHovered = newValue;
+}
+void CheckersView::UpdateLaunchHoveredFlag(bool newValue)
+{
+    m_flags.m_isLaunchgameButtonHovered = newValue;
 }
 
-/*void CheckersView::UpdateCurrentPlayerText(const std::string& player)
+void CheckersView::HideLaunchgameButton()
 {
-    m_playerturnText.setString("Tour du joueur " + player);
-}*/
+    m_flags.m_isLaunchgameButtonVisible = false;
+}
+void CheckersView::NeedHighlight()
+{
+    m_flags.m_hasHighLightedCell = true;
+}
+void CheckersView::RemoveHighlight()
+{
+    m_flags.m_hasHighLightedCell = false;
+}
+void CheckersView::LauchButtonPressed()
+{
+    m_flags.m_isLaunchgameButtonPressed = true;
+}
+void CheckersView::ExitButtonPressed()
+{
+    m_flags.m_isExitButtonPressed = true;
+}
 
 sf::Text& CheckersView::GetLaunchgameButton()
 {

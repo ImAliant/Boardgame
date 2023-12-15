@@ -53,7 +53,7 @@ void CheckersController::Update() {
         m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Yellow);
         auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
         m_view->HighlightPossibleMoves(possibleMoves);
-        m_view->UpdateFlag(m_view->HasHighLightedCell(), true);
+        m_view->NeedHighlight();
     }
     if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 
@@ -64,7 +64,7 @@ void CheckersController::Update() {
         auto lastPossibleMoves = m_model->GetLastPossibleMoves();
         m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
         m_model->ResetSelectedPieceFlag();
-        m_view->UpdateFlag(m_view->HasHighLightedCell(), false);
+        m_view->RemoveHighlight();
     }
 
     if (m_model->IsBoardNeedUpdate())
@@ -72,13 +72,6 @@ void CheckersController::Update() {
         m_view->UpdateBoard(*m_model->GetBoard());
         m_model->ResetBoardNeedUpdateFlag();
     }
-
-    /*if (m_model->IsPlayerChanged())
-    {
-        std::string player = m_model->GetCurrentPlayer()->ToString();
-        m_view->UpdateCurrentPlayerText(player);
-        m_model->ResetPlayerChangedFlag();
-    }*/
 
     if (m_view->IsLaunchgameButtonPressed())
     {
@@ -96,9 +89,8 @@ void CheckersController::Draw() {
 }
 
 void CheckersController::Start() {
-    m_view->UpdateFlag(m_view->IsLaunchgameButtonPressed(), false);
+    m_view->LauchButtonPressed();
     m_view->HideLaunchgameButton();
-    //m_view->ShowPlayerTurnText();
     m_model->GameStart();
 
     // TODO: random player
@@ -118,8 +110,8 @@ void CheckersController::UpdateButtonHoverState(const sf::Event& event) {
         static_cast<float>(event.mouseButton.y)
     );
 
-    m_view->UpdateFlag(m_view->IsExitButtonHovered(), isExitHovered);
-    m_view->UpdateFlag(m_view->IsLaunchgameButtonHovered(), isLaunchgameHovered);
+    m_view->UpdateExitHoveredFlag(isExitHovered);
+    m_view->UpdateLaunchHoveredFlag(isLaunchgameHovered);
 }
 
 void CheckersController::UpdateButtonSelectionState() {
@@ -133,8 +125,8 @@ void CheckersController::UpdateButtonSelectionState() {
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
     );
 
-    m_view->UpdateFlag(m_view->IsExitButtonSelected(), isExitSelected);
-    m_view->UpdateFlag(m_view->IsLaunchgameButtonSelected(), isLaunchgameSelected);
+    m_view->UpdateExitSelectedFlag(isExitSelected);
+    m_view->UpdateLaunchSelectedFlag(isLaunchgameSelected);
 }
 
 void CheckersController::HandleMousePressed(const sf::Event& event) {
@@ -143,9 +135,9 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
     if (isMousePressed)
     {
         if (m_view->IsLaunchgameButtonSelected())
-            m_view->UpdateFlag(m_view->IsLaunchgameButtonPressed(), true);
+            m_view->LauchButtonPressed();
         if (m_view->IsExitButtonSelected())
-            m_view->UpdateFlag(m_view->IsExitButtonPressed(), true);
+            m_view->ExitButtonPressed();
         if (m_model->IsGameStarted())
         {
             auto x = event.mouseButton.x;
