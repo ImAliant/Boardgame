@@ -29,6 +29,9 @@ class Checkers
         std::vector<std::pair<int, int>> m_lastPossibleMoves;
 
         flagsmodel_t m_flags;
+
+        void ResetPieceCapturedFlag();
+        bool AreCoordinatesValid(std::pair<int, int> coord) const;
     public:
         Checkers();
         ~Checkers();
@@ -47,8 +50,8 @@ class Checkers
         bool IsMovePossible(std::pair<int, int> coord) const;
         void ApplyMove(std::pair<int, int> coord);
         void PromotePiece(/**/);
+        bool CheckCapture(std::pair<int, int> coord);
         void CapturePiece(int x, int y);
-        void RemovePiece(int x, int y);
         bool IsPromoted(int x, int y) const;
         bool CanPromotePiece(std::pair<int, int> coord) const;
 
@@ -59,9 +62,9 @@ class Checkers
         void UpdatePossibleMoves() const;
 
         void GameStart();
+
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
-        bool AreCoordinatesValid(std::pair<int, int> coord) const;
         
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;

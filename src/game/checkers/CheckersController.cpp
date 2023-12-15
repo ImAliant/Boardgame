@@ -52,7 +52,8 @@ void CheckersController::Update() {
     {
         m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Yellow);
         auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
-        m_view->HighlightPossibleMoves(possibleMoves);
+        //auto possibleCaptures = m_model->GetPossibleCaptures(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
+        m_view->HighlightPossibleMoves(possibleMoves/*, possibleCaptures*/);
         m_view->UpdateFlag(m_view->HasHighLightedCell(), true);
     }
     if (m_model->IsSelectedPieceChanged() && 
@@ -62,6 +63,13 @@ void CheckersController::Update() {
     {
         m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
         auto lastPossibleMoves = m_model->GetLastPossibleMoves();
+        // debug 
+        std::cout << "lastPossibleMoves: " << std::endl;
+        for (const auto& [x, y]: lastPossibleMoves)
+        {
+            std::cout << x << ", " << y << std::endl;
+        }
+        //  
         m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
         m_model->ResetSelectedPieceFlag();
         m_view->UpdateFlag(m_view->HasHighLightedCell(), false);

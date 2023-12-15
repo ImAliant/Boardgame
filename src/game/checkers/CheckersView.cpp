@@ -101,10 +101,17 @@ void CheckersView::InitBoardPiece(const CheckersBoard& board)
                 CalculatePosition(15.f, i, j)
             );
 
-            auto color = board.GetValueAt(i, j)->GetColor();
+            /*auto color = board.GetValueAt(i, j)->GetColor();
             if (color == sf::Color::Black)
                 m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
             else if (color == sf::Color::White) 
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
+            else m_boardPiece[i][j].setTexture(&m_pieceTexture[EMPTY_TEXTUREID]);*/
+
+            auto color = board.GetValueAt(i, j)->GetSymbol();
+            if (color == 'B')
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
+            else if (color == 'W') 
                 m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
             else m_boardPiece[i][j].setTexture(&m_pieceTexture[EMPTY_TEXTUREID]);
         }
@@ -169,10 +176,16 @@ void CheckersView::UpdateBoard(const CheckersBoard& board)
                 CalculatePosition(15.f, i, j)
             );
 
-            auto color = board.GetValueAt(i, j)->GetColor();
-            if (color == sf::Color::Black)
+            //auto color = board.GetValueAt(i, j)->GetColor();
+            auto color = board.GetValueAt(i, j)->GetSymbol();
+            /*if (color == sf::Color::Black)
                 m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
             else if (color == sf::Color::White) 
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
+            else m_boardPiece[i][j].setTexture(&m_pieceTexture[EMPTY_TEXTUREID]);*/
+            if (color == 'B')
+                m_boardPiece[i][j].setTexture(&m_pieceTexture[BLACKPIECE_TEXTUREID]);
+            else if (color == 'W') 
                 m_boardPiece[i][j].setTexture(&m_pieceTexture[WHITEPIECE_TEXTUREID]);
             else m_boardPiece[i][j].setTexture(&m_pieceTexture[EMPTY_TEXTUREID]);
         }
@@ -189,11 +202,14 @@ void CheckersView::RemoveHighlightCell(std::pair<int, int> coord)
     else m_boardCell[coord.first][coord.second].setFillColor(BLACKCELL_COLOR);
 }
 
-void CheckersView::HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves)
+void CheckersView::HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves/*, const std::vector<std::pair<int, int>>& possibleCaptures*/)
 {
     for (const auto move : possibleMoves) {
         HighlightCell(move, sf::Color::Green);
     }
+    /*for (const auto capture : possibleCaptures) {
+        HighlightCell(capture, sf::Color::Red);
+    }*/
 }
 void CheckersView::RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves)
 {

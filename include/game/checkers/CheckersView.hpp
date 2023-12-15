@@ -78,7 +78,8 @@ class CheckersView: public UI::UIHandler
 
         void HighlightCell(std::pair<int, int> coord, sf::Color color);
         void RemoveHighlightCell(std::pair<int, int> coord);
-        void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
+        void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves/*, 
+                                    const std::vector<std::pair<int, int>>& possibleCaptures*/);
         void RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
 
         void HideLaunchgameButton();

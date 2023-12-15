@@ -37,6 +37,13 @@ namespace CheckersConstants
     const int WHITEPIECE_TEXTUREID = 1;
     const int EMPTY_TEXTUREID = 2;
     const auto CLICKABLE_ZONE = std::make_pair(10, 480);
+    const int PLAYER_ONEID = 0;
+    const int PLAYER_TWOID = 1;
+    const int NONEID = 2;
+
+    const std::vector<std::pair<int, int>> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
+    const std::vector<std::pair<int, int>> BLACK_DIRECTION = {{1, -1}, {1, 1}};
+    const std::vector<std::pair<int, int>> ALL_DIRECTION = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
 
     const sf::Color BLACKCELL_COLOR = sf::Color{112, 74, 39};
     const sf::Color WHITECELL_COLOR = sf::Color{209, 183, 151};

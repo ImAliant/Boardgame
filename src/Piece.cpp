@@ -4,11 +4,9 @@
 
 Piece::Piece() {}
 
-Piece::Piece(int x, int y, std::shared_ptr<Player> owner, sf::Color color, char symbol)
+Piece::Piece(int x, int y, std::shared_ptr<Player> owner, char symbol)
     : m_x(x), m_y(y)
 {
-    m_state.type = 0;
-    m_state.m_color = color;
     m_state.m_owner = std::move(owner);
     m_state.m_symbol = symbol;
 }
@@ -32,11 +30,6 @@ std::pair<int, int> Piece::GetPosition() const
 Player& Piece::GetOwner() const
 {
     return *m_state.m_owner;
-}
-
-sf::Color Piece::GetColor() const
-{
-    return m_state.m_color;
 }
 
 char Piece::GetSymbol() const
