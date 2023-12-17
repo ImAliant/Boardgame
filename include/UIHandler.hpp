@@ -22,7 +22,7 @@ namespace UI
             );
             object.setPosition(position);
         };
-        virtual void InitSizeAndPositionRectangleShape(sf::RectangleShape &object, const sf::Vector2f &size, const sf::Vector2f &position) {
+        virtual void InitRectangleShape(sf::RectangleShape &object, const sf::Vector2f &size, const sf::Vector2f &position) {
             object.setSize(size);
             object.setPosition(position);
         };

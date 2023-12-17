@@ -27,6 +27,16 @@ std::pair<int, int> Piece::GetPosition() const
     return std::make_pair(m_x, m_y);
 }
 
+int Piece::GetX() const
+{
+    return m_x;
+}
+
+int Piece::GetY() const
+{
+    return m_y;
+}
+
 Player& Piece::GetOwner() const
 {
     return *m_state.m_owner;

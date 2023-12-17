@@ -57,6 +57,10 @@ class CheckersView: public UI::UIHandler
         void DrawBoardPiece(sf::RenderWindow& window);
         void UpdateBoard(const CheckersBoard& board);
 
+        void SetupBoardPiece(int i, int j, const CheckersBoard &board);
+        
+        void SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted);
+
         void HighlightCell(std::pair<int, int> coord, sf::Color color);
         void RemoveHighlightCell(std::pair<int, int> coord);
         void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);

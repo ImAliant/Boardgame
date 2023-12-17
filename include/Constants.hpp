@@ -37,13 +37,19 @@ namespace CheckersConstants
 {
     const int CHECKERSROWS = 10;
     const int CHECKERSCOLS = 10;
-    const int BLACKPIECE_TEXTUREID = 0;
-    const int WHITEPIECE_TEXTUREID = 1;
-    const int EMPTY_TEXTUREID = 2;
+    const int BLACKPAWN_ID = 0;
+    const int WHITEPAWN_ID = 1;
+    const int BLACKQUEEN_ID = 2;
+    const int WHITEQUEEN_ID = 3;
+    const int EMPTY_ID = 4;
+
     const auto CLICKABLE_ZONE = std::make_pair(10, 480);
     const int PLAYER_ONEID = 0;
     const int PLAYER_TWOID = 1;
     const int NONEID = 2;
+
+    const int BOARD_UPPER_LIMIT = 0;
+    const int BOARD_LOWER_LIMIT = 9;
 
     const std::vector<std::pair<int, int>> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
     const std::vector<std::pair<int, int>> BLACK_DIRECTION = {{1, -1}, {1, 1}};

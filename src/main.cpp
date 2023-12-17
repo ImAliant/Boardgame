@@ -5,6 +5,8 @@
 #include "../include/Board.hpp"
 
 int main() {
+    system("clear");
+
     Launcher game;
     game.Run();
 

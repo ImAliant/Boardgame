@@ -13,10 +13,7 @@ void CheckersController::Init()
 {
     m_context->m_window->setTitle("Les Dames - Diamant/Hamdi");
 
-    m_model->InitPlayers();
-    m_model->InitBoard();
-    m_model->UpdatePossibleMoves();
-
+    m_model->Init();
     m_view->Init(m_context, *m_model->GetBoard());
 }
 
@@ -98,9 +95,6 @@ void CheckersController::Start() {
     m_view->HideLaunchgameButton();
     m_model->GameStart();
     m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
-
-    // update possible moves
-    m_model->UpdatePossibleMoves();
 
     m_view->ResetLaunchPressedFlag();
 }

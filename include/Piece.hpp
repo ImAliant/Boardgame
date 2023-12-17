@@ -38,6 +38,8 @@ class Piece
 
         std::vector<std::pair<int, int>> GetPossibleMoves() const;
         std::pair<int, int> GetPosition() const;
+        int GetX() const;
+        int GetY() const;
         Player& GetOwner() const;
         char GetSymbol() const;
 };
