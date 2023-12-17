@@ -101,12 +101,47 @@ void CheckersView::InitBoardPiece(const CheckersBoard& board)
         }
     }
 }
+
+void CheckersView::UpdateBoard(const CheckersBoard& board)
+{
+    auto rows = m_boardPiece.size();
+    auto cols = m_boardPiece[0].size();
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            SetupBoardPiece(i, j, board);
+        }
+    }
+}
+
+void CheckersView::SetupBoardPiece(int i, int j, const CheckersBoard &board)
+{
+    InitRectangleShape(
+        m_boardPiece[i][j],
+        BOARDPIECE_SIZE,
+        CalculatePosition(15.f, i, j)
+    );
+
+    auto piece = board.GetValueAt(i, j);
+    SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol(), piece->IsPromoted());
+}
 sf::Vector2f CheckersView::CalculatePosition(float offset, int i, int j) const
 {
     return sf::Vector2f(
         offset + (BOARDCELL_SIZE.x * static_cast<float>(j)),
         offset + (BOARDCELL_SIZE.y * static_cast<float>(i))
     );
+}
+
+void CheckersView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted)
+{
+    if (color == BLACK)
+        piece.setTexture(promoted ? &m_pieceTexture[BLACKQUEEN_ID] : &m_pieceTexture[BLACKPAWN_ID]);
+    else if (color == WHITE)
+        piece.setTexture(promoted ? &m_pieceTexture[WHITEQUEEN_ID] : &m_pieceTexture[WHITEPAWN_ID]);
+    else piece.setTexture(&m_pieceTexture[EMPTY_ID]);
 }
 
 void CheckersView::Draw(sf::RenderWindow& window)
@@ -145,41 +180,6 @@ void CheckersView::DrawBoardPiece(sf::RenderWindow& window)
             window.draw(m_boardPiece[i][j]);
         }
     }
-}
-
-void CheckersView::UpdateBoard(const CheckersBoard& board)
-{
-    auto rows = m_boardPiece.size();
-    auto cols = m_boardPiece[0].size();
-
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            SetupBoardPiece(i, j, board);
-        }
-    }
-}
-
-void CheckersView::SetupBoardPiece(int i, int j, const CheckersBoard &board)
-{
-    InitRectangleShape(
-        m_boardPiece[i][j],
-        BOARDPIECE_SIZE,
-        CalculatePosition(15.f, i, j)
-    );
-
-    auto piece = board.GetValueAt(i, j);
-    SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol(), piece->IsPromoted());
-}
-
-void CheckersView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted)
-{
-    if (color == 'B')
-        piece.setTexture(promoted ? &m_pieceTexture[BLACKQUEEN_ID] : &m_pieceTexture[BLACKPAWN_ID]);
-    else if (color == 'W')
-        piece.setTexture(promoted ? &m_pieceTexture[WHITEQUEEN_ID] : &m_pieceTexture[WHITEPAWN_ID]);
-    else piece.setTexture(&m_pieceTexture[EMPTY_ID]);
 }
 
 void CheckersView::HighlightCell(std::pair<int, int> coord, sf::Color color)

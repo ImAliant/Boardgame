@@ -12,7 +12,7 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
 {
     const auto& checkersBoard = dynamic_cast<const CheckersBoard&>(board);
 
-    if (m_state.m_symbol == 'T') return;
+    if (m_state.m_symbol == CheckersConstants::TRANSPARENT) return;
 
     m_possibleMoves.clear();
     m_possibleCaptures.clear();
@@ -23,9 +23,9 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
 void CheckersPiece::SimpleMoves(const CheckersBoard& board) 
 {
     std::vector<std::pair<int, int>> const* directions;
-    if (m_state.m_symbol == 'W')
+    if (m_state.m_symbol == CheckersConstants::WHITE)
         directions = &CheckersConstants::WHITE_DIRECTION;
-    else if (m_state.m_symbol == 'B')
+    else if (m_state.m_symbol == CheckersConstants::BLACK)
         directions = &CheckersConstants::BLACK_DIRECTION;
     else
         return;
@@ -57,7 +57,6 @@ void CheckersPiece::CaptureMoves(const CheckersBoard& board)
 
         if (IsWithinBoard(board, x, y) && IsOpponentPiece(board, m_x + dx, m_y + dy) && EmptyCell(board, x, y))
         {
-            //m_possibleCaptures.push_back(std::make_pair(x, y));
             m_possibleMoves.push_back(std::make_pair(x, y));
             m_possibleCaptures.push_back(std::make_pair(dx, dy));
         }
@@ -95,7 +94,6 @@ void CheckersPiece::ResetCanBeCaptured()
 void CheckersPiece::Promote()
 {
     m_state.type = PieceType::QUEEN;
-    m_state.m_symbol = 'Q';
 }
 
 bool CheckersPiece::IsPromoted() const
@@ -111,6 +109,16 @@ bool CheckersPiece::CanBeCaptured() const
 std::vector<std::pair<int, int>> CheckersPiece::GetPossibleCaptures() const
 {
     return m_possibleCaptures;
+}
+
+std::string CheckersPiece::GetType() const
+{
+    std::string res;
+    if (m_state.type == PAWN) res = "PAWN";
+    else if (m_state.type == QUEEN) res = "QUEEN";
+    else res = "EMPTY";
+
+    return res;
 }
 
 std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece)

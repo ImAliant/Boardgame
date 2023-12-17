@@ -43,6 +43,10 @@ namespace CheckersConstants
     const int WHITEQUEEN_ID = 3;
     const int EMPTY_ID = 4;
 
+    const char BLACK = 'B';
+    const char WHITE = 'W';
+    const char TRANSPARENT = 'T';
+
     const auto CLICKABLE_ZONE = std::make_pair(10, 480);
     const int PLAYER_ONEID = 0;
     const int PLAYER_TWOID = 1;

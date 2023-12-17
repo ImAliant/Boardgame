@@ -23,6 +23,16 @@ struct CheckersStatus {
 
     std::vector<std::pair<int, int>> m_currentPossibleMoves;
     std::vector<std::pair<int, int>> m_lastPossibleMoves;
+
+    void SaveLastPossibleMoves() 
+    {
+        m_lastPossibleMoves = m_currentPossibleMoves;
+    }
+
+    void SaveLastSelectedPiece()
+    {
+        m_lastSelectedPiece = m_selectedPiece;
+    }
 };
 
 class Checkers
@@ -54,9 +64,6 @@ class Checkers
         bool CanPromotePiece(std::pair<int, int> coord) const;
         void PromotePiece(std::pair<int, int> coord);
 
-        void SaveLastPossibleMoves();
-        void SaveLastSelectedPiece();
-
         // Change the value of boolean flags
         void PieceIsSelected();
         void PieceIsNotSelected();
@@ -87,8 +94,8 @@ class Checkers
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
 
-        CheckersPiece& GetPiece(std::pair<int, int> coord/*int x, int y*/) const;
-        
+        CheckersPiece* GetPiece(std::pair<int, int> coord) const;
+
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;
         std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y) const;

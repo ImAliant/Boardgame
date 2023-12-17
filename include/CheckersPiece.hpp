@@ -43,4 +43,6 @@ class CheckersPiece: public Piece
         bool CanBeCaptured() const;
 
         std::vector<std::pair<int, int>> GetPossibleCaptures() const;
+
+        std::string GetType() const;
 };
