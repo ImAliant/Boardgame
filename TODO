@@ -1,8 +1,7 @@
 TODO:
-1) Promotion d'un pion. FAIT
-2) Probleme de capture:
+1) Probleme de capture:
 	- Un joueur peut capturé un de ses pions ou celui d'un adversaire alors qu'il n'en pas le 	 droit
-3) Modifier les mouvements possibles lorsque la piece est une dame.
-4) Fin de partie
-5) Choix aléatoire du joueur
+2) Modifier les mouvements possibles lorsque la piece est une dame.
+3) Fin de partie
+4) Choix aléatoire du joueur
 

@@ -45,46 +45,69 @@ void CheckersController::Update() {
     m_view->Render();
 
     // On change de couleur la case lorsqu'un pion est sélectionné
+    UpdateHighlight();
+    UpdateBoard();
+    UpdateCurrentPlayer();
+    UpdateButtonPushed();
+}
+
+void CheckersController::UpdateHighlight() const
+{
     if (m_model->IsPieceSelected() && !m_view->HasHighLightedCell())
     {
-        m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Yellow);
-        auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
-        m_view->HighlightPossibleMoves(possibleMoves);
-        m_view->NeedHighlight();
+        HighlightSelectedPiece();
     }
     if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 
         m_model->GetLastSelectedPiece().second != -1 &&
         m_model->GetLastSelectedPiece() != m_model->GetSelectedPiece())
     {
-        m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
-        auto lastPossibleMoves = m_model->GetPossibleMoves(m_model->GetLastSelectedPiece().first, m_model->GetLastSelectedPiece().second);
-        m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
-        m_model->ResetSelectedPieceFlag();
-        m_view->RemoveHighlight();
+        RemoveHighlightSelectedPiece();
     }
+}
 
+void CheckersController::HighlightSelectedPiece() const
+{
+    const auto& [selectedX, selectedY] = m_model->GetSelectedPiece();
+    m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Yellow);
+    auto possibleMoves = m_model->GetPossibleMoves(selectedX, selectedY);
+    m_view->HighlightPossibleMoves(possibleMoves);
+    m_view->NeedHighlight();
+}
+
+void CheckersController::RemoveHighlightSelectedPiece() const
+{
+    const auto& [lastSelectedX, lastSelectedY] = m_model->GetLastSelectedPiece();
+    m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
+    auto lastPossibleMoves = m_model->GetPossibleMoves(lastSelectedX, lastSelectedY);
+    m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
+    m_model->ResetSelectedPieceFlag();
+    m_view->RemoveHighlight();
+}
+
+void CheckersController::UpdateBoard() const
+{
     if (m_model->IsBoardNeedUpdate())
     {
         m_view->UpdateBoard(*m_model->GetBoard());
         m_model->ResetBoardNeedUpdateFlag();
     }
+}
 
+void CheckersController::UpdateCurrentPlayer() const
+{
     if (m_model->IsCurrentPlayerChanged())
     {
         m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
         m_model->ResetCurrentPlayerChangedFlag();
     }
+}
 
-    if (m_view->IsLaunchgameButtonPressed())
-    {
-        Start();
-    }
+void CheckersController::UpdateButtonPushed()
+{
+    if (m_view->IsLaunchgameButtonPressed()) Start();
 
-    if (m_view->IsExitButtonPressed())
-    {
-        CloseWindow();
-    }
+    if (m_view->IsExitButtonPressed()) CloseWindow();
 }
 
 void CheckersController::Draw() {
