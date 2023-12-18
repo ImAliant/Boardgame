@@ -1,5 +1,5 @@
 #include "../../include/game/Checkers.hpp"
-
+#include "../../include/GameType.hpp"
 #include <random>
 
 Checkers::Checkers(const std::shared_ptr<Context> &context): m_context(context) {}
@@ -289,7 +289,7 @@ void Checkers::UpdateBoard()
             else
                 m_boardPiece[i][j].setFillColor(sf::Color::Transparent);
 
-            m_board.get()->getValueAt(i, j)->findPossibleMoves(*m_board.get());
+            m_board.get()->getValueAt(i, j)->findPossibleMoves(*m_board.get(),GameType::CHECKERS);
         }
     }
 }
@@ -300,7 +300,7 @@ void Checkers::updatePossibleMoves() const
     {
         for (int j = 0; j < BOARD_SIZE; j++)
         {
-            m_board.get()->getValueAt(i, j)->findPossibleMoves(*m_board.get());
+            m_board.get()->getValueAt(i, j)->findPossibleMoves(*m_board.get(),GameType::CHECKERS);
         }
     }
 }
@@ -414,5 +414,6 @@ void Checkers::HandleMousePressed(const sf::Event& event)
         if (m_isExitButtonSelected) m_isExitButtonPressed = true;
         if (m_isLaunchgameButtonSelected) m_isLaunchgameButtonPressed = true;
         if (m_isGameStarted /*&& !m_isPlayerTurn*/) doPlayerTurn(event.mouseButton);
+        
     }
 }

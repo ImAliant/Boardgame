@@ -2,7 +2,7 @@
 
 enum class GameType
 {
-    JEU1,
+    BUTIN,
     CHECKERS,
     JEU3
 };

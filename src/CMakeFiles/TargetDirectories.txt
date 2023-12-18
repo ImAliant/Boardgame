@@ -1,0 +1,5 @@
+/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/src/CMakeFiles/boardgame.dir
+/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/src/CMakeFiles/package.dir
+/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/src/CMakeFiles/package_source.dir
+/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/src/CMakeFiles/edit_cache.dir
+/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/src/CMakeFiles/rebuild_cache.dir

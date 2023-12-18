@@ -28,7 +28,7 @@ class Piece
         Piece& operator=(const Piece& piece);
         friend std::ostream& operator<<(std::ostream& os, const Piece& piece);
 
-        void findPossibleMoves(const Board& board);
+        void findPossibleMoves(const Board& board,GameType gameType);
 
         void setPosition(int x, int y);
 

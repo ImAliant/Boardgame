@@ -23,6 +23,7 @@ set(SOURCES
     src/Player.cpp
     src/game/Checkers.cpp
     src/EventHandler.cpp
+    src/game/Butin.cpp
 
     # Add other source files here
 )

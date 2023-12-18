@@ -1,6 +1,6 @@
 #include "../include/GameChoice.hpp"
 #include "../include/game/Checkers.hpp"
-
+#include "../include/game/Butin.hpp"
 #include <iostream>
 #include <SFML/Window/Event.hpp>
 
@@ -39,6 +39,7 @@ void GameChoice::Update()
     if(m_isButinButtonPressed)
     {
         // TODO : Change the current state to Game1
+        m_context->m_states->Add(std::make_unique<Butin>(m_context), true);
         std::cout << "Butin" << std::endl;
 
         m_isButinButtonPressed = false;
