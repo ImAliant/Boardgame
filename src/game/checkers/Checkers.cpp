@@ -14,7 +14,7 @@ void Checkers::SwitchPlayer() {
         m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_TWO)];
     else m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
 
-    CurrentPlayerChanged();
+    m_flags.CurrentPlayerChanged();
 }
 
 void Checkers::Turn(std::pair<int, int> coord) {
@@ -48,7 +48,7 @@ void Checkers::Turn(std::pair<int, int> coord) {
             SwitchPlayer();
 
         // On reset le flag de piece capturée
-        ResetPieceCapturedFlag();
+        m_flags.ResetPieceCapturedFlag();
     }
     else {
         if (m_flags.m_isPieceSelected)
@@ -92,16 +92,16 @@ void Checkers::SelectPiece(std::pair<int, int> coord)
     m_status.m_currentPossibleMoves = GetPossibleMoves(coord.first, coord.second);
 
     SetSelectedPiece(coord);
-    PieceIsSelected();
+    m_flags.PieceIsSelected();
 }
 void Checkers::DeselectPiece()
 {
     std::cout << "DeselectPiece" << std::endl;
 
     m_status.SaveLastPossibleMoves();
-    SelectPieceChanged();
+    m_flags.SelectPieceChanged();
     m_status.SaveLastSelectedPiece();
-    PieceIsNotSelected();
+    m_flags.PieceIsNotSelected();
     SetSelectedPiece(std::make_pair<int, int>(-1, -1));
 }
 void Checkers::ApplyMove(std::pair<int, int> coord)
@@ -140,7 +140,7 @@ void Checkers::ApplyMove(std::pair<int, int> coord)
     // On met à jour les mouvements possibles
     UpdatePossibleMoves();
 
-    BoardNeedUpdate();
+    m_flags.BoardNeedUpdate();
 }
 bool Checkers::CheckCapture(std::pair<int, int> coord)
 {
@@ -212,7 +212,7 @@ void Checkers::PromotePiece(std::pair<int, int> coord)
 
     piece->Promote();
 
-    BoardNeedUpdate();
+    m_flags.BoardNeedUpdate();
 }
 
 void Checkers::Init()
@@ -275,34 +275,34 @@ void Checkers::GameStart()
     m_flags.m_isGameStarted = true;
 }
 
-void Checkers::PieceIsSelected()
+void flagsmodel_t::PieceIsSelected()
 {
-    m_flags.m_isPieceSelected = true;
+    m_isPieceSelected = true;
 }
-void Checkers::PieceIsNotSelected()
+void flagsmodel_t::PieceIsNotSelected()
 {
-    m_flags.m_isPieceSelected = false;
+    m_isPieceSelected = false;
 }
-void Checkers::CurrentPlayerChanged()
+void flagsmodel_t::CurrentPlayerChanged()
 {
-    m_flags.m_currentPlayerChanged = true;
+    m_currentPlayerChanged = true;
 }
-void Checkers::SelectPieceChanged()
+void flagsmodel_t::SelectPieceChanged()
 {
-    m_flags.m_selectedPieceChanged = true;
+    m_selectedPieceChanged = true;
 }
-void Checkers::BoardNeedUpdate()
+void flagsmodel_t::BoardNeedUpdate()
 {
-    m_flags.m_boardNeedUpdate = true;
+    m_boardNeedUpdate = true;
 }
 
 void Checkers::ResetCurrentPlayerChangedFlag()
 {
     m_flags.m_currentPlayerChanged = false;
 }
-void Checkers::ResetPieceCapturedFlag()
+void flagsmodel_t::ResetPieceCapturedFlag()
 {
-    m_flags.m_isPieceCaptured = false;
+    m_isPieceCaptured = false;
 }
 void Checkers::ResetSelectedPieceFlag()
 {

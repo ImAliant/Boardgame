@@ -15,6 +15,14 @@ struct flagsmodel_t {
     bool m_boardNeedUpdate = false;
     bool m_isPieceCaptured = false;
     bool m_currentPlayerChanged = false;
+
+    void PieceIsSelected();
+    void PieceIsNotSelected();
+    void CurrentPlayerChanged();
+    void SelectPieceChanged();
+    void BoardNeedUpdate();
+    
+    void ResetPieceCapturedFlag();
 };
 
 struct CheckersStatus {
@@ -65,13 +73,6 @@ class Checkers
         void PromotePiece(std::pair<int, int> coord);
 
         // Change the value of boolean flags
-        void PieceIsSelected();
-        void PieceIsNotSelected();
-        void CurrentPlayerChanged();
-        void SelectPieceChanged();
-        void BoardNeedUpdate();
-
-        void ResetPieceCapturedFlag();
         bool AreCoordinatesValid(std::pair<int, int> coord) const;
 
         void SetSelectedPiece(std::pair<int, int> coord);

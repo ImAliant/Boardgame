@@ -58,7 +58,7 @@ void CheckersController::Update() {
         m_model->GetLastSelectedPiece() != m_model->GetSelectedPiece())
     {
         m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
-        auto lastPossibleMoves = m_model->GetLastPossibleMoves();
+        auto lastPossibleMoves = m_model->GetPossibleMoves(m_model->GetLastSelectedPiece().first, m_model->GetLastSelectedPiece().second);
         m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
         m_model->ResetSelectedPieceFlag();
         m_view->RemoveHighlight();
