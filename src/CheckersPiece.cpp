@@ -96,7 +96,7 @@ void CheckersPiece::CaptureMoves(const CheckersBoard& board)
 
 void CheckersPiece::QueenCaptureDirections(const CheckersBoard& board, direction_t dir)
 {
-    const auto& [dx, dy] = dir;
+    /*const auto& [dx, dy] = dir;
     int x = m_x + dx;
     int y = m_y + dy;
 
@@ -114,6 +114,37 @@ void CheckersPiece::QueenCaptureDirections(const CheckersBoard& board, direction
     {
         m_possibleMoves.push_back(coord1);
         m_possibleCaptures.push_back(std::make_pair(dx, dy));
+    }*/
+
+    const auto& [dx, dy] = dir;
+    int x = m_x + dx;
+    int y = m_y + dy;
+
+    auto coord = std::make_pair(x, y);
+    while (IsWithinBoard(board, coord) && IsEmptyCell(board, coord))
+    {
+        x += dx;
+        y += dy;
+
+        coord = std::make_pair(x, y);
+    }
+
+    if (IsWithinBoard(board, coord) && IsOpponentPiece(board, coord))
+    {
+        int captX = x + dx;
+        int captY = y + dy;
+
+        auto captCoord = std::make_pair(captX, captY);
+        while (IsWithinBoard(board, captCoord) && IsEmptyCell(board, captCoord))
+        {
+            m_possibleMoves.push_back(captCoord);
+            m_possibleCaptures.push_back(std::make_pair(dx, dy));
+
+            captX += dx;
+            captY += dy;
+
+            captCoord = std::make_pair(captX, captY);
+        }
     }
 }
 

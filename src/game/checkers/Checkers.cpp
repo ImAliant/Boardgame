@@ -38,28 +38,16 @@ void Checkers::Turn(coord_t coord) {
     else if (IsMovePossible(coord) && IsPieceSelected())
     {
         // Si le mouvement est possible alors on déplace la piece
-        // debug 
-        std::cout << "debug1" << std::endl;
-        //
         ApplyMove(coord);
 
         // On teste si la partie est terminée
-        // debug
-        std::cout << "debug2" << std::endl;
-        //
         CheckForWin();
 
         // On change de joueur si aucune piece n'a été capturée
-        // debug 
-        std::cout << "debug3" << std::endl;
-        //
         if (!m_flags.m_isPieceCaptured)
             SwitchPlayer();
 
         // On reset le flag de piece capturée
-        // debug
-        std::cout << "debug4" << std::endl;
-        //
         m_flags.ResetPieceCapturedFlag();
     }
     else {
