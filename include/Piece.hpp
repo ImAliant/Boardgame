@@ -21,11 +21,8 @@ struct state_t {
 class Piece 
 {
     protected:
-        int m_x;
-        int m_y;
-
+        coord_t m_coord;
         state_t m_state;
-
         std::vector<coord_t> m_possibleMoves;
     public:
         Piece();

@@ -5,17 +5,12 @@
 Piece::Piece() {}
 
 Piece::Piece(coord_t coord, std::shared_ptr<Player> owner, char symbol)
-    : m_x(coord.first), m_y(coord.second)
-{
-    m_state.m_owner = std::move(owner);
-    m_state.m_symbol = symbol;
-}
+    : m_coord(coord), m_state({0, std::move(owner), symbol})
+{}
 
 void Piece::SetPosition(coord_t coord)
 {
-    const auto& [x, y] = coord;
-    m_x = x;
-    m_y = y;
+    m_coord = coord;
 }
 
 std::vector<coord_t> Piece::GetPossibleMoves() const
@@ -25,17 +20,17 @@ std::vector<coord_t> Piece::GetPossibleMoves() const
 
 coord_t Piece::GetPosition() const
 {
-    return std::make_pair(m_x, m_y);
+    return m_coord;
 }
 
 int Piece::GetX() const
 {
-    return m_x;
+    return m_coord.first;
 }
 
 int Piece::GetY() const
 {
-    return m_y;
+    return m_coord.second;
 }
 
 std::shared_ptr<Player> Piece::GetOwner() const

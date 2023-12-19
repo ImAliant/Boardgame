@@ -45,8 +45,8 @@ void CheckersPiece::AddPossibleMoves(const CheckersBoard& board, std::vector<dir
 {
     for (const auto& [dx, dy]: directions)
     {
-        int x = m_x + dx;
-        int y = m_y + dy;
+        int x = GetX() + dx;
+        int y = GetY() + dy;
 
         auto coord = std::make_pair(x, y);
         while (IsWithinBoard(board, coord) && IsEmptyCell(board, coord))
@@ -72,11 +72,11 @@ void CheckersPiece::CaptureMoves(const CheckersBoard& board)
     {
         for (const auto& [dx, dy]: *directions)
         {
-            int x = m_x + 2*dx;
-            int y = m_y + 2*dy;
+            int x = GetX() + 2*dx;
+            int y = GetY() + 2*dy;
 
             const auto& coord = std::make_pair(x, y);
-            const auto& coord1 = std::make_pair(m_x + dx, m_y + dy);
+            const auto& coord1 = std::make_pair(GetX() + dx, GetY() + dy);
             if (IsWithinBoard(board, coord) && IsOpponentPiece(board, coord1) && IsEmptyCell(board, coord))
             {
                 const auto& direction = std::make_pair(dx, dy);
@@ -96,29 +96,9 @@ void CheckersPiece::CaptureMoves(const CheckersBoard& board)
 
 void CheckersPiece::QueenCaptureDirections(const CheckersBoard& board, direction_t dir)
 {
-    /*const auto& [dx, dy] = dir;
-    int x = m_x + dx;
-    int y = m_y + dy;
-
-    auto coord = std::make_pair(x, y);
-    while (IsWithinBoard(board, coord) && IsEmptyCell(board, coord))
-    {
-        x += dx;
-        y += dy;
-
-        coord = std::make_pair(x, y);
-    }
-
-    const auto& coord1 = std::make_pair(x+dx, y+dy);
-    if (IsWithinBoard(board, coord) && IsOpponentPiece(board, coord) && IsEmptyCell(board, coord1))
-    {
-        m_possibleMoves.push_back(coord1);
-        m_possibleCaptures.push_back(std::make_pair(dx, dy));
-    }*/
-
     const auto& [dx, dy] = dir;
-    int x = m_x + dx;
-    int y = m_y + dy;
+    int x = GetX() + dx;
+    int y = GetY() + dy;
 
     auto coord = std::make_pair(x, y);
     while (IsWithinBoard(board, coord) && IsEmptyCell(board, coord))
