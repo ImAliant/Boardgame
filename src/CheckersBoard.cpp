@@ -37,8 +37,6 @@ void CheckersBoard::FillBoard()
             {
                 m_board[i][j] = CreatePiece(coord, WHITE);
             }
-            else
-                m_board[i][j] = CreatePiece(coord, TRANSPARENT);
         }
     }
 }
@@ -55,7 +53,7 @@ void CheckersBoard::MovePiece(coord_t coord, coord_t newCoord)
 
     const auto& [newX, newY] = newCoord;
     m_board[newX][newY] = std::move(piece);
-    m_board[x][y] = CreatePiece(coord, TRANSPARENT);
+    m_board[x][y] = nullptr;
 }
 
 void CheckersBoard::RemovePiece(coord_t coord)
@@ -63,14 +61,14 @@ void CheckersBoard::RemovePiece(coord_t coord)
     CheckBounds(coord);
 
     const auto& [x, y] = coord;
-    m_board[x][y] = CreatePiece(coord, TRANSPARENT);
+    m_board[x][y] = nullptr;
 }
 
 bool CheckersBoard::EmptyCell(coord_t coord) const
 {
     CheckBounds(coord);
 
-    return GetValueAt(coord)->GetSymbol() == TRANSPARENT;
+    return GetValueAt(coord) == nullptr;
 }
 
 void CheckersBoard::CheckBounds(coord_t coord) const
@@ -87,9 +85,9 @@ bool CheckersBoard::IsOpponentPiece(coord_t srcCoord, coord_t dstCoord) const
     CheckBounds(srcCoord);
     CheckBounds(dstCoord);
 
-    if (GetValueAt(srcCoord)->GetSymbol() == GetValueAt(dstCoord)->GetSymbol())
+    if (GetValueAt(srcCoord) == nullptr || GetValueAt(dstCoord) == nullptr)
         return false;
-    if (GetValueAt(srcCoord)->GetSymbol() == TRANSPARENT || GetValueAt(dstCoord)->GetSymbol() == TRANSPARENT)
+    if (GetValueAt(srcCoord)->GetSymbol() == GetValueAt(dstCoord)->GetSymbol())
         return false;
     
     return true;
@@ -101,13 +99,7 @@ std::unique_ptr<CheckersPiece> CheckersBoard::CreatePiece(coord_t coord, char co
         return CreateBlackPiece(coord);
     else if (color == WHITE)
         return CreateWhitePiece(coord);
-    else if (color == TRANSPARENT)
-        return CreateTransparentPiece(coord);
     else throw std::invalid_argument("Invalid color");
-}
-std::unique_ptr<CheckersPiece> CheckersBoard::CreateTransparentPiece(coord_t coord) const
-{
-    return std::make_unique<CheckersPiece>(coord, nullptr, TRANSPARENT);
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(coord_t coord) const
 {

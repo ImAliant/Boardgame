@@ -12,8 +12,6 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
 {
     const auto& checkersBoard = dynamic_cast<const CheckersBoard&>(board);
 
-    if (m_state.m_symbol == CheckersConstants::TRANSPARENT) return;
-
     m_possibleMoves.clear();
     m_possibleCaptures.clear();
 
@@ -137,8 +135,10 @@ bool CheckersPiece::IsOpponentPiece(const CheckersBoard& board, const coord_t co
 {
     if (IsWithinBoard(board, coord)) 
     {
-        auto pieceColor = board.GetValueAt(coord)->GetSymbol();
-        return !IsEmptyCell(board, coord) && pieceColor != m_state.m_symbol;
+        const auto& piece = board.GetValueAt(coord);
+        if (piece == nullptr) return false;
+        auto pieceColor = piece->GetSymbol();
+        return pieceColor != m_state.m_symbol;
     }
 
     return false;

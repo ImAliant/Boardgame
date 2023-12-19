@@ -129,7 +129,9 @@ void CheckersView::SetupBoardPiece(coord_t coord, const CheckersBoard &board)
     );
 
     auto piece = board.GetValueAt(coord);
-    SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol(), piece->IsPromoted());
+    if (piece != nullptr)
+        SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol(), piece->IsPromoted());
+    else SetPieceTexture(m_boardPiece[i][j], EMPTY_ID, false);
 }
 sf::Vector2f CheckersView::CalculatePosition(float offset, const coord_t coord) const
 {

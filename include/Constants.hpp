@@ -50,7 +50,6 @@ namespace CheckersConstants
 
     const char BLACK = 'B';
     const char WHITE = 'W';
-    const char TRANSPARENT = 'T';
 
     const auto CLICKABLE_ZONE = std::make_pair(10, 480);
     const int PLAYER_ONEID = 0;

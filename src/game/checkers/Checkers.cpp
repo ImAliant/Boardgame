@@ -59,11 +59,11 @@ void Checkers::Turn(coord_t coord) {
 bool Checkers::IsPieceOfCurrentPlayer(coord_t coord) const
 {
     auto piece = GetPiece(coord);
-    auto idCurrentPlayer = m_currentPlayer->GetId();
-
+    if (piece == nullptr) return false;
+    
     auto pieceOwner = piece->GetOwner();
-    if (pieceOwner == nullptr) return false;
     auto idPieceOwner = pieceOwner->GetId();
+    auto idCurrentPlayer = m_currentPlayer->GetId();
 
     return idCurrentPlayer == idPieceOwner;
 }
@@ -96,6 +96,7 @@ void Checkers::CheckForWin() {
     {
         for (int j = 0; j < cols; j++) {
             auto piece = GetPiece(std::make_pair(i, j));
+            if (piece == nullptr) continue;
             if (piece->GetSymbol() == CheckersConstants::WHITE) nbWhitePieces++;
             else if (piece->GetSymbol() == CheckersConstants::BLACK) nbBlackPieces++;
         }
@@ -190,7 +191,7 @@ bool Checkers::CheckCapture(coord_t coord)
             const auto& pieceCapture = GetPiece(c);;
             if (!AreCoordinatesValid(c) || pieceCapture->GetSymbol() == piece->GetSymbol()) break;
 
-            if (pieceCapture->GetSymbol() == CheckersConstants::TRANSPARENT)
+            if (pieceCapture == nullptr)
             {
                 x -= captx;
                 y -= capty;
@@ -224,7 +225,7 @@ bool Checkers::CanPromotePiece(coord_t coord) const
     auto piece = GetPiece(coord);
 
     if (piece->IsPromoted()) return false;
-    if (piece->GetSymbol() == CheckersConstants::TRANSPARENT) return false;
+    if (piece == nullptr) return false;
 
     auto x = piece->GetX();
 
@@ -288,13 +289,9 @@ void Checkers::InitBoard() {
     int row = m_board->GetRows();
     int col = m_board->GetCols();
 
-    if (row != 10 || col != 10) {
+    if (row != CheckersConstants::CHECKERSROWS || col != CheckersConstants::CHECKERSCOLS) {
         throw std::runtime_error("Checkers::InitBoard() : row and col have incorrect values");
     }
-
-    // debug
-    GetPiece(std::make_pair(3, 2))->Promote();
-    //
 }
 
 void Checkers::UpdatePossibleMoves() const
@@ -306,7 +303,9 @@ void Checkers::UpdatePossibleMoves() const
     {
         for (int j = 0; j < cols; j++) {
             const auto& coord = std::make_pair(i, j);
-            m_board->GetValueAt(coord)->FindPossibleMoves(*m_board);
+            const auto& piece = GetPiece(coord);
+            if (piece != nullptr)
+                piece->FindPossibleMoves(*m_board);
         }
     }
 }
