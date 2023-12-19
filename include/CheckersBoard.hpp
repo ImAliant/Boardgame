@@ -18,7 +18,7 @@ class CheckersBoard: public Board
         std::unique_ptr<CheckersPiece> CreateBlackPiece(int x, int y) const;
         std::unique_ptr<CheckersPiece> CreateWhitePiece(int x, int y) const;
     public:
-        explicit CheckersBoard(std::vector<std::shared_ptr<Player>> players);
+        explicit CheckersBoard(/*std::vector<std::shared_ptr<Player>> players*/);
         ~CheckersBoard() override = default;
 
         friend std::ostream& operator<<(std::ostream& os, const CheckersBoard& board);

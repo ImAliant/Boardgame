@@ -28,7 +28,7 @@ class CheckersPiece: public Piece
         void CaptureMoves(const CheckersBoard& board);
     public:
         CheckersPiece() = default;
-        CheckersPiece(int x, int y, std::shared_ptr<Player> owner, char symbol);
+        CheckersPiece(int x, int y/*, std::shared_ptr<Player> owner*/, char symbol);
         ~CheckersPiece() override;
 
         friend std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece);

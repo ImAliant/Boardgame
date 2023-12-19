@@ -1,7 +1,7 @@
 #include "../include/CheckersPiece.hpp"
 
-CheckersPiece::CheckersPiece(int x, int y, std::shared_ptr<Player> owner, char symbol)
-    : Piece(x, y, std::move(owner), symbol)
+CheckersPiece::CheckersPiece(int x, int y/*, std::shared_ptr<Player> owner*/, char symbol)
+    : Piece(x, y/*, std::move(owner)*/, symbol)
 {
     m_state.type = PieceType::PAWN;
 }
