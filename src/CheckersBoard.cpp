@@ -106,11 +106,11 @@ std::unique_ptr<CheckersPiece> CheckersBoard::CreateTransparentPiece(int x, int 
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(int x, int y) const
 {
-    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_ONEID], BLACK);
+    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_TWOID], BLACK);
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateWhitePiece(int x, int y) const
 {
-    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_TWOID], WHITE);
+    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_ONEID], WHITE);
 }
 
 std::ostream &operator<<(std::ostream &os, const CheckersBoard &board)

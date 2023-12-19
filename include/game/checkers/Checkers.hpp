@@ -41,6 +41,21 @@ struct CheckersStatus {
     {
         m_lastSelectedPiece = m_selectedPiece;
     }
+
+    void SetSelectedPiece(std::pair<int, int> coord)
+    {
+        m_selectedPiece = coord;
+    }
+
+    void SetPossibleMoves(std::vector<std::pair<int, int>> const& moves)
+    {
+        m_currentPossibleMoves = moves;
+    }
+
+    void ResetSelectedPiece()
+    {
+        m_selectedPiece = {-1, -1};
+    }
 };
 
 class Checkers
@@ -74,8 +89,6 @@ class Checkers
 
         // Change the value of boolean flags
         bool AreCoordinatesValid(std::pair<int, int> coord) const;
-
-        void SetSelectedPiece(std::pair<int, int> coord);
     public:
         Checkers();
         ~Checkers();

@@ -19,8 +19,6 @@ class Board
         virtual ~Board() = default;
 
         virtual void Init() = 0;
-        /*virtual void FillBoardWithEmptyPieces() = 0;
-        virtual void SetPieceOnBoard() = 0;*/
         virtual void FillBoard() = 0;
         virtual void MovePiece(int x, int y, int newX, int newY) = 0;
         virtual void RemovePiece(int x, int y) = 0;
