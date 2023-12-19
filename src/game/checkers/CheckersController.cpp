@@ -57,7 +57,7 @@ void CheckersController::UpdateHighlight() const
     {
         HighlightSelectedPiece();
     }
-    if (m_model->IsSelectedPieceChanged() && 
+    else if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 
         m_model->GetLastSelectedPiece().second != -1 &&
         m_model->GetLastSelectedPiece() != m_model->GetSelectedPiece())
@@ -68,18 +68,21 @@ void CheckersController::UpdateHighlight() const
 
 void CheckersController::HighlightSelectedPiece() const
 {
-    const auto& [selectedX, selectedY] = m_model->GetSelectedPiece();
-    m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Yellow);
-    auto possibleMoves = m_model->GetPossibleMoves(selectedX, selectedY);
+    const auto& selectedPiece = m_model->GetSelectedPiece();
+    const auto& [selectedX, selectedY] = selectedPiece;
+    const auto& possibleMoves = m_model->GetPossibleMoves(selectedX, selectedY);
+    
+    m_view->HighlightCell(selectedPiece, sf::Color::Yellow);
     m_view->HighlightPossibleMoves(possibleMoves);
     m_view->NeedHighlight();
 }
 
 void CheckersController::RemoveHighlightSelectedPiece() const
 {
-    const auto& [lastSelectedX, lastSelectedY] = m_model->GetLastSelectedPiece();
-    m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
-    auto lastPossibleMoves = m_model->GetPossibleMoves(lastSelectedX, lastSelectedY);
+    const auto& lastSelectedPiece = m_model->GetLastSelectedPiece();
+    const auto& lastPossibleMoves = m_model->GetLastPossibleMoves();
+    
+    m_view->RemoveHighlightCell(lastSelectedPiece);
     m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
     m_model->ResetSelectedPieceFlag();
     m_view->RemoveHighlight();
