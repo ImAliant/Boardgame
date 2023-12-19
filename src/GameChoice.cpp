@@ -1,5 +1,6 @@
 #include "../include/GameChoice.hpp"
 #include "../include/game/checkers/CheckersController.hpp"
+#include "../include/Constants.hpp"
 
 #include <iostream>
 #include <SFML/Window/Event.hpp>
@@ -10,30 +11,29 @@ GameChoice::~GameChoice() {}
 
 void GameChoice::Init() 
 {
-    auto width = static_cast<float>(m_context->m_window->getSize().x);
-    auto height = static_cast<float>(m_context->m_window->getSize().y);
+    using namespace UIConstants;
+    using namespace UIConstants::GameChoiceContext;
 
     sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT);
     if (font == nullptr)
     {
-        std::cout << "The font of is not loaded" << std::endl;
-        return;
+        throw std::runtime_error("MainMenu::Init() : font is nullptr");
     }
 
     // Title
-    InitText(m_gameTitle, "Boardgame", sf::Vector2f(width / 2, height / 2 - 150.f), *font);
+    InitText(m_gameTitle, "Boardgame", GAMETITLE_POSITION, *font);
 
     // Game 1 button
-    InitText(m_butinButton, "Butin", sf::Vector2f(width / 2, height / 2 - 25.f), *font, 20);
+    InitText(m_butinButton, "Butin", BUTINBUTTON_POSITION, *font, CHARACTER_SIZE);
 
     // Checkers game button
-    InitText(m_checkersButton, "Les Dames", sf::Vector2f(width / 2, height / 2), *font, 20);
+    InitText(m_checkersButton, "Les Dames", CHECKERSBUTTON_POSITION, *font, CHARACTER_SIZE);
 
     // Game 3 button
-    InitText(m_bulltrickerButton, "Bulltricker", sf::Vector2f(width / 2, height / 2 + 25.f), *font, 20);
+    InitText(m_bulltrickerButton, "Bulltricker", BULLTRICKERBUTTON_POSITION, *font, CHARACTER_SIZE);
 
     // Exit button
-    InitText(m_exitButton, "Quitter", sf::Vector2f(width / 2, height / 2 + 250.f), *font, 20);
+    InitText(m_exitButton, "Quitter", EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
 }
 
 void GameChoice::Update()

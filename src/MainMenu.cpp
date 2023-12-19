@@ -1,32 +1,31 @@
 #include "../include/MainMenu.hpp"
 #include "../include/GameChoice.hpp"
+#include "../include/Constants.hpp"
 
 #include <iostream>
 #include <SFML/Window/Event.hpp>
+
+using namespace UIConstants;
 
 MainMenu::MainMenu(const std::shared_ptr<Context> &context): m_context(context) {}
 MainMenu::~MainMenu() {}
 
 void MainMenu::Init()
 {
-    auto width = static_cast<float>(m_context->m_window->getSize().x);
-    auto height = static_cast<float>(m_context->m_window->getSize().y);
-
     sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT);
     if (font == nullptr)
     {
-        std::cout << "The font of is not loaded" << std::endl;
-        return;
+        throw std::runtime_error("MainMenu::Init() : font is nullptr");
     }
 
     // Title
-    InitText(m_gameTitle, "Boardgame", sf::Vector2f(width / 2, height / 2 - 150.f), *font);
+    InitText(m_gameTitle, "Boardgame", GAMETITLE_POSITION, *font);
 
     // Play button
-    InitText(m_choiceButton, "Jeux", sf::Vector2f(width / 2, height / 2), *font, 20);
+    InitText(m_choiceButton, "Jeux", MainMenuContext::CHOICEBUTTON_POSITION, *font, CHARACTER_SIZE);
 
     // Exit button
-    InitText(m_exitButton, "Quitter", sf::Vector2f(width / 2, height / 2 + 250.f), *font, 20);
+    InitText(m_exitButton, "Quitter", EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
 }
 
 void MainMenu::Update()
