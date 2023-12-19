@@ -69,6 +69,7 @@ class CheckersView: public UI::UIHandler
         void Render();
 
         void PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const;
+        void PrintWinner(char winner) const;
 
         std::pair<int, int> GetBoardCoord(int x, int y) const;
 

@@ -22,10 +22,12 @@ class CheckersPiece: public Piece
 
         bool IsWithinBoard(const CheckersBoard& board, int x, int y) const;
         bool IsOpponentPiece(const CheckersBoard& board, int x, int y) const;
-        bool EmptyCell(const CheckersBoard& board, int x, int y) const;
+        bool IsEmptyCell(const CheckersBoard& board, int x, int y) const;
         
         void SimpleMoves(const CheckersBoard& board);
         void CaptureMoves(const CheckersBoard& board);
+        void AddPossibleMoves(const CheckersBoard& board, std::vector<std::pair<int, int>> const& directions);
+        void QueenCaptureDirections(const CheckersBoard& board, int dx, int dy);
     public:
         CheckersPiece() = default;
         CheckersPiece(int x, int y, std::shared_ptr<Player> owner, char symbol);

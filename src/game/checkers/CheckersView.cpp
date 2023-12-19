@@ -217,6 +217,15 @@ void CheckersView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) con
 {
     std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
 }
+void CheckersView::PrintWinner(char winner) const
+{
+    std::string winnerStr;
+    if (winner == WHITE) winnerStr = "White";
+    else if (winner == BLACK) winnerStr = "Black";
+    else winnerStr = "No winner";
+    
+    std::cout << "Winner: " << winnerStr << std::endl;
+}
 
 std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const 
 {

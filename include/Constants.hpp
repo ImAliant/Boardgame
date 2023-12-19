@@ -13,6 +13,7 @@ namespace WindowConstants
         static_cast<int>(sf::VideoMode::getDesktopMode().height / 2 - WINDOW_SIZE.y / 2)
     };
     const std::string WINDOW_TITLE = "Boardgame - Diamant/Hamdi";
+    const std::string CHECKERS_TITLE = "Les Dames - Diamant/Hamdi";
 };
 
 namespace UIConstants {
@@ -43,6 +44,8 @@ namespace CheckersConstants
     const int WHITEQUEEN_ID = 3;
     const int EMPTY_ID = 4;
 
+    const char NOWINNER = -1;
+
     const char BLACK = 'B';
     const char WHITE = 'W';
     const char TRANSPARENT = 'T';
@@ -50,7 +53,6 @@ namespace CheckersConstants
     const auto CLICKABLE_ZONE = std::make_pair(10, 480);
     const int PLAYER_ONEID = 0;
     const int PLAYER_TWOID = 1;
-    const int NONEID = 2;
 
     const int BOARD_UPPER_LIMIT = 0;
     const int BOARD_LOWER_LIMIT = 9;

@@ -1,4 +1,5 @@
 #include "../../../include/game/checkers/CheckersController.hpp"
+#include "../../../include/GameChoice.hpp"
 
 CheckersController::CheckersController(std::shared_ptr<Context> context)
     : m_context(context)
@@ -11,7 +12,7 @@ CheckersController::~CheckersController() {}
 
 void CheckersController::Init()
 {
-    m_context->m_window->setTitle("Les Dames - Diamant/Hamdi");
+    m_context->m_window->setTitle(WindowConstants::CHECKERS_TITLE);
 
     m_model->Init();
     m_view->Init(m_context, *m_model->GetBoard());
@@ -176,6 +177,11 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
             std::pair<int, int> coord = m_view->GetBoardCoord(x, y);
         
             m_model->Turn(coord);
+        }
+        if (m_model->IsGameFinished())
+        {
+            m_view->PrintWinner(m_model->GetWinner());
+            m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
         }
     }
 }

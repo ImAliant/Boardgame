@@ -20,46 +20,88 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
     SimpleMoves(checkersBoard);
     CaptureMoves(checkersBoard);
 }
+
 void CheckersPiece::SimpleMoves(const CheckersBoard& board) 
 {
     std::vector<std::pair<int, int>> const* directions;
-    if (m_state.m_symbol == CheckersConstants::WHITE)
-        directions = &CheckersConstants::WHITE_DIRECTION;
-    else if (m_state.m_symbol == CheckersConstants::BLACK)
-        directions = &CheckersConstants::BLACK_DIRECTION;
-    else
-        return;
+    if (m_state.type == PieceType::PAWN)
+    {
+        if (m_state.m_symbol == CheckersConstants::WHITE)
+            directions = &CheckersConstants::WHITE_DIRECTION;
+        else if (m_state.m_symbol == CheckersConstants::BLACK)
+            directions = &CheckersConstants::BLACK_DIRECTION;
+        else
+            return; 
+    }
+    else 
+    {
+        directions = &CheckersConstants::ALL_DIRECTION;
+    }
 
-    for (const auto& [dx, dy] : *directions)
+    AddPossibleMoves(board, *directions);
+}
+
+void CheckersPiece::AddPossibleMoves(const CheckersBoard& board, std::vector<std::pair<int, int>> const& directions)
+{
+    for (const auto& [dx, dy]: directions)
     {
         int x = m_x + dx;
         int y = m_y + dy;
 
-        if (!IsWithinBoard(board, x, y)) continue;
-    
-        if (board.EmptyCell(x, y))
+        while (IsWithinBoard(board, x, y) && IsEmptyCell(board, x, y))
         {
             m_possibleMoves.push_back(std::make_pair(x, y));
+            
+            if (!IsPromoted()) break;
+            
+            x += dx;
+            y += dy;
         }
     }
 }
+
 void CheckersPiece::CaptureMoves(const CheckersBoard& board)
 {
-    // Un joueur peut capturer une pièce adverse dans n'importe quelle directions
-
     std::vector<std::pair<int, int>> const* directions = &CheckersConstants::ALL_DIRECTION;
 
-    // On verifie dans ces directions si une piece adverse peut etre capturée
-    for (const auto& [dx, dy]: *directions)
+    if (m_state.type == PieceType::PAWN)
     {
-        int x = m_x + 2*dx;
-        int y = m_y + 2*dy;
-
-        if (IsWithinBoard(board, x, y) && IsOpponentPiece(board, m_x + dx, m_y + dy) && EmptyCell(board, x, y))
+        for (const auto& [dx, dy]: *directions)
         {
-            m_possibleMoves.push_back(std::make_pair(x, y));
-            m_possibleCaptures.push_back(std::make_pair(dx, dy));
+            int x = m_x + 2*dx;
+            int y = m_y + 2*dy;
+
+            if (IsWithinBoard(board, x, y) && IsOpponentPiece(board, m_x + dx, m_y + dy) && IsEmptyCell(board, x, y))
+            {
+                m_possibleMoves.push_back(std::make_pair(x, y));
+                m_possibleCaptures.push_back(std::make_pair(dx, dy));
+            }
         }
+    }
+    else
+    {
+        for (const auto& [dx, dy]: *directions)
+        {
+            QueenCaptureDirections(board, dx, dy);
+        }
+    }
+}
+
+void CheckersPiece::QueenCaptureDirections(const CheckersBoard& board, int dx, int dy)
+{
+    int x = m_x + dx;
+    int y = m_y + dy;
+
+    while (IsWithinBoard(board, x, y) && IsEmptyCell(board, x, y))
+    {
+        x += dx;
+        y += dy;
+    }
+
+    if (IsWithinBoard(board, x, y) && IsOpponentPiece(board, x, y) && IsEmptyCell(board, x + dx, y + dy))
+    {
+        m_possibleMoves.push_back(std::make_pair(x + dx, y + dy));
+        m_possibleCaptures.push_back(std::make_pair(dx, dy));
     }
 }
 
@@ -77,7 +119,7 @@ bool CheckersPiece::IsOpponentPiece(const CheckersBoard& board, int x, int y) co
 
     return false;
 }
-bool CheckersPiece::EmptyCell(const CheckersBoard& board, int x, int y) const
+bool CheckersPiece::IsEmptyCell(const CheckersBoard& board, int x, int y) const
 {
     return IsWithinBoard(board, x, y) && board.EmptyCell(x, y);
 }

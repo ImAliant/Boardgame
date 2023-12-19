@@ -83,6 +83,35 @@ bool Checkers::IsMovePossible(std::pair<int, int> coord) const
 
 void Checkers::CheckForWin() {
     // TODO
+    // Simple solution pour tester la fin de partie
+    // On compte les pieces de chaque joueur
+    // Si un joueur n'a plus de pieces, il a perdu
+
+    int nbWhitePieces = 0;
+    int nbBlackPieces = 0;
+
+    auto rows = m_board->GetRows();
+    auto cols = m_board->GetCols();
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++) {
+            auto piece = GetPiece(std::make_pair(i, j));
+            if (piece->GetSymbol() == CheckersConstants::WHITE) nbWhitePieces++;
+            else if (piece->GetSymbol() == CheckersConstants::BLACK) nbBlackPieces++;
+        }
+    }
+
+    if (nbWhitePieces == 0 || nbBlackPieces == 0)
+    {
+        m_status.m_winner = (nbWhitePieces == 0) ? CheckersConstants::BLACK : CheckersConstants::WHITE;
+        m_flags.GameFinished();
+    }
+
+    // debug
+    std::cout << "nbWhitePieces: " << nbWhitePieces << std::endl;
+    std::cout << "nbBlackPieces: " << nbBlackPieces << std::endl;
+    //
 }
 
 void Checkers::SelectPiece(std::pair<int, int> coord)
@@ -146,6 +175,7 @@ void Checkers::ApplyMove(std::pair<int, int> coord)
 
     m_flags.BoardNeedUpdate();
 }
+
 bool Checkers::CheckCapture(std::pair<int, int> coord)
 {
     bool capt = false;
@@ -160,16 +190,25 @@ bool Checkers::CheckCapture(std::pair<int, int> coord)
         int x = coord.first - captx;
         int y = coord.second - capty;
 
-        auto c = std::make_pair(x, y);
-        if (!AreCoordinatesValid(c)) continue;
-
-        auto pieceCapture = GetPiece(c);
-
-        if (pieceCapture->GetSymbol() != CheckersConstants::TRANSPARENT
-            && piece->GetSymbol() != pieceCapture->GetSymbol())
+        while (true)
         {
-            CapturePiece(c);
-            capt = true;
+            auto c = std::make_pair(x, y);
+            if (!AreCoordinatesValid(c)) break;
+
+            auto pieceCapture = GetPiece(c);
+            
+            if (pieceCapture->GetSymbol() == CheckersConstants::TRANSPARENT)
+            {
+                x -= captx;
+                y -= capty;
+                continue;
+            }
+            else if (piece->GetSymbol() != pieceCapture->GetSymbol())
+            {
+                CapturePiece(c);
+                capt = true;
+                break;
+            }
         }
     }
 
@@ -262,6 +301,10 @@ void Checkers::InitBoard() {
     if (row != 10 || col != 10) {
         throw std::runtime_error("Checkers::InitBoard() : row and col have incorrect values");
     }
+
+    // debug
+    GetPiece(std::make_pair(3, 2))->Promote();
+    //
 }
 
 void Checkers::UpdatePossibleMoves() const
@@ -279,7 +322,7 @@ void Checkers::UpdatePossibleMoves() const
 
 void Checkers::GameStart()
 {
-    m_flags.m_isGameStarted = true;
+    m_flags.GameStarted();
 }
 
 void flagsmodel_t::PieceIsSelected()
@@ -301,6 +344,14 @@ void flagsmodel_t::SelectPieceChanged()
 void flagsmodel_t::BoardNeedUpdate()
 {
     m_boardNeedUpdate = true;
+}
+void flagsmodel_t::GameStarted()
+{
+    m_isGameStarted = true;
+}
+void flagsmodel_t::GameFinished()
+{
+    m_isGameFinished = true;
 }
 
 void Checkers::ResetCurrentPlayerChangedFlag()
@@ -339,6 +390,11 @@ CheckersPiece* Checkers::GetPiece(std::pair<int, int> coord) const
 
     return m_board->GetValueAt(x, y);
 }
+char Checkers::GetWinner() const
+{
+    return m_status.m_winner;
+}
+
 std::vector<std::pair<int, int>> Checkers::GetPossibleMoves(int x, int y) const
 {
     return m_board->GetValueAt(x, y)->GetPossibleMoves();

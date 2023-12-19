@@ -21,6 +21,8 @@ struct flagsmodel_t {
     void CurrentPlayerChanged();
     void SelectPieceChanged();
     void BoardNeedUpdate();
+    void GameStarted();
+    void GameFinished();
     
     void ResetPieceCapturedFlag();
 };
@@ -31,6 +33,7 @@ struct CheckersStatus {
 
     std::vector<std::pair<int, int>> m_currentPossibleMoves;
     std::vector<std::pair<int, int>> m_lastPossibleMoves;
+    char m_winner = CheckersConstants::NOWINNER; // -1 = no winner 0 = white, 1 = black
 
     void SaveLastPossibleMoves() 
     {
@@ -109,6 +112,7 @@ class Checkers
         void ResetBoardNeedUpdateFlag();
 
         CheckersPiece* GetPiece(std::pair<int, int> coord) const;
+        char GetWinner() const;
 
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;
