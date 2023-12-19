@@ -40,6 +40,6 @@ class Piece
         std::pair<int, int> GetPosition() const;
         int GetX() const;
         int GetY() const;
-        Player& GetOwner() const;
+        std::shared_ptr<Player> GetOwner() const;
         char GetSymbol() const;
 };

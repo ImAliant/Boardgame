@@ -102,7 +102,7 @@ std::unique_ptr<CheckersPiece> CheckersBoard::CreatePiece(int x, int y, char col
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateTransparentPiece(int x, int y) const
 {
-    return std::make_unique<CheckersPiece>(x, y, m_players[NONEID], TRANSPARENT);
+    return std::make_unique<CheckersPiece>(x, y, nullptr/*m_players[NONEID]*/, TRANSPARENT);
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(int x, int y) const
 {

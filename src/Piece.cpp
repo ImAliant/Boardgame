@@ -37,9 +37,9 @@ int Piece::GetY() const
     return m_y;
 }
 
-Player& Piece::GetOwner() const
+std::shared_ptr<Player> Piece::GetOwner() const
 {
-    return *m_state.m_owner;
+    return m_state.m_owner;
 }
 
 char Piece::GetSymbol() const

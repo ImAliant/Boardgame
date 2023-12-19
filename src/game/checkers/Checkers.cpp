@@ -11,14 +11,11 @@ Checkers::Checkers() {}
 Checkers::~Checkers() {}
 
 void Checkers::SwitchPlayer() {
-    if (m_currentPlayer == m_players[static_cast<int>(Players::PLAYER_ONE)])
-        m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_TWO)];
-    else m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
+    if (m_currentPlayer == m_players[CheckersConstants::PLAYER_ONEID])
+        m_currentPlayer = m_players[CheckersConstants::PLAYER_TWOID];
+    else m_currentPlayer = m_players[CheckersConstants::PLAYER_ONEID];
 
     m_flags.CurrentPlayerChanged();
-    /*if (m_currentPlayer == m_players[CheckersConstants::PLAYER_ONEID])
-        m_currentPlayer = m_players[CheckersConstants::PLAYER_TWOID];
-    else m_currentPlayer = m_players[CheckersConstants::PLAYER_ONEID];*/
 }
 
 void Checkers::Turn(std::pair<int, int> coord) {
@@ -62,11 +59,14 @@ void Checkers::Turn(std::pair<int, int> coord) {
 
 bool Checkers::IsPieceOfCurrentPlayer(std::pair<int, int> coord) const
 {
-    // TODO: corriger cette fonction
-    auto currentPlayer = m_currentPlayer->getPlayer();
     auto piece = GetPiece(coord);
+    auto idCurrentPlayer = m_currentPlayer->GetId();
 
-    return piece->GetOwner().getPlayer() == currentPlayer;
+    auto pieceOwner = piece->GetOwner();
+    if (pieceOwner == nullptr) return false;
+    auto idPieceOwner = pieceOwner->GetId();
+
+    return idCurrentPlayer == idPieceOwner;
 }
 
 bool Checkers::IsMovePossible(std::pair<int, int> coord) const
@@ -229,14 +229,13 @@ void Checkers::InitPlayers() {
     }
 
     // On crée les joueurs
-    m_players.push_back(std::make_shared<Player>(Players::PLAYER_ONE));
-    m_players.push_back(std::make_shared<Player>(Players::PLAYER_TWO));
-    m_players.push_back(std::make_shared<Player>(Players::NONE));
-    /*m_players.push_back(std::make_shared<Player>());
-    m_players.push_back(std::make_shared<Player>());*/
+    m_players.push_back(std::make_shared<Player>());
+    m_players.push_back(std::make_shared<Player>());
 
     // On définit le joueur courant
-    m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
+    m_currentPlayer = m_players[CheckersConstants::PLAYER_ONEID];
+
+    // Solution pour choisir un joueur au hasard
     /*std::random_device rd;
     std::mt19937 g(rd());
     std::uniform_int_distribution<> dis(0, 1);
