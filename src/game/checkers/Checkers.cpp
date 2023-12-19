@@ -4,7 +4,6 @@
 #include "../../../include/exception/InvalidCoordinatesException.hpp"
 
 #include <algorithm>
-#include <random>
 
 Checkers::Checkers() {}
 
@@ -77,28 +76,8 @@ bool Checkers::IsMovePossible(std::pair<int, int> coord) const
     return std::find(possibleMoves.begin(), possibleMoves.end(), coord) != possibleMoves.end();
 }
 
-void Checkers::CheckForWin() 
-{
-    // On teste si le joueur courant a encore des pieces
-    if (m_currentPlayer->GetPieces().empty())
-    {
-        m_flags.m_isGameFinished = true;
-        return;
-    }
-
-    // On teste si le joueur courant peut encore jouer
-    auto pieces = m_currentPlayer->GetPieces();
-    for (const auto& piece: pieces)
-    {
-        auto possibleMoves = GetPossibleMoves(piece->GetX(), piece->GetY());
-        if (!possibleMoves.empty())
-        {
-            return;
-        }
-    }
-
-    // Si le joueur courant ne peut plus jouer, il a perdu
-    m_flags.m_isGameFinished = true;
+void Checkers::CheckForWin() {
+    // TODO
 }
 
 void Checkers::SelectPiece(std::pair<int, int> coord)
@@ -110,8 +89,9 @@ void Checkers::SelectPiece(std::pair<int, int> coord)
         DeselectPiece();
     }
 
-    m_status.SetSelectedPiece(coord);
-    m_status.SetPossibleMoves(GetPossibleMoves(coord.first, coord.second));
+    m_status.m_currentPossibleMoves = GetPossibleMoves(coord.first, coord.second);
+
+    SetSelectedPiece(coord);
     m_flags.PieceIsSelected();
 }
 void Checkers::DeselectPiece()
@@ -119,11 +99,10 @@ void Checkers::DeselectPiece()
     std::cout << "DeselectPiece" << std::endl;
 
     m_status.SaveLastPossibleMoves();
-    m_status.SaveLastSelectedPiece();
-
     m_flags.SelectPieceChanged();
+    m_status.SaveLastSelectedPiece();
     m_flags.PieceIsNotSelected();
-    m_status.ResetSelectedPiece();
+    SetSelectedPiece(std::make_pair<int, int>(-1, -1));
 }
 void Checkers::ApplyMove(std::pair<int, int> coord)
 {
@@ -152,6 +131,7 @@ void Checkers::ApplyMove(std::pair<int, int> coord)
     // Si la piece est un pion, on teste si elle peut se promouvoir
     if (CanPromotePiece(coord))
     {
+        std::cout << "debug 2" << std::endl;
         PromotePiece(coord);
     }
     
@@ -204,6 +184,8 @@ void Checkers::CapturePiece(std::pair<int, int> coord)
 
 bool Checkers::CanPromotePiece(std::pair<int, int> coord) const
 {  
+    std::cout << "debug 1" << std::endl;
+
     // Un pion devient une dame si il atteint la dernière ligne du plateau adverse
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Checkers::CanPromotePiece() : coord are invalid");
@@ -221,6 +203,8 @@ bool Checkers::CanPromotePiece(std::pair<int, int> coord) const
 
 void Checkers::PromotePiece(std::pair<int, int> coord)
 {
+    std::cout << "debug 3" << std::endl;
+
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Checkers::PromotePiece() : coord are invalid");
 
@@ -249,14 +233,8 @@ void Checkers::InitPlayers() {
     m_players.push_back(std::make_shared<Player>(Players::PLAYER_TWO));
     m_players.push_back(std::make_shared<Player>(Players::NONE));
 
-    // On définit le joueur courant aléatoirement
-    //m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::uniform_int_distribution<> dis(0, 1);
-    int random = dis(g);
-
-    m_currentPlayer = m_players[random];
+    // On définit le joueur courant
+    m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
 }
 
 void Checkers::InitBoard() {
@@ -277,10 +255,6 @@ void Checkers::InitBoard() {
     if (row != 10 || col != 10) {
         throw std::runtime_error("Checkers::InitBoard() : row and col have incorrect values");
     }
-
-    // TODO: On attribue aux joueurs leurs pieces
-    // Le joueur qui commence a toujours les pieces blanches
-    // Le second joueur a les pieces noires
 }
 
 void Checkers::UpdatePossibleMoves() const
@@ -342,6 +316,11 @@ void Checkers::ResetBoardNeedUpdateFlag()
 bool Checkers::AreCoordinatesValid(std::pair<int, int> coord) const
 {
     return coord.first >= 0 && coord.first < 10 && coord.second >= 0 && coord.second < 10;
+}
+
+void Checkers::SetSelectedPiece(std::pair<int, int> coord)
+{
+    m_status.m_selectedPiece = coord;
 }
 
 std::shared_ptr<Player> Checkers::GetCurrentPlayer() const

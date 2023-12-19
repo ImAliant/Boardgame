@@ -4,13 +4,14 @@
 #include <memory>
 #include <SFML/Graphics/Color.hpp>
 
+#include "Player.hpp"
 #include "Board.hpp"
 
 class Board;
 
 struct state_t {
     int type = 0;
-    //std::shared_ptr<Player> m_owner;
+    std::shared_ptr<Player> m_owner;
     char m_symbol;
 };
 
@@ -28,7 +29,7 @@ class Piece
         std::vector<std::pair<int, int>> m_possibleMoves;
     public:
         Piece();
-        Piece(int x, int y/*, std::shared_ptr<Player> owner*/, char symbol);
+        Piece(int x, int y, std::shared_ptr<Player> owner, char symbol);
         virtual ~Piece() = default;
 
         virtual void FindPossibleMoves(const Board& board) = 0;
@@ -39,6 +40,6 @@ class Piece
         std::pair<int, int> GetPosition() const;
         int GetX() const;
         int GetY() const;
-        //Player& GetOwner() const;
+        Player& GetOwner() const;
         char GetSymbol() const;
 };

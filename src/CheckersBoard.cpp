@@ -2,8 +2,8 @@
 
 using namespace CheckersConstants;
 
-CheckersBoard::CheckersBoard(/*std::vector<std::shared_ptr<Player>> players*/)
-//: Board(std::move(players))
+CheckersBoard::CheckersBoard(std::vector<std::shared_ptr<Player>> players)
+: Board(std::move(players))
 {
     m_rows = CHECKERSROWS;
     m_cols = CHECKERSCOLS;
@@ -102,15 +102,15 @@ std::unique_ptr<CheckersPiece> CheckersBoard::CreatePiece(int x, int y, char col
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateTransparentPiece(int x, int y) const
 {
-    return std::make_unique<CheckersPiece>(x, y/*, m_players[NONEID]*/, TRANSPARENT);
+    return std::make_unique<CheckersPiece>(x, y, m_players[NONEID], TRANSPARENT);
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(int x, int y) const
 {
-    return std::make_unique<CheckersPiece>(x, y/*, m_players[PLAYER_ONEID]*/, BLACK);
+    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_ONEID], BLACK);
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateWhitePiece(int x, int y) const
 {
-    return std::make_unique<CheckersPiece>(x, y/*, m_players[PLAYER_TWOID]*/, WHITE);
+    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_TWOID], WHITE);
 }
 
 std::ostream &operator<<(std::ostream &os, const CheckersBoard &board)

@@ -4,7 +4,7 @@
 
 int Player::m_idCounter = 0;
 
-Player::Player()
+Player::Player(Players player): m_player(player)
 {
     m_id = m_idCounter++;
 }
@@ -13,13 +13,48 @@ Player::~Player() {}
 
 std::string Player::ToString() const
 {
-    return "Player " + std::to_string(m_id);
+    std::string str;
+    switch (m_player)
+    {
+        case Players::PLAYER_ONE:
+            str = "PLAYER_ONE";
+            break;
+        case Players::PLAYER_TWO:
+            str = "PLAYER_TWO";
+            break;
+        case Players::PLAYER_THREE:
+            str = "PLAYER_THREE";
+            break;
+        case Players::NONE:
+            str = "NONE";
+            break;
+    }
+    return str;
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& player)
 {
-    os << player.ToString();
+    switch (player.getPlayer())
+    {
+        case Players::PLAYER_ONE:
+            os << "PLAYER_ONE";
+            break;
+        case Players::PLAYER_TWO:
+            os << "PLAYER_TWO";
+            break;
+        case Players::PLAYER_THREE:
+            os << "PLAYER_THREE";
+            break;
+        case Players::NONE:
+            os << "NONE";
+            break;
+    }
     return os;
+}
+
+Players Player::getPlayer() const
+{
+    return m_player;
 }
 
 int Player::getId() const

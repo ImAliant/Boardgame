@@ -4,10 +4,10 @@
 
 Piece::Piece() {}
 
-Piece::Piece(int x, int y/*, std::shared_ptr<Player> owner*/, char symbol)
+Piece::Piece(int x, int y, std::shared_ptr<Player> owner, char symbol)
     : m_x(x), m_y(y)
 {
-    //m_state.m_owner = std::move(owner);
+    m_state.m_owner = std::move(owner);
     m_state.m_symbol = symbol;
 }
 
@@ -37,10 +37,10 @@ int Piece::GetY() const
     return m_y;
 }
 
-/*Player& Piece::GetOwner() const
+Player& Piece::GetOwner() const
 {
     return *m_state.m_owner;
-}*/
+}
 
 char Piece::GetSymbol() const
 {
