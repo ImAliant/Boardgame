@@ -126,6 +126,11 @@ void CheckersController::Start() {
     m_view->ResetLaunchPressedFlag();
 }
 
+void CheckersController::End() {
+    m_view->PrintWinner(m_model->GetWinner());
+    m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
+}
+
 void CheckersController::UpdateButtonHoverState(const sf::Event& event) {
     bool isExitHovered = m_view->GetExitButton().getGlobalBounds().contains(
         static_cast<float>(event.mouseButton.x), 
@@ -180,8 +185,7 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
         }
         if (m_model->IsGameFinished())
         {
-            m_view->PrintWinner(m_model->GetWinner());
-            m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
+            End();
         }
     }
 }
