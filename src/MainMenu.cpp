@@ -126,19 +126,3 @@ void MainMenu::InputEscape()
     m_context->m_states->PopAll();
     m_context->m_window->close();
 }
-
-/*void MainMenu::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const int &characterSize)
-{
-    sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT); 
-    if (font == nullptr)
-    {
-        std::cout << "The font of is not loaded" << std::endl;
-        return;
-    }
-
-    object.setFont(*font);
-    object.setString(text);
-    object.setCharacterSize(characterSize);
-    object.setOrigin(object.getGlobalBounds().width / 2, object.getGlobalBounds().height / 2);
-    object.setPosition(position);
-}*/

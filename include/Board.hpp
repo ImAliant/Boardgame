@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include "GameType.hpp"
 #include "Piece.hpp"
+#include "Types.hpp"
 
 class Board
 {
@@ -20,8 +20,8 @@ class Board
 
         virtual void Init() = 0;
         virtual void FillBoard() = 0;
-        virtual void MovePiece(int x, int y, int newX, int newY) = 0;
-        virtual void RemovePiece(int x, int y) = 0;
+        virtual void MovePiece(coord_t coord, coord_t newCoord) = 0;
+        virtual void RemovePiece(coord_t coord) = 0;
 
         int GetRows() const { return m_rows; };
         int GetCols() const { return m_cols; };

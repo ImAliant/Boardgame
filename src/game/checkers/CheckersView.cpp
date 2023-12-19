@@ -73,10 +73,11 @@ void CheckersView::InitBoardCell(const CheckersBoard& board)
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
+            const auto& coord = std::make_pair(i, j);
             InitRectangleShape(
                 m_boardCell[i][j],
                 BOARDCELL_SIZE,
-                CalculatePosition(10.f, i, j)
+                CalculatePosition(10.f, coord)
             );
 
             if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(WHITECELL_COLOR);
@@ -97,7 +98,8 @@ void CheckersView::InitBoardPiece(const CheckersBoard& board)
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols ; j++) {
-            SetupBoardPiece(i, j, board);
+            const auto& coord = std::make_pair(i, j);
+            SetupBoardPiece(coord, board);
         }
     }
 }
@@ -111,24 +113,27 @@ void CheckersView::UpdateBoard(const CheckersBoard& board)
     {
         for (int j = 0; j < cols; j++)
         {
-            SetupBoardPiece(i, j, board);
+            const auto& coord = std::make_pair(i, j);
+            SetupBoardPiece(coord, board);
         }
     }
 }
 
-void CheckersView::SetupBoardPiece(int i, int j, const CheckersBoard &board)
+void CheckersView::SetupBoardPiece(coord_t coord, const CheckersBoard &board)
 {
+    const auto& [i, j] = coord;
     InitRectangleShape(
         m_boardPiece[i][j],
         BOARDPIECE_SIZE,
-        CalculatePosition(15.f, i, j)
+        CalculatePosition(15.f, coord)
     );
 
-    auto piece = board.GetValueAt(i, j);
+    auto piece = board.GetValueAt(coord);
     SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol(), piece->IsPromoted());
 }
-sf::Vector2f CheckersView::CalculatePosition(float offset, int i, int j) const
+sf::Vector2f CheckersView::CalculatePosition(float offset, const coord_t coord) const
 {
+    const auto& [i, j] = coord;
     return sf::Vector2f(
         offset + (BOARDCELL_SIZE.x * static_cast<float>(j)),
         offset + (BOARDCELL_SIZE.y * static_cast<float>(i))
@@ -182,23 +187,23 @@ void CheckersView::DrawBoardPiece(sf::RenderWindow& window)
     }
 }
 
-void CheckersView::HighlightCell(std::pair<int, int> coord, sf::Color color)
+void CheckersView::HighlightCell(coord_t coord, sf::Color color)
 {
     m_boardCell[coord.first][coord.second].setFillColor(color);
 }
-void CheckersView::RemoveHighlightCell(std::pair<int, int> coord)
+void CheckersView::RemoveHighlightCell(coord_t coord)
 {
     if ((coord.first + coord.second) % 2 == 0) m_boardCell[coord.first][coord.second].setFillColor(WHITECELL_COLOR);
     else m_boardCell[coord.first][coord.second].setFillColor(BLACKCELL_COLOR);
 }
 
-void CheckersView::HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves)
+void CheckersView::HighlightPossibleMoves(const std::vector<coord_t>& possibleMoves)
 {
     for (const auto move : possibleMoves) {
         HighlightCell(move, sf::Color::Green);
     }
 }
-void CheckersView::RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves)
+void CheckersView::RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMoves)
 {
     for (auto move : possibleMoves) {
         RemoveHighlightCell(move);
@@ -227,7 +232,7 @@ void CheckersView::PrintWinner(char winner) const
     std::cout << "Winner: " << winnerStr << std::endl;
 }
 
-std::pair<int, int> CheckersView::GetBoardCoord(int x, int y) const 
+coord_t CheckersView::GetBoardCoord(int x, int y) const 
 {
     auto cX = static_cast<int>((x - BOARDOFFSET.x) / BOARDCELL_SIZE.x);
     auto cY = static_cast<int>((y - BOARDOFFSET.y) / BOARDCELL_SIZE.y);

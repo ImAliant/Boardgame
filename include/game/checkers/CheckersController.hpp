@@ -6,6 +6,7 @@
 #include "../../AssetManager.hpp"
 #include "../../EventHandler.hpp"
 #include "../../Constants.hpp"
+#include "../../Types.hpp"
 #include "Checkers.hpp"
 #include "CheckersView.hpp"
 

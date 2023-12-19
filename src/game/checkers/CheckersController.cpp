@@ -70,8 +70,7 @@ void CheckersController::UpdateHighlight() const
 void CheckersController::HighlightSelectedPiece() const
 {
     const auto& selectedPiece = m_model->GetSelectedPiece();
-    const auto& [selectedX, selectedY] = selectedPiece;
-    const auto& possibleMoves = m_model->GetPossibleMoves(selectedX, selectedY);
+    const auto& possibleMoves = m_model->GetPossibleMoves(selectedPiece);
     
     m_view->HighlightCell(selectedPiece, sf::Color::Yellow);
     m_view->HighlightPossibleMoves(possibleMoves);

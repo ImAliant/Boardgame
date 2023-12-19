@@ -26,18 +26,18 @@ class Piece
 
         state_t m_state;
 
-        std::vector<std::pair<int, int>> m_possibleMoves;
+        std::vector<coord_t> m_possibleMoves;
     public:
         Piece();
-        Piece(int x, int y, std::shared_ptr<Player> owner, char symbol);
+        Piece(coord_t coord, std::shared_ptr<Player> owner, char symbol);
         virtual ~Piece() = default;
 
         virtual void FindPossibleMoves(const Board& board) = 0;
 
-        void SetPosition(int x, int y);
+        void SetPosition(coord_t coord);
 
-        std::vector<std::pair<int, int>> GetPossibleMoves() const;
-        std::pair<int, int> GetPosition() const;
+        std::vector<coord_t> GetPossibleMoves() const;
+        coord_t GetPosition() const;
         int GetX() const;
         int GetY() const;
         std::shared_ptr<Player> GetOwner() const;

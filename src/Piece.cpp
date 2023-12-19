@@ -4,25 +4,26 @@
 
 Piece::Piece() {}
 
-Piece::Piece(int x, int y, std::shared_ptr<Player> owner, char symbol)
-    : m_x(x), m_y(y)
+Piece::Piece(coord_t coord, std::shared_ptr<Player> owner, char symbol)
+    : m_x(coord.first), m_y(coord.second)
 {
     m_state.m_owner = std::move(owner);
     m_state.m_symbol = symbol;
 }
 
-void Piece::SetPosition(int x, int y)
+void Piece::SetPosition(coord_t coord)
 {
+    const auto& [x, y] = coord;
     m_x = x;
     m_y = y;
 }
 
-std::vector<std::pair<int, int>> Piece::GetPossibleMoves() const
+std::vector<coord_t> Piece::GetPossibleMoves() const
 {
     return m_possibleMoves;
 }
 
-std::pair<int, int> Piece::GetPosition() const
+coord_t Piece::GetPosition() const
 {
     return std::make_pair(m_x, m_y);
 }

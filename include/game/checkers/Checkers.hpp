@@ -2,6 +2,7 @@
 
 #include "../../CheckersBoard.hpp"
 #include "../../Player.hpp"
+#include "../../Types.hpp"
 
 #include <memory>
 #include <vector>
@@ -28,11 +29,11 @@ struct flagsmodel_t {
 };
 
 struct CheckersStatus {
-    std::pair<int, int> m_selectedPiece = {-1, -1};
-    std::pair<int, int> m_lastSelectedPiece = {-1, -1};
+    coord_t m_selectedPiece = {-1, -1};
+    coord_t m_lastSelectedPiece = {-1, -1};
 
-    std::vector<std::pair<int, int>> m_currentPossibleMoves;
-    std::vector<std::pair<int, int>> m_lastPossibleMoves;
+    std::vector<coord_t> m_currentPossibleMoves;
+    std::vector<coord_t> m_lastPossibleMoves;
     char m_winner = CheckersConstants::NOWINNER; // -1 = no winner 0 = white, 1 = black
 
     void SaveLastPossibleMoves() 
@@ -45,12 +46,12 @@ struct CheckersStatus {
         m_lastSelectedPiece = m_selectedPiece;
     }
 
-    void SetSelectedPiece(std::pair<int, int> coord)
+    void SetSelectedPiece(coord_t coord)
     {
         m_selectedPiece = coord;
     }
 
-    void SetPossibleMoves(std::vector<std::pair<int, int>> const& moves)
+    void SetPossibleMoves(std::vector<coord_t> const& moves)
     {
         m_currentPossibleMoves = moves;
     }
@@ -77,21 +78,21 @@ class Checkers
 
         void UpdatePossibleMoves() const;
 
-        bool IsPieceOfCurrentPlayer(std::pair<int, int> coord) const;
+        bool IsPieceOfCurrentPlayer(coord_t coord) const;
         void CheckForWin();
 
         // piece
-        void SelectPiece(std::pair<int, int> coord);
+        void SelectPiece(coord_t coord);
         void DeselectPiece();
-        bool IsMovePossible(std::pair<int, int> coord) const;
-        void ApplyMove(std::pair<int, int> coord);
-        bool CheckCapture(std::pair<int, int> coord);
-        void CapturePiece(std::pair<int, int> coord);
-        bool CanPromotePiece(std::pair<int, int> coord) const;
-        void PromotePiece(std::pair<int, int> coord);
+        bool IsMovePossible(coord_t coord) const;
+        void ApplyMove(coord_t coord);
+        bool CheckCapture(coord_t coord);
+        void CapturePiece(coord_t coord);
+        bool CanPromotePiece(coord_t coord) const;
+        void PromotePiece(coord_t coord);
 
         // Change the value of boolean flags
-        bool AreCoordinatesValid(std::pair<int, int> coord) const;
+        bool AreCoordinatesValid(coord_t coord) const;
     public:
         Checkers();
         ~Checkers();
@@ -100,7 +101,7 @@ class Checkers
         void SwitchPlayer();
 
         // turn
-        void Turn(std::pair<int, int> coord);
+        void Turn(coord_t coord);
 
         // initialization
         void Init();
@@ -111,20 +112,20 @@ class Checkers
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
 
-        CheckersPiece* GetPiece(std::pair<int, int> coord) const;
+        CheckersPiece* GetPiece(coord_t coord) const;
         char GetWinner() const;
 
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;
-        std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y) const;
+        std::vector<coord_t> GetPossibleMoves(coord_t coord) const;
         std::unique_ptr<CheckersBoard>& GetBoard();
         bool& IsGameStarted();
         bool& IsGameFinished();
-        std::pair<int, int> GetSelectedPiece() const;
-        std::pair<int, int> GetLastSelectedPiece() const;
+        coord_t GetSelectedPiece() const;
+        coord_t GetLastSelectedPiece() const;
         bool IsPieceSelected() const;
         bool IsSelectedPieceChanged() const;
-        std::vector<std::pair<int, int>> GetLastPossibleMoves() const;
+        std::vector<coord_t> GetLastPossibleMoves() const;
         bool IsBoardNeedUpdate() const;
         bool IsCurrentPlayerChanged() const;
 };

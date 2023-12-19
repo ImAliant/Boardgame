@@ -1,7 +1,7 @@
 #include "../include/CheckersPiece.hpp"
 
-CheckersPiece::CheckersPiece(int x, int y, std::shared_ptr<Player> owner, char symbol)
-    : Piece(x, y, std::move(owner), symbol)
+CheckersPiece::CheckersPiece(coord_t coord, std::shared_ptr<Player> owner, char symbol)
+    : Piece(coord, std::move(owner), symbol)
 {
     m_state.type = PieceType::PAWN;
 }
@@ -23,7 +23,7 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
 
 void CheckersPiece::SimpleMoves(const CheckersBoard& board) 
 {
-    std::vector<std::pair<int, int>> const* directions;
+    std::vector<direction_t> const* directions;
     if (m_state.type == PieceType::PAWN)
     {
         if (m_state.m_symbol == CheckersConstants::WHITE)
@@ -41,28 +41,32 @@ void CheckersPiece::SimpleMoves(const CheckersBoard& board)
     AddPossibleMoves(board, *directions);
 }
 
-void CheckersPiece::AddPossibleMoves(const CheckersBoard& board, std::vector<std::pair<int, int>> const& directions)
+void CheckersPiece::AddPossibleMoves(const CheckersBoard& board, std::vector<direction_t> const& directions)
 {
     for (const auto& [dx, dy]: directions)
     {
         int x = m_x + dx;
         int y = m_y + dy;
 
-        while (IsWithinBoard(board, x, y) && IsEmptyCell(board, x, y))
+        auto coord = std::make_pair(x, y);
+        while (IsWithinBoard(board, coord) && IsEmptyCell(board, coord))
         {
-            m_possibleMoves.push_back(std::make_pair(x, y));
+            const auto& move = std::make_pair(x, y);
+            m_possibleMoves.push_back(move);
             
             if (!IsPromoted()) break;
             
             x += dx;
             y += dy;
+
+            coord = std::make_pair(x, y);
         }
     }
 }
 
 void CheckersPiece::CaptureMoves(const CheckersBoard& board)
 {
-    std::vector<std::pair<int, int>> const* directions = &CheckersConstants::ALL_DIRECTION;
+    std::vector<direction_t> const* directions = &CheckersConstants::ALL_DIRECTION;
 
     if (m_state.type == PieceType::PAWN)
     {
@@ -71,57 +75,66 @@ void CheckersPiece::CaptureMoves(const CheckersBoard& board)
             int x = m_x + 2*dx;
             int y = m_y + 2*dy;
 
-            if (IsWithinBoard(board, x, y) && IsOpponentPiece(board, m_x + dx, m_y + dy) && IsEmptyCell(board, x, y))
+            const auto& coord = std::make_pair(x, y);
+            const auto& coord1 = std::make_pair(m_x + dx, m_y + dy);
+            if (IsWithinBoard(board, coord) && IsOpponentPiece(board, coord1) && IsEmptyCell(board, coord))
             {
-                m_possibleMoves.push_back(std::make_pair(x, y));
-                m_possibleCaptures.push_back(std::make_pair(dx, dy));
+                const auto& direction = std::make_pair(dx, dy);
+                m_possibleMoves.push_back(coord);
+                m_possibleCaptures.push_back(direction);
             }
         }
     }
     else
     {
-        for (const auto& [dx, dy]: *directions)
+        for (const auto& dir: *directions)
         {
-            QueenCaptureDirections(board, dx, dy);
+            QueenCaptureDirections(board, dir);
         }
     }
 }
 
-void CheckersPiece::QueenCaptureDirections(const CheckersBoard& board, int dx, int dy)
+void CheckersPiece::QueenCaptureDirections(const CheckersBoard& board, direction_t dir)
 {
+    const auto& [dx, dy] = dir;
     int x = m_x + dx;
     int y = m_y + dy;
 
-    while (IsWithinBoard(board, x, y) && IsEmptyCell(board, x, y))
+    auto coord = std::make_pair(x, y);
+    while (IsWithinBoard(board, coord) && IsEmptyCell(board, coord))
     {
         x += dx;
         y += dy;
+
+        coord = std::make_pair(x, y);
     }
 
-    if (IsWithinBoard(board, x, y) && IsOpponentPiece(board, x, y) && IsEmptyCell(board, x + dx, y + dy))
+    const auto& coord1 = std::make_pair(x+dx, y+dy);
+    if (IsWithinBoard(board, coord) && IsOpponentPiece(board, coord) && IsEmptyCell(board, coord1))
     {
-        m_possibleMoves.push_back(std::make_pair(x + dx, y + dy));
+        m_possibleMoves.push_back(coord1);
         m_possibleCaptures.push_back(std::make_pair(dx, dy));
     }
 }
 
-bool CheckersPiece::IsWithinBoard(const CheckersBoard& board, int x, int y) const
+bool CheckersPiece::IsWithinBoard(const CheckersBoard& board, const coord_t coord) const
 {
+    const auto& [x, y] = coord;
     return x >= 0 && x < board.GetRows() && y >= 0 && y < board.GetCols();
 }
-bool CheckersPiece::IsOpponentPiece(const CheckersBoard& board, int x, int y) const
+bool CheckersPiece::IsOpponentPiece(const CheckersBoard& board, const coord_t coord) const
 {
-    if (IsWithinBoard(board, x, y)) 
+    if (IsWithinBoard(board, coord)) 
     {
-        auto pieceColor = board.GetValueAt(x, y)->GetSymbol();
-        return !board.EmptyCell(x, y) && pieceColor != m_state.m_symbol;
+        auto pieceColor = board.GetValueAt(coord)->GetSymbol();
+        return !IsEmptyCell(board, coord) && pieceColor != m_state.m_symbol;
     }
 
     return false;
 }
-bool CheckersPiece::IsEmptyCell(const CheckersBoard& board, int x, int y) const
+bool CheckersPiece::IsEmptyCell(const CheckersBoard& board, const coord_t coord) const
 {
-    return IsWithinBoard(board, x, y) && board.EmptyCell(x, y);
+    return IsWithinBoard(board, coord) && board.EmptyCell(coord);
 }
 
 void CheckersPiece::SetCanBeCaptured()

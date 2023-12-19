@@ -18,19 +18,19 @@ class CheckersPiece: public Piece
     private:
         bool m_canBeCaptured = false;
 
-        std::vector<std::pair<int, int>> m_possibleCaptures;
+        std::vector<direction_t> m_possibleCaptures;
 
-        bool IsWithinBoard(const CheckersBoard& board, int x, int y) const;
-        bool IsOpponentPiece(const CheckersBoard& board, int x, int y) const;
-        bool IsEmptyCell(const CheckersBoard& board, int x, int y) const;
+        bool IsWithinBoard(const CheckersBoard& board, coord_t coord) const;
+        bool IsOpponentPiece(const CheckersBoard& board, coord_t coord) const;
+        bool IsEmptyCell(const CheckersBoard& board, coord_t coord) const;
         
         void SimpleMoves(const CheckersBoard& board);
         void CaptureMoves(const CheckersBoard& board);
-        void AddPossibleMoves(const CheckersBoard& board, std::vector<std::pair<int, int>> const& directions);
-        void QueenCaptureDirections(const CheckersBoard& board, int dx, int dy);
+        void AddPossibleMoves(const CheckersBoard& board, std::vector<direction_t> const& directions);
+        void QueenCaptureDirections(const CheckersBoard& board, direction_t direction);
     public:
         CheckersPiece() = default;
-        CheckersPiece(int x, int y, std::shared_ptr<Player> owner, char symbol);
+        CheckersPiece(coord_t coord, std::shared_ptr<Player> owner, char symbol);
         ~CheckersPiece() override;
 
         friend std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece);
@@ -44,7 +44,7 @@ class CheckersPiece: public Piece
         bool IsPromoted() const;
         bool CanBeCaptured() const;
 
-        std::vector<std::pair<int, int>> GetPossibleCaptures() const;
+        std::vector<direction_t> GetPossibleCaptures() const;
 
         std::string GetType() const;
 };

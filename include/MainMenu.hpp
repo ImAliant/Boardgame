@@ -34,6 +34,4 @@ class MainMenu: public Engine::State, public UI::UIHandler, public EventHandler
         void InputDown() override;
         void InputReturn() override;
         void InputEscape() override;
-
-        //void InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const sf::Font& font, const int &characterSize = 30) override;
 };

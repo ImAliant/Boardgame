@@ -1,6 +1,4 @@
 #pragma once
 
-struct coord_t {
-    int x;
-    int y;
-};
+using coord_t = std::pair<int, int>;
+using direction_t = std::pair<int, int>;

@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+#include "Types.hpp"
+
 namespace WindowConstants
 {
     const auto WINDOW_SIZE = sf::Vector2i{500, 600};
@@ -57,9 +59,9 @@ namespace CheckersConstants
     const int BOARD_UPPER_LIMIT = 0;
     const int BOARD_LOWER_LIMIT = 9;
 
-    const std::vector<std::pair<int, int>> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
-    const std::vector<std::pair<int, int>> BLACK_DIRECTION = {{1, -1}, {1, 1}};
-    const std::vector<std::pair<int, int>> ALL_DIRECTION = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+    const std::vector<direction_t> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
+    const std::vector<direction_t> BLACK_DIRECTION = {{1, -1}, {1, 1}};
+    const std::vector<direction_t> ALL_DIRECTION = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
 
     const sf::Color BLACKCELL_COLOR = sf::Color{112, 74, 39};
     const sf::Color WHITECELL_COLOR = sf::Color{209, 183, 151};

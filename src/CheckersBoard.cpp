@@ -28,89 +28,94 @@ void CheckersBoard::FillBoard()
     {
         for (int j = 0; j < m_cols; j++)
         {
+            const auto& coord = std::make_pair(i, j);
             if (i < 4 && (i + j) % 2 != 0)
             {
-                m_board[i][j] = CreatePiece(i, j, BLACK);
+                m_board[i][j] = CreatePiece(coord, BLACK);
             }
             else if (i > 5 && (i + j) % 2 != 0)
             {
-                m_board[i][j] = CreatePiece(i, j, WHITE);
+                m_board[i][j] = CreatePiece(coord, WHITE);
             }
             else
-                m_board[i][j] = CreatePiece(i, j, TRANSPARENT);
+                m_board[i][j] = CreatePiece(coord, TRANSPARENT);
         }
     }
 }
 
-void CheckersBoard::MovePiece(int x, int y, int newX, int newY)
+void CheckersBoard::MovePiece(coord_t coord, coord_t newCoord)
 {
-    CheckBounds(x, y);
-    CheckBounds(newX, newY);
+    CheckBounds(coord);
+    CheckBounds(newCoord);
 
     // On recupere la piece a deplacer
+    const auto& [x, y] = coord;
     auto piece = std::move(m_board[x][y]);
-    piece->SetPosition(newX, newY);
+    piece->SetPosition(newCoord);
 
+    const auto& [newX, newY] = newCoord;
     m_board[newX][newY] = std::move(piece);
-    m_board[x][y] = CreatePiece(x, y, TRANSPARENT);
+    m_board[x][y] = CreatePiece(coord, TRANSPARENT);
 }
 
-void CheckersBoard::RemovePiece(int x, int y)
+void CheckersBoard::RemovePiece(coord_t coord)
 {
-    CheckBounds(x, y);
+    CheckBounds(coord);
 
-    m_board[x][y] = CreatePiece(x, y, TRANSPARENT);
+    const auto& [x, y] = coord;
+    m_board[x][y] = CreatePiece(coord, TRANSPARENT);
 }
 
-bool CheckersBoard::EmptyCell(int x, int y) const
+bool CheckersBoard::EmptyCell(coord_t coord) const
 {
-    CheckBounds(x, y);
+    CheckBounds(coord);
 
-    return GetValueAt(x, y)->GetSymbol() == TRANSPARENT;
+    return GetValueAt(coord)->GetSymbol() == TRANSPARENT;
 }
 
-void CheckersBoard::CheckBounds(int x, int y) const
+void CheckersBoard::CheckBounds(coord_t coord) const
 {
+    const auto& [x, y] = coord;
     if (x < 0 || x >= m_rows || y < 0 || y >= m_cols)
     {
         throw std::out_of_range("x or y is out of range");
     }
 }
 
-bool CheckersBoard::IsOpponentPiece(int sx, int sy, int dx, int dy) const
+bool CheckersBoard::IsOpponentPiece(coord_t srcCoord, coord_t dstCoord) const
 {
-    CheckBounds(sx, sy);
-    CheckBounds(dx, dy);
+    CheckBounds(srcCoord);
+    CheckBounds(dstCoord);
 
-    if (GetValueAt(sx, sy)->GetSymbol() == GetValueAt(dx, dy)->GetSymbol())
+    if (GetValueAt(srcCoord)->GetSymbol() == GetValueAt(dstCoord)->GetSymbol())
         return false;
-    if (GetValueAt(sx, sy)->GetSymbol() == TRANSPARENT || GetValueAt(dx, dy)->GetSymbol() == TRANSPARENT)
+    if (GetValueAt(srcCoord)->GetSymbol() == TRANSPARENT || GetValueAt(dstCoord)->GetSymbol() == TRANSPARENT)
         return false;
     
     return true;
 }
 
-std::unique_ptr<CheckersPiece> CheckersBoard::CreatePiece(int x, int y, char color) const
+std::unique_ptr<CheckersPiece> CheckersBoard::CreatePiece(coord_t coord, char color) const
 {
     if (color == BLACK)
-        return CreateBlackPiece(x, y);
+        return CreateBlackPiece(coord);
     else if (color == WHITE)
-        return CreateWhitePiece(x, y);
+        return CreateWhitePiece(coord);
     else if (color == TRANSPARENT)
-        return CreateTransparentPiece(x, y);
+        return CreateTransparentPiece(coord);
     else throw std::invalid_argument("Invalid color");
 }
-std::unique_ptr<CheckersPiece> CheckersBoard::CreateTransparentPiece(int x, int y) const
+std::unique_ptr<CheckersPiece> CheckersBoard::CreateTransparentPiece(coord_t coord) const
 {
-    return std::make_unique<CheckersPiece>(x, y, nullptr/*m_players[NONEID]*/, TRANSPARENT);
+    return std::make_unique<CheckersPiece>(coord, nullptr/*m_players[NONEID]*/, TRANSPARENT);
 }
-std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(int x, int y) const
+std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(coord_t coord) const
 {
-    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_TWOID], BLACK);
+    return std::make_unique<CheckersPiece>(coord, m_players[PLAYER_TWOID], BLACK);
 }
-std::unique_ptr<CheckersPiece> CheckersBoard::CreateWhitePiece(int x, int y) const
+std::unique_ptr<CheckersPiece> CheckersBoard::CreateWhitePiece(coord_t coord) const
 {
-    return std::make_unique<CheckersPiece>(x, y, m_players[PLAYER_ONEID], WHITE);
+    return std::make_unique<CheckersPiece>(coord, m_players[PLAYER_ONEID], WHITE);
 }
 
 std::ostream &operator<<(std::ostream &os, const CheckersBoard &board)

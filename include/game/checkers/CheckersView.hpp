@@ -4,6 +4,7 @@
 #include "../../Launcher.hpp"
 #include "../../CheckersBoard.hpp"
 #include "../../Constants.hpp"
+#include "../../Types.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -40,10 +41,10 @@ class CheckersView: public UI::UIHandler
         flagsview_t m_flags;
 
         void InitPieceTexture(std::shared_ptr<Context> context);
-        void LoadTexture(int textureID, std::shared_ptr<Context> context);
+        void LoadTexture(const int textureID, std::shared_ptr<Context> context);
         void InitBoardBackground();
         void InitBoardCell(const CheckersBoard& board);
-        sf::Vector2f CalculatePosition(float offset, int i, int j) const;
+        sf::Vector2f CalculatePosition(float offset, const coord_t coord) const;
 
         void InitBoardPiece(const CheckersBoard& board);
     public:
@@ -57,21 +58,21 @@ class CheckersView: public UI::UIHandler
         void DrawBoardPiece(sf::RenderWindow& window);
         void UpdateBoard(const CheckersBoard& board);
 
-        void SetupBoardPiece(int i, int j, const CheckersBoard &board);
+        void SetupBoardPiece(const coord_t coord, const CheckersBoard &board);
         
         void SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted);
 
-        void HighlightCell(std::pair<int, int> coord, sf::Color color);
-        void RemoveHighlightCell(std::pair<int, int> coord);
-        void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
-        void RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
+        void HighlightCell(const coord_t coord, const sf::Color color);
+        void RemoveHighlightCell(const coord_t coord);
+        void HighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
+        void RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
 
         void Render();
 
         void PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const;
         void PrintWinner(char winner) const;
 
-        std::pair<int, int> GetBoardCoord(int x, int y) const;
+        coord_t GetBoardCoord(int x, int y) const;
 
         void UpdateExitSelectedFlag(bool newValue);
         void UpdateLaunchSelectedFlag(bool newValue);
