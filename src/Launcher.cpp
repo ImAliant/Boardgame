@@ -42,4 +42,9 @@ void Launcher::InitAssets() const
     m_context->m_assets->AddTexture(CHECKERS_BLACK_QUEEN, "../assets/images/checkers/black_queen.png");
     m_context->m_assets->AddTexture(CHECKERS_WHITE_QUEEN, "../assets/images/checkers/white_queen.png");
     m_context->m_assets->AddTexture(EMPTY_ASSET, "../assets/images/empty.png");
+    
+    m_context->m_assets->AddTexture(BUTIN_YELLOW_PIECE, "/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/assets/images/butin/black_piece.png");
+    m_context->m_assets->AddTexture(BUTIN_RED_PIECE, "/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/assets/images/butin/red_piece.png");
+    m_context->m_assets->AddTexture(BUTIN_BLACK_PIECE, "/home/yahya/Desktop/M1/S1/langObj/projet/diamant-hamdi-cpp-boardgames/assets/images/butin/yelllow_piece.png");
+
 }

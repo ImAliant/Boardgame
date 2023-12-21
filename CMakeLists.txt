@@ -31,6 +31,12 @@ set(SOURCES
     src/exception/AssetNotFoundException.cpp
 
     # Add other source files here
+
+    src/game/Butin/Butin.cpp
+    src/game/Butin/ButinController.cpp
+    src/game/Butin/ButinView.cpp
+    src/ButinBoard.cpp
+    src/ButinPiece.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

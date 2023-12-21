@@ -77,3 +77,50 @@ namespace CheckersConstants
     };
     const sf::Vector2f BOARDOFFSET = sf::Vector2f{10.f, 10.f};
 };
+
+
+namespace ButinConstants
+{
+    const int BUTINROWS = 8; // Assuming an 8x8 board for Butin
+    const int BUTINCOLS = 8;
+    
+    const int YELLOW_PAWN_ID = 0; // Define IDs for Butin pieces
+    const int RED_PAWN_ID = 1;
+    const int BLACK_PAWN_ID = 2;
+    const int EMPTY_ID = 3;
+
+    const char BUTIN_YELLOW = 'Y'; // Define character symbols for Butin pieces
+    const char BUTIN_RED = 'R';
+    const char BUTIN_BLACK = 'B';
+    const char TRANSPARENT = 'T';
+
+    // Assuming the whole board is clickable
+    const auto CLICKABLE_ZONE = std::make_pair(0, 480); 
+
+    
+    const int PLAYER_ONEID = 0;
+    const int PLAYER_TWOID = 1;
+    const int NONEID = 2;
+
+    const int BOARD_UPPER_LIMIT = 0;
+    const int BOARD_LOWER_LIMIT = 9;
+
+    const sf::Color BLACKCELL_COLOR = sf::Color{112, 74, 39};
+    const sf::Color WHITECELL_COLOR = sf::Color{209, 183, 151};
+    const sf::Color BOARDBACKGROUND_COLOR = sf::Color{46, 24, 3};
+    const sf::Vector2f BOARDBACKGROUND_SIZE = sf::Vector2f{
+        static_cast<float>(WindowConstants::WINDOW_SIZE.x) - 10.f, 
+        static_cast<float>(WindowConstants::WINDOW_SIZE.y) - 110.f
+    };
+    const sf::Vector2f BOARDBACKGROUND_POSITION = sf::Vector2f{5.f, 5.f};
+    const sf::Vector2f BOARDCELL_SIZE = sf::Vector2f{
+        (BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(BUTINROWS),
+        (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(BUTINCOLS)
+    };
+    const sf::Vector2f BOARDPIECE_SIZE = sf::Vector2f{
+        BOARDCELL_SIZE.x - 10.f, 
+        BOARDCELL_SIZE.y - 10.f
+    };
+    const sf::Vector2f BOARDOFFSET = sf::Vector2f{10.f, 10.f};
+};
+

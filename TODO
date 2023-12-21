@@ -6,3 +6,6 @@ TODO:
 4) Fin de partie
 5) Choix aléatoire du joueur
 
+Butin:
+)TODO: Avoid multiple calls to FindPossibleMoves if used with select
+
