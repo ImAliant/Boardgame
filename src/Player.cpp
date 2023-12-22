@@ -4,7 +4,7 @@
 
 int Player::m_idCounter = 0;
 
-Player::Player(Players player): m_player(player)
+Player::Player(Players player): m_player(player), m_score(0)
 {
     m_id = m_idCounter++;
 }
@@ -31,6 +31,16 @@ std::string Player::ToString() const
     }
     return str;
 }
+
+void Player::addScore(int points) {
+    m_score += points;
+}
+
+int Player::getScore() const {
+    return m_score;
+}
+
+
 
 std::ostream& operator<<(std::ostream& os, const Player& player)
 {

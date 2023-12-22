@@ -9,10 +9,10 @@ ButinPiece::~ButinPiece() {}
 
 void ButinPiece::FindPossibleMoves(const Board& board)
 {
-    std::cout << "FindPossibleMoves()" << std::endl;
+    
     const auto& butinBoard = dynamic_cast<const ButinBoard&>(board);
 
-    if (m_state.m_symbol != 'Y') return; // Only yellow pieces can move
+    //if (m_state.m_symbol != 'Y') return; // Only yellow pieces can move
 
     m_possibleMoves.clear();
 
@@ -90,13 +90,12 @@ bool ButinPiece::HasPieceToJump(const ButinBoard& board,int currentX, int curren
     if (!IsWithinBoard(board,jumpX, jumpY)) {
         return false;
     }
-    std::cout << "#############" << std::endl;
-    std::cout << jumpX << std::endl;
-    std::cout << jumpY << std::endl;
+    
 
     // Get the color of the piece at the jump position
     char pieceColor = board.GetValueAt(jumpX, jumpY)->GetSymbol();
+     
 
     // Check if there's a piece to jump over (non-yellow) at this position
-    return pieceColor != 'Y' && pieceColor != 'T'; // 'Y' for yellow, 'T' for transparent/empty
+    return pieceColor != 'T'; // 'Y' for yellow, 'T' for transparent/empty
 }

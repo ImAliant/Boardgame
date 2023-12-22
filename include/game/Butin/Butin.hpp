@@ -16,7 +16,9 @@ struct Butin_flagsmodel_t {
     bool m_isPieceCaptured = false;
     bool m_currentPlayerChanged = false;
     bool isFirstRound = true;
+    bool m_PieceMoved = false;
     
+    void PieceMoved();
     void PieceIsSelected();
     void PieceIsNotSelected();
     void CurrentPlayerChanged();
@@ -67,16 +69,16 @@ class Butin
         void SelectPiece(std::pair<int, int> coord);
         void DeselectPiece();
         void SetSelectedPiece(const std::pair<int, int>& coords);
-
-
+        
+        
       //  bool IsPieceOfCurrentPlayer(std::pair<int, int> coord) const;
         //void CheckForWin();
 
         // piece
         //void SelectPiece(std::pair<int, int> coord);
         //void DeselectPiece();
-        //bool IsMovePossible(std::pair<int, int> coord) const;
-        //void ApplyMove(std::pair<int, int> coord);
+        bool IsMovePossible(std::pair<int, int> coord) const;
+        void ApplyMove(std::pair<int, int> coord);
         //bool CheckCapture(std::pair<int, int> coord);
         //void CapturePiece(std::pair<int, int> coord);
         //bool CanPromotePiece(std::pair<int, int> coord) const;
@@ -110,7 +112,7 @@ class Butin
         //std::pair<int, int> GetSelectedPiece() const;
 
         ButinPiece* GetPiece(std::pair<int, int> coord) const;
-
+        bool hasPieceMoved() const ;
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;
         std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y) const;
@@ -125,4 +127,6 @@ class Butin
         bool IsBoardNeedUpdate() const;
         bool IsCurrentPlayerChanged() const;
         void UpdatePossibleMoves() const;
+        void UpdatePlayerScore(char pieceType);
+        
 };

@@ -26,22 +26,8 @@ void ButinView::Init(std::shared_ptr<Context> context, const ButinBoard& board)
     InitText(m_lauchgameButton, "Lancer la partie", UIConstants::LAUNCHBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
     InitText(m_exitButton, "Quitter", UIConstants::EXITBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
 
-std::cout << "printing" << std::endl;
-      
-    auto rows = board.GetRows();
-    auto cols = board.GetCols();
 
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            auto piece = board.GetValueAt(i, j);
-            if (piece) {
-                std::cout << piece->GetSymbol() << " ";
-            } 
-        }
-        std::cout << std::endl;
-    }
 
-std::cout << "end printing" << std::endl;
 
 }
 void ButinView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const
@@ -54,7 +40,7 @@ void ButinView::InitPieceTexture(std::shared_ptr<Context> context)
     try 
     {
         LoadTexture(BUTIN_BLACK_PIECE, context);
-        std::cout << "load init pice tex" << std::endl;
+       
         LoadTexture(BUTIN_RED_PIECE, context);
         LoadTexture(BUTIN_YELLOW_PIECE, context);
         LoadTexture(EMPTY_ASSET, context);
@@ -70,10 +56,10 @@ void ButinView::LoadTexture(int textureID, std::shared_ptr<Context> context)
     if (!context->m_assets->HasTexture(textureID)) {
         throw AssetNotFoundException("Texture not found" + std::to_string(textureID));
     }
-    std::cout << "load texture" << std::endl;
+    
 
     m_pieceTexture.push_back(context->m_assets->GetTexture(textureID));
-    std::cout << "load texture ENDDDD --------" << std::endl;
+    
 }
 
 
@@ -114,7 +100,7 @@ void ButinView::InitBoardCell(const ButinBoard& board)
 
 void ButinView::InitBoardPiece(const ButinBoard& board)
 {   
-    std::cout << "InitBoardPiece" << std::endl;
+   
     auto rows = board.GetRows();
     auto cols = board.GetCols();
 
@@ -159,7 +145,7 @@ void ButinView::SetupBoardPiece(int i, int j, const ButinBoard &board)
 
 
 void ButinView::SetPieceTexture(sf::RectangleShape &piece, char color)
-{   std::cout << "color: " << color << std::endl;
+{  
     if (color == 'Y')
         piece.setTexture(&m_pieceTexture[YELLOW_PAWN_ID]);
     else if (color == 'R')

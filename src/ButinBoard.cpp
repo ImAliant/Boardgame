@@ -1,4 +1,5 @@
 #include "../include/ButinBoard.hpp"
+#include "../include/game/Butin/Butin.hpp"
 #include <random>
 using namespace ButinConstants;
 
@@ -10,6 +11,8 @@ ButinBoard::ButinBoard(std::vector<std::shared_ptr<Player>> players)
 
     ButinBoard::Init();
 }
+
+
 
 void ButinBoard::Init()
 {
@@ -54,7 +57,7 @@ void ButinBoard::FillBoard()
 }
 void ButinBoard::MovePiece(int x, int y, int newX, int newY)
 {
-    /*
+    
     CheckBounds(x, y);
     CheckBounds(newX, newY);
 
@@ -64,14 +67,24 @@ void ButinBoard::MovePiece(int x, int y, int newX, int newY)
 
     m_board[newX][newY] = std::move(piece);
     m_board[x][y] = CreatePiece(x, y, TRANSPARENT);
+    removeJumpedPiece(x, y, newX, newY);
 
-*/}
+}
 
 void ButinBoard::RemovePiece(int x, int y)
 {   CheckBounds(x, y);
 
     m_board[x][y] = CreatePiece(x, y, TRANSPARENT);
     
+}
+void ButinBoard::removeJumpedPiece(int startX, int startY, int endX, int endY) {
+    int jumpedX = (startX + endX) / 2;
+    int jumpedY = (startY + endY) / 2;
+
+    // Assuming board is a 2D array representing the game board
+    RemovePiece(jumpedX,jumpedY); // Set the cell to empty
+     // Update the player's score (if needed
+   
 }
 
 

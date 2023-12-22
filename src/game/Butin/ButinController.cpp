@@ -27,6 +27,12 @@ void ButinController::ProcessInput()
         if (event.type == sf::Event::Closed)
         {
             CloseWindow();
+        }else if (event.type == sf::Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::Space)
+            {
+                m_model->SwitchPlayer();
+            }
         }
 
         UpdateButtonHoverState(event);
@@ -39,6 +45,7 @@ void ButinController::ProcessInput()
         {
             HandleMousePressed(event);
         }
+        
     }
 }
 void ButinController::Update(){
@@ -49,7 +56,13 @@ void ButinController::Update(){
         auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
         m_view->HighlightPossibleMoves(possibleMoves);
         m_view->NeedHighlight();
-    }
+        
+        if (m_model->hasPieceMoved() && possibleMoves.empty()) {
+            m_view->RemoveHighlightPossibleMoves(possibleMoves);
+            m_model->SwitchPlayer(); // Switch player when no more moves are possible
+        }
+        
+    }   
     if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 
         m_model->GetLastSelectedPiece().second != -1 &&
@@ -57,6 +70,7 @@ void ButinController::Update(){
     {
         m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
         auto lastPossibleMoves = m_model->GetPossibleMoves(m_model->GetLastSelectedPiece().first, m_model->GetLastSelectedPiece().second);
+        
         m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
         m_model->ResetSelectedPieceFlag();
         m_view->RemoveHighlight();
@@ -66,10 +80,14 @@ void ButinController::Update(){
        m_view->UpdateBoard(*m_model->GetBoard());
         m_model->ResetBoardNeedUpdateFlag();
     }
+    
     if (m_view->IsLaunchgameButtonPressed())
     {
         Start();
     }
+    
+    
+
 
     if (m_view->IsExitButtonPressed())
     {
@@ -138,10 +156,9 @@ void ButinController::HandleMousePressed(const sf::Event& event) {
             using namespace ButinConstants;
             if (x < CLICKABLE_ZONE.first || x > CLICKABLE_ZONE.second || y < CLICKABLE_ZONE.first || y > CLICKABLE_ZONE.second)
                 return;
-            std::cout << "hola" << std::endl;
+
             std::pair<int, int> coord = m_view->GetBoardCoord(x, y);
-            std::cout << coord.first << " " << coord.second << std::endl;
-        
+            
             m_model->Turn(coord);
         }
     }

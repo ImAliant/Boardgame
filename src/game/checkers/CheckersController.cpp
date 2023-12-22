@@ -51,6 +51,7 @@ void CheckersController::Update() {
         auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece().first, m_model->GetSelectedPiece().second);
         m_view->HighlightPossibleMoves(possibleMoves);
         m_view->NeedHighlight();
+        
     }
     if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 

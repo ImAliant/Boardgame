@@ -20,6 +20,19 @@ Butin::~Butin() {}
     }
 
 
+void Butin::SwitchPlayer() {
+    if (m_currentPlayer == m_players[static_cast<int>(Players::PLAYER_ONE)])
+        m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_TWO)];
+    else m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
+    
+    m_flags.CurrentPlayerChanged();
+    
+    std::cout << "Current player: " << m_currentPlayer->ToString()<< std::endl;
+    // print the score
+    std::cout << "Score: " << m_currentPlayer->getScore() << std::endl;
+}
+
+
 void Butin::Turn(std::pair<int, int> coord) {
     // On teste si la partie est déjà terminée
    
@@ -27,19 +40,30 @@ void Butin::Turn(std::pair<int, int> coord) {
     if (!IsGameStarted()) {
         throw InvalidUsageException("Butin::Turn() : m_isGameStarted is false");
     }
+     if (!AreCoordinatesValid(coord)) {
+        throw InvalidCoordinatesException("Butin::Turn() : coord are invalid");
+    }
+
     if (IsFirstRound())
     {
             HandleFirstRoundSelection(coord);
-    } else {
+    } else {    
+                if(IsMovePossible(coord) && IsPieceSelected())
+                {
+                    ApplyMove(coord);
+                }
+               
                 
                 //HandlePieceSelection(coord);
                 if (m_flags.m_isPieceSelected)
                     DeselectPiece();
                 else{
                     SelectPiece(coord);
+                    
                     m_board->GetValueAt(coord.first,coord.second)->FindPossibleMoves(*m_board);
                     //TODO: Avoid multiple calls to FindPossibleMoves if used with select 
                     
+                
                 }
             }
   
@@ -81,7 +105,9 @@ void Butin::InitPlayers() {
 
     // On définit le joueur courant
     m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
+    
 }
+
 
 
 
@@ -170,6 +196,7 @@ void Butin::HandleFirstRoundSelection(const std::pair<int, int>& coords) {
     if (pieceColor == 'Y') { // 'Y' represents a yellow piece
         m_board->RemovePiece(coords.first,coords.second); // Remove the piece from the board
         m_currentPlayerIndex++; // Increment the current player index
+        SwitchPlayer(); // Switch to the next player
         m_flags.BoardNeedUpdate();
         EndFirstRoundIfNeeded(); // Check if the first round should end
     }
@@ -183,6 +210,7 @@ void Butin::EndFirstRoundIfNeeded() {
    if(m_currentPlayerIndex >= numberOfPlayers){
         EndFirstRound();
         m_currentPlayerIndex = 1;
+        
     }    
 }
     
@@ -201,26 +229,48 @@ void Butin::SelectPiece(std::pair<int, int> coord) {
     if (m_flags.m_isPieceSelected) {
         DeselectPiece();
     }
+   
     if(m_board->GetValueAt(coord.first, coord.second)->GetSymbol() != 'Y'){
         std::cout << "Not a yellow piece" << std::endl;
     }
+    
     //UpdatePossibleMoves();
-
+    
     // Assuming GetPossibleJumps returns the possible jumps for a yellow piece at the given coordinates
     m_status.m_currentPossibleMoves = GetPossibleMoves(coord.first, coord.second);
     //UpdatePossibleMoves();
     
     SetSelectedPiece(coord);
+    
     m_flags.PieceIsSelected();
+    
 }
 
 void Butin::DeselectPiece() {
     std::cout << "DeselectPiece" << std::endl;
-
+    m_status.SaveLastPossibleMoves();
     m_flags.SelectPieceChanged();
+    m_status.SaveLastSelectedPiece();
     m_flags.PieceIsNotSelected();
     SetSelectedPiece(std::make_pair(-1, -1));
+    
 }
+
+
+bool Butin::IsMovePossible(std::pair<int, int> coord) const
+{
+    // On teste si la piece est selectionnée
+    if (!IsPieceSelected()) {
+        return false;
+    }
+
+    // On teste si la piece peut se déplacer à la coordonnée
+    auto possibleMoves = GetPossibleMoves(m_status.m_selectedPiece.first, m_status.m_selectedPiece.second);
+    return std::find(possibleMoves.begin(), possibleMoves.end(), coord) != possibleMoves.end();
+}
+
+
+
 
 // Helper methods to manage selected piece
 void Butin::SetSelectedPiece(const std::pair<int, int>& coords) {
@@ -260,7 +310,14 @@ void Butin_flagsmodel_t::SelectPieceChanged()
 {
     m_selectedPieceChanged = true;
 }
-
+void Butin_flagsmodel_t::PieceMoved() 
+{
+    m_PieceMoved = true;
+}
+bool Butin::hasPieceMoved() const
+{
+    return m_flags.m_PieceMoved;
+}
 std::pair<int, int> Butin::GetLastSelectedPiece() const
 {
     return m_status.m_lastSelectedPiece;
@@ -274,4 +331,64 @@ std::vector<std::pair<int, int>> Butin::GetLastPossibleMoves() const
 void Butin::ResetSelectedPieceFlag()
 {
     m_flags.m_selectedPieceChanged = false;
+}
+
+
+
+void Butin::ApplyMove(std::pair<int, int> coord)
+{
+    // On teste si la piece est selectionnée
+    if (!IsPieceSelected())
+    {
+        throw InvalidCoordinatesException("Butin::ApplyMove() : m_selectedPiece is invalid");
+    }
+    
+    // On teste si le mouvement est possible
+    if (!IsMovePossible(coord))
+    {
+        return;
+    }
+
+    // On déplace la piece
+    int jumpedX = (m_status.m_selectedPiece.first + coord.first) / 2;
+    int jumpedY = (m_status.m_selectedPiece.second + coord.second) / 2;
+    UpdatePlayerScore(m_board->GetValueAt(jumpedX, jumpedY)->GetSymbol());
+    std::cout << "Piece capt ;"  <<  m_board->GetValueAt(jumpedX, jumpedY)->GetSymbol() << std::endl;
+
+    m_board->MovePiece(m_status.m_selectedPiece.first, m_status.m_selectedPiece.second, coord.first, coord.second);
+    
+    m_flags.m_PieceMoved = true;
+    
+    // Set the selected piece to the new coordinates
+    //SetSelectedPiece(coord);
+    // Si il y a une capture, on supprime la piece capturée
+    // Le joueur courant peut rejouer avec la meme piece
+
+   
+    
+    DeselectPiece();
+    
+    // On met à jour les mouvements possibles
+    UpdatePossibleMoves();
+
+    m_flags.BoardNeedUpdate();
+}
+
+
+void Butin::UpdatePlayerScore(char pieceType) {
+    int scoreIncrement = 0;
+    switch (pieceType) {
+        case 'Y':
+            scoreIncrement = 1; // Yellow piece is 1 point
+            break;
+        case 'R':
+            scoreIncrement = 2; // Red piece is 2 points
+            break;
+        case 'B':
+            scoreIncrement = 3; // Black piece is 3 points
+            break;
+        default:
+            return; // No score for other types
+    }
+    m_currentPlayer->addScore(scoreIncrement);
 }

@@ -16,6 +16,7 @@ class Player
         Players m_player;
         int m_id;
         static int m_idCounter;
+        int m_score;
     public:
         explicit Player(Players player);
         ~Player();
@@ -26,4 +27,6 @@ class Player
 
         Players getPlayer() const;
         int getId() const;
+        void addScore(int points);
+        int getScore() const;
 };
