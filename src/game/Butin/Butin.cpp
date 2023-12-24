@@ -218,6 +218,7 @@ void Butin::EndFirstRoundIfNeeded() {
     std::vector<std::pair<int, int>> Butin::GetPossibleMoves(int x, int y) const
 {   
     //UpdatePossibleMoves();
+    
     return m_board->GetValueAt(x, y)->GetPossibleMoves();
 }
 
@@ -232,6 +233,7 @@ void Butin::SelectPiece(std::pair<int, int> coord) {
    
     if(m_board->GetValueAt(coord.first, coord.second)->GetSymbol() != 'Y'){
         std::cout << "Not a yellow piece" << std::endl;
+        return;
     }
     
     //UpdatePossibleMoves();
@@ -263,7 +265,9 @@ bool Butin::IsMovePossible(std::pair<int, int> coord) const
     if (!IsPieceSelected()) {
         return false;
     }
-
+    if(m_board->GetValueAt(m_status.m_selectedPiece.first, m_status.m_selectedPiece.second)->GetSymbol() != 'Y'){
+        return false;
+    }
     // On teste si la piece peut se déplacer à la coordonnée
     auto possibleMoves = GetPossibleMoves(m_status.m_selectedPiece.first, m_status.m_selectedPiece.second);
     return std::find(possibleMoves.begin(), possibleMoves.end(), coord) != possibleMoves.end();
