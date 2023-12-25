@@ -122,6 +122,16 @@ void Checkers::SelectPiece(coord_t coord)
     auto possibleMoves = GetPossibleMoves(coord);
     m_status.SetPossibleMoves(possibleMoves);
     m_flags.PieceIsSelected();
+
+    // debug 
+    auto piece = GetPiece(m_status.m_selectedPiece);
+    auto possibleCaptures = piece->GetPossibleCaptures();
+    std::cout << "possibleCaptures: " << std::endl;
+    for (const auto& [x, y]: possibleCaptures)
+    {
+        std::cout << x << ", " << y << std::endl;
+    }
+    // end debug
 }
 void Checkers::DeselectPiece()
 {
@@ -133,6 +143,7 @@ void Checkers::DeselectPiece()
     m_flags.PieceIsNotSelected();
     m_status.ResetSelectedPiece();
 }
+
 void Checkers::ApplyMove(coord_t coord)
 {
     // On teste si la piece est selectionnée
@@ -171,6 +182,7 @@ void Checkers::ApplyMove(coord_t coord)
     m_flags.BoardNeedUpdate();
 }
 
+// Vérifie si une piece a capturé une autre piece
 bool Checkers::CheckCapture(coord_t coord)
 {
     bool capt = false;
@@ -188,7 +200,7 @@ bool Checkers::CheckCapture(coord_t coord)
         while (!capt)
         {
             const auto& c = std::make_pair(x, y);
-            const auto& pieceCapture = GetPiece(c);;
+            const auto& pieceCapture = GetPiece(c);
             if (!AreCoordinatesValid(c) || pieceCapture->GetSymbol() == piece->GetSymbol()) break;
 
             if (pieceCapture == nullptr)

@@ -148,15 +148,6 @@ bool CheckersPiece::IsEmptyCell(const CheckersBoard& board, const coord_t coord)
     return IsWithinBoard(board, coord) && board.EmptyCell(coord);
 }
 
-void CheckersPiece::SetCanBeCaptured()
-{
-    m_canBeCaptured = true;
-}
-void CheckersPiece::ResetCanBeCaptured()
-{
-    m_canBeCaptured = false;
-}
-
 void CheckersPiece::Promote()
 {
     m_state.type = PieceType::QUEEN;
@@ -165,11 +156,6 @@ void CheckersPiece::Promote()
 bool CheckersPiece::IsPromoted() const
 {
     return m_state.type == PieceType::QUEEN;
-}
-
-bool CheckersPiece::CanBeCaptured() const
-{
-    return m_canBeCaptured;
 }
 
 std::vector<std::pair<int, int>> CheckersPiece::GetPossibleCaptures() const

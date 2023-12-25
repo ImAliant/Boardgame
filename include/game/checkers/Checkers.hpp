@@ -16,6 +16,7 @@ struct flagsmodel_t {
     bool m_boardNeedUpdate = false;
     bool m_isPieceCaptured = false;
     bool m_currentPlayerChanged = false;
+    //bool m_canCaptureAgain = false;
 
     void PieceIsSelected();
     void PieceIsNotSelected();

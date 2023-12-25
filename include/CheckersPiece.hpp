@@ -16,8 +16,6 @@ enum PieceType
 class CheckersPiece: public Piece
 {
     private:
-        bool m_canBeCaptured = false;
-
         std::vector<direction_t> m_possibleCaptures;
 
         bool IsWithinBoard(const CheckersBoard& board, coord_t coord) const;
@@ -37,12 +35,8 @@ class CheckersPiece: public Piece
 
         void FindPossibleMoves(const Board& board) override;
 
-        void SetCanBeCaptured();
-        void ResetCanBeCaptured();
-
         void Promote();
         bool IsPromoted() const;
-        bool CanBeCaptured() const;
 
         std::vector<direction_t> GetPossibleCaptures() const;
 
