@@ -10,9 +10,9 @@ Checkers::Checkers() {}
 Checkers::~Checkers() {}
 
 void Checkers::SwitchPlayer() {
-    if (m_currentPlayer == m_players[CheckersConstants::PLAYER_ONEID])
-        m_currentPlayer = m_players[CheckersConstants::PLAYER_TWOID];
-    else m_currentPlayer = m_players[CheckersConstants::PLAYER_ONEID];
+    if (m_status.m_currentPlayer == m_players[CheckersConstants::PLAYER_ONEID])
+        m_status.SetCurrentPlayer(m_players[CheckersConstants::PLAYER_TWOID]);
+    else m_status.SetCurrentPlayer(m_players[CheckersConstants::PLAYER_ONEID]);
 
     m_flags.CurrentPlayerChanged();
 }
@@ -71,7 +71,7 @@ bool Checkers::IsPieceOfCurrentPlayer(coord_t coord) const
     
     auto pieceOwner = piece->GetOwner();
     auto idPieceOwner = pieceOwner->GetId();
-    auto idCurrentPlayer = m_currentPlayer->GetId();
+    auto idCurrentPlayer = m_status.m_currentPlayer->GetId();
 
     return idCurrentPlayer == idPieceOwner;
 }
@@ -116,7 +116,7 @@ void Checkers::CheckForWin() {
     bool CanMove = HavePieceWithCapturingMoves() || HavePieceWithNonCapturingMoves();
     if (!CanMove)
     {
-        m_status.m_winner = (m_currentPlayer->GetId() == CheckersConstants::PLAYER_ONEID) ? CheckersConstants::BLACK : CheckersConstants::WHITE;
+        m_status.m_winner = (m_status.m_currentPlayer->GetId() == CheckersConstants::PLAYER_ONEID) ? CheckersConstants::BLACK : CheckersConstants::WHITE;
         m_flags.GameFinished();
         return;
     }
@@ -291,7 +291,7 @@ bool Checkers::HavePieceWithCapturingMoves() const
             auto coord = std::make_pair(i, j);
             auto piece = GetPiece(coord);
             if (piece == nullptr) continue;
-            if (piece->GetOwner() != m_currentPlayer) continue;
+            if (piece->GetOwner() != m_status.m_currentPlayer) continue;
 
             auto possibleCaptures = piece->GetPossibleCaptures();
             if (!possibleCaptures.empty()) return true;
@@ -312,7 +312,7 @@ bool Checkers::HavePieceWithNonCapturingMoves() const
             auto coord = std::make_pair(i, j);
             auto piece = GetPiece(coord);
             if (piece == nullptr) continue;
-            if (piece->GetOwner() != m_currentPlayer) continue;
+            if (piece->GetOwner() != m_status.m_currentPlayer) continue;
 
             auto possibleMoves = piece->GetPossibleMoves();
             if (!possibleMoves.empty()) return true;
@@ -369,7 +369,7 @@ void Checkers::InitPlayers() {
     m_players.push_back(std::make_shared<Player>());
 
     // On définit le joueur courant
-    m_currentPlayer = m_players[CheckersConstants::PLAYER_ONEID];
+    m_status.SetCurrentPlayer(m_players[CheckersConstants::PLAYER_ONEID]);
 }
 
 void Checkers::InitBoard() {
@@ -474,7 +474,7 @@ bool Checkers::AreCoordinatesValid(coord_t coord) const
 
 std::shared_ptr<Player> Checkers::GetCurrentPlayer() const
 {
-    return m_currentPlayer;
+    return m_status.m_currentPlayer;
 }
 CheckersPiece* Checkers::GetPiece(coord_t coord) const
 {
