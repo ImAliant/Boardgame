@@ -16,7 +16,9 @@ struct flagsmodel_t {
     bool m_boardNeedUpdate = false;
     bool m_isPieceCaptured = false;
     bool m_currentPlayerChanged = false;
-    //bool m_canCaptureAgain = false;
+    bool m_capturingMoveRequired = false;
+
+    bool m_replay = false;
 
     void PieceIsSelected();
     void PieceIsNotSelected();
@@ -25,13 +27,18 @@ struct flagsmodel_t {
     void BoardNeedUpdate();
     void GameStarted();
     void GameFinished();
+
+    void CapturingMoveRequired();
     
     void ResetPieceCapturedFlag();
+    void ResetCapturingMoveRequiredFlag();
 };
 
 struct CheckersStatus {
-    coord_t m_selectedPiece = {-1, -1};
+    coord_t m_selectedPieceCoord = {-1, -1};
     coord_t m_lastSelectedPiece = {-1, -1};
+
+    coord_t m_savedNewPosition = {-1, -1};
 
     std::vector<coord_t> m_currentPossibleMoves;
     std::vector<coord_t> m_lastPossibleMoves;
@@ -41,17 +48,15 @@ struct CheckersStatus {
     {
         m_lastPossibleMoves = m_currentPossibleMoves;
     }
-
     void SaveLastSelectedPiece()
     {
-        m_lastSelectedPiece = m_selectedPiece;
+        m_lastSelectedPiece = m_selectedPieceCoord;
     }
 
     void SetSelectedPiece(coord_t coord)
     {
-        m_selectedPiece = coord;
+        m_selectedPieceCoord = coord;
     }
-
     void SetPossibleMoves(std::vector<coord_t> const& moves)
     {
         m_currentPossibleMoves = moves;
@@ -59,7 +64,7 @@ struct CheckersStatus {
 
     void ResetSelectedPiece()
     {
-        m_selectedPiece = {-1, -1};
+        m_selectedPieceCoord = {-1, -1};
     }
 };
 
@@ -86,9 +91,16 @@ class Checkers
         void SelectPiece(coord_t coord);
         void DeselectPiece();
         bool IsMovePossible(coord_t coord) const;
-        void ApplyMove(coord_t coord);
-        bool CheckCapture(coord_t coord);
-        void CapturePiece(coord_t coord);
+        
+        // move
+        void PerformMove(coord_t coord);
+        bool HasCapturingMoves(coord_t coord) const;
+        bool IsCapturingMove(coord_t coord) const;
+        void PerformCapturingMove(coord_t coord);
+        void PerformNonCapturingMove(coord_t coord);
+        bool HavePieceWithCapturingMoves() const;
+        bool HavePieceWithNonCapturingMoves() const;
+
         bool CanPromotePiece(coord_t coord) const;
         void PromotePiece(coord_t coord);
 

@@ -15,8 +15,10 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
     m_possibleMoves.clear();
     m_possibleCaptures.clear();
 
-    SimpleMoves(checkersBoard);
     CaptureMoves(checkersBoard);
+
+    if (m_possibleCaptures.empty())
+        SimpleMoves(checkersBoard);
 }
 
 void CheckersPiece::SimpleMoves(const CheckersBoard& board) 
@@ -158,7 +160,7 @@ bool CheckersPiece::IsPromoted() const
     return m_state.type == PieceType::QUEEN;
 }
 
-std::vector<std::pair<int, int>> CheckersPiece::GetPossibleCaptures() const
+std::vector<direction_t> CheckersPiece::GetPossibleCaptures() const
 {
     return m_possibleCaptures;
 }

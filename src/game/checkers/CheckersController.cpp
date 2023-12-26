@@ -99,7 +99,7 @@ void CheckersController::UpdateBoard() const
 
 void CheckersController::UpdateCurrentPlayer() const
 {
-    if (m_model->IsCurrentPlayerChanged())
+    if (m_model->IsCurrentPlayerChanged() && !m_model->IsGameFinished())
     {
         m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
         m_model->ResetCurrentPlayerChangedFlag();
