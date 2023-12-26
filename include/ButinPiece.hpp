@@ -35,11 +35,10 @@ class ButinPiece: public Piece
 
         void FindPossibleMoves(const Board& board) override;
 
-        void SetCanBeCaptured();
-        void ResetCanBeCaptured();
+       
         bool HasPieceToJump(const ButinBoard& board,int currentX, int currentY, int nextX, int nextY);
         
-        bool CanBeCaptured() const;
+        
 
         std::vector<std::pair<int, int>> GetPossibleCaptures() const;
 

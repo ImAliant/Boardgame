@@ -54,19 +54,7 @@ bool ButinPiece::EmptyCell(const ButinBoard& board, int x, int y) const
     return IsWithinBoard(board, x, y) && board.EmptyCell(x, y);
 }
 
-void ButinPiece::SetCanBeCaptured()
-{
-    m_canBeCaptured = true;
-}
-void ButinPiece::ResetCanBeCaptured()
-{
-    m_canBeCaptured = false;
-}
 
-bool ButinPiece::CanBeCaptured() const
-{
-    return m_canBeCaptured;
-}
 
 std::vector<std::pair<int, int>> ButinPiece::GetPossibleCaptures() const
 {
