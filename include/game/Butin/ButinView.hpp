@@ -101,4 +101,7 @@ class ButinView: public UI::UIHandler
         bool& IsExitButtonHovered();
         bool& WasExitButtonHovered();
         bool& HasHighLightedCell();
+        void printWinner(Player* winner)const;
+        void printScore(int score) const;
+
 };

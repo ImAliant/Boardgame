@@ -9,18 +9,18 @@ Butin::Butin() {}
 
 Butin::~Butin() {}
 
-// Method to check if it's the first round
-    bool Butin::IsFirstRound() const {
-        return m_flags.isFirstRound;
-    }
+bool Butin::IsFirstRound() const 
+{
+    return m_flags.isFirstRound;
+}
+void Butin::EndFirstRound() 
+{
+    m_flags.isFirstRound = false;
+}
 
-    // Method to mark the end of the first round
-    void Butin::EndFirstRound() {
-        m_flags.isFirstRound = false;
-    }
 
-
-void Butin::SwitchPlayer() {
+void Butin::SwitchPlayer() 
+{
     if (m_currentPlayer == m_players[static_cast<int>(Players::PLAYER_ONE)])
         m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_TWO)];
     else m_currentPlayer = m_players[static_cast<int>(Players::PLAYER_ONE)];
@@ -28,16 +28,13 @@ void Butin::SwitchPlayer() {
     m_flags.CurrentPlayerChanged();
     
     std::cout << "Current player: " << m_currentPlayer->ToString()<< std::endl;
-    // print the score
-    std::cout << "Score: " << m_currentPlayer->getScore() << std::endl;
+    
 }
 
 
-void Butin::Turn(std::pair<int, int> coord) {
-    // On teste si la partie est déjà terminée
-   
-    // On teste si la partie n'est pas encore commencée
-    if (!IsGameStarted()) {
+void Butin::Turn(std::pair<int, int> coord) 
+{
+    if (!IsGameStarted() ) {
         throw InvalidUsageException("Butin::Turn() : m_isGameStarted is false");
     }
      if (!AreCoordinatesValid(coord)) {
@@ -51,19 +48,19 @@ void Butin::Turn(std::pair<int, int> coord) {
                 if(IsMovePossible(coord) && IsPieceSelected())
                 {
                     ApplyMove(coord);
+                    if(CheckForWinner())
+                    {  
+                        m_flags.GameFinished();
+                        
+                    }
                 }
                
-                
-                //HandlePieceSelection(coord);
                 if (m_flags.m_isPieceSelected)
                     DeselectPiece();
                 else{
                     SelectPiece(coord);
                     
                     m_board->GetValueAt(coord.first,coord.second)->FindPossibleMoves(*m_board);
-                    //TODO: Avoid multiple calls to FindPossibleMoves if used with select 
-                    
-                
                 }
             }
   
@@ -92,7 +89,8 @@ void Butin::UpdatePossibleMoves() const
 
 
 
-void Butin::InitPlayers() {
+void Butin::InitPlayers() 
+{
     // On teste si les joueurs sont déjà initialisés
     if (!m_players.empty()) {
         m_players.clear();
@@ -108,10 +106,8 @@ void Butin::InitPlayers() {
     
 }
 
-
-
-
-void Butin::InitBoard() {
+void Butin::InitBoard() 
+{
     // On teste si le board est déjà initialisé
     if (m_board != nullptr) {
         m_board.reset();
@@ -172,6 +168,15 @@ bool& Butin::IsGameStarted()
 {
     return m_flags.m_isGameStarted;
 }
+void Butin_flagsmodel_t::GameFinished()
+{
+    m_isGameFinished = true;
+
+}
+bool& Butin::IsGameFinished()
+{
+    return m_flags.m_isGameFinished;
+}
 
 bool Butin::IsBoardNeedUpdate() const
 {
@@ -189,8 +194,8 @@ bool Butin::AreCoordinatesValid(std::pair<int, int> coord) const
     return coord.first >= 0 && coord.first < 10 && coord.second >= 0 && coord.second < 10;
 }
 
-void Butin::HandleFirstRoundSelection(const std::pair<int, int>& coords) {
-    // Assuming GetPieceAt returns the color of the piece at given coordinates
+void Butin::HandleFirstRoundSelection(const std::pair<int, int>& coords) 
+{    
     char pieceColor = m_board->GetValueAt(coords.first,coords.second)->GetSymbol();
     
     if (pieceColor == 'Y') { // 'Y' represents a yellow piece
@@ -202,9 +207,8 @@ void Butin::HandleFirstRoundSelection(const std::pair<int, int>& coords) {
     }
 }
 
-void Butin::EndFirstRoundIfNeeded() {
-    // Logic to check if all players have had their turn in the first round
-    // This could be a counter that increments each time a player removes a yellow piece
+void Butin::EndFirstRoundIfNeeded() 
+{   
     int numberOfPlayers=m_players.size();
    
    if(m_currentPlayerIndex >= numberOfPlayers){
@@ -215,17 +219,14 @@ void Butin::EndFirstRoundIfNeeded() {
 }
     
 
-    std::vector<std::pair<int, int>> Butin::GetPossibleMoves(int x, int y) const
-{   
-    //UpdatePossibleMoves();
-    
+std::vector<std::pair<int, int>> Butin::GetPossibleMoves(int x, int y) const
+{       
     return m_board->GetValueAt(x, y)->GetPossibleMoves();
 }
 
 
-void Butin::SelectPiece(std::pair<int, int> coord) {
-    std::cout << "SelectPiece: " << coord.first << ", " << coord.second << std::endl;
-
+void Butin::SelectPiece(std::pair<int, int> coord) 
+{
     // Check if a piece is already selected
     if (m_flags.m_isPieceSelected) {
         DeselectPiece();
@@ -235,21 +236,12 @@ void Butin::SelectPiece(std::pair<int, int> coord) {
         std::cout << "Not a yellow piece" << std::endl;
         return;
     }
-    
-    //UpdatePossibleMoves();
-    
-    // Assuming GetPossibleJumps returns the possible jumps for a yellow piece at the given coordinates
     m_status.m_currentPossibleMoves = GetPossibleMoves(coord.first, coord.second);
-    //UpdatePossibleMoves();
-    
     SetSelectedPiece(coord);
-    
-    m_flags.PieceIsSelected();
-    
+    m_flags.PieceIsSelected();   
 }
 
 void Butin::DeselectPiece() {
-    std::cout << "DeselectPiece" << std::endl;
     m_status.SaveLastPossibleMoves();
     m_flags.SelectPieceChanged();
     m_status.SaveLastSelectedPiece();
@@ -357,19 +349,10 @@ void Butin::ApplyMove(std::pair<int, int> coord)
     int jumpedX = (m_status.m_selectedPiece.first + coord.first) / 2;
     int jumpedY = (m_status.m_selectedPiece.second + coord.second) / 2;
     UpdatePlayerScore(m_board->GetValueAt(jumpedX, jumpedY)->GetSymbol());
-    std::cout << "Piece capt ;"  <<  m_board->GetValueAt(jumpedX, jumpedY)->GetSymbol() << std::endl;
-
     m_board->MovePiece(m_status.m_selectedPiece.first, m_status.m_selectedPiece.second, coord.first, coord.second);
     
     m_flags.m_PieceMoved = true;
-    
-    // Set the selected piece to the new coordinates
-    //SetSelectedPiece(coord);
-    // Si il y a une capture, on supprime la piece capturée
-    // Le joueur courant peut rejouer avec la meme piece
-
-   
-    
+     
     DeselectPiece();
     
     // On met à jour les mouvements possibles
@@ -379,7 +362,8 @@ void Butin::ApplyMove(std::pair<int, int> coord)
 }
 
 
-void Butin::UpdatePlayerScore(char pieceType) {
+void Butin::UpdatePlayerScore(char pieceType) 
+{
     int scoreIncrement = 0;
     switch (pieceType) {
         case 'Y':
@@ -392,7 +376,69 @@ void Butin::UpdatePlayerScore(char pieceType) {
             scoreIncrement = 3; // Black piece is 3 points
             break;
         default:
-            return; // No score for other types
+            return; 
     }
     m_currentPlayer->addScore(scoreIncrement);
+    std::cout << "Score: " << m_currentPlayer->getScore() << std::endl;
+}
+
+bool Butin::CheckForWinner() const 
+{
+    //Check if there is no possible move in the board
+    auto rows = m_board->GetRows();
+    auto cols = m_board->GetCols();
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++) {
+            auto piece = m_board->GetValueAt(i, j);
+            if (piece->GetSymbol() == 'Y') {
+                if (!piece->GetPossibleMoves().empty()) {
+                    return false;
+                }
+            }
+        }
+    
+    }
+    return true;
+}
+
+
+Player* Butin::DetermineWinner()  
+{
+    Player* winner = nullptr;
+    if (m_players[static_cast<int>(Players::PLAYER_ONE)]->getScore() > m_players[static_cast<int>(Players::PLAYER_TWO)]->getScore()) {
+        winner = m_players[static_cast<int>(Players::PLAYER_ONE)].get();
+        
+    }
+    else if (m_players[static_cast<int>(Players::PLAYER_ONE)]->getScore() < m_players[static_cast<int>(Players::PLAYER_TWO)]->getScore()) {
+        winner = m_players[static_cast<int>(Players::PLAYER_TWO)].get();
+    }
+    else {
+        winner = m_players[static_cast<int>(Players::NONE)].get();
+    }
+
+    setWinner(winner);
+    setWinnerScore(winner->getScore());
+    return winner;
+}
+
+Player* Butin::GetWinner() const 
+{
+    return m_status.m_winner;
+}
+
+void Butin::setWinner(Player* winner) 
+{
+    m_status.m_winner = winner;
+}
+
+void Butin::setWinnerScore(int score) 
+{
+    m_status.m_winnerScore = score;
+}
+
+int Butin::getWinnerScore() const 
+{
+return m_status.m_winnerScore;
 }

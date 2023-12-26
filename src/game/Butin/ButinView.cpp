@@ -352,3 +352,15 @@ void ButinView::RemoveHighlight()
 {
     m_flags.m_hasHighLightedCell = false;
 }
+
+void ButinView::printWinner(Player* winner) const
+{
+    if (winner != nullptr) {
+        std::cout << "The winner is: " << winner->ToString() << std::endl;
+    } else {
+        std::cout << "No winner determined." << std::endl;
+    }
+}
+void ButinView::printScore(int score) const{
+    std::cout << "Score: " << score << std::endl;
+}

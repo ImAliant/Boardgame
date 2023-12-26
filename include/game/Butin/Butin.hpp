@@ -24,8 +24,9 @@ struct Butin_flagsmodel_t {
     void CurrentPlayerChanged();
     void SelectPieceChanged();
     void BoardNeedUpdate();
+    void GameFinished();
     
-    //void ResetPieceCapturedFlag();
+    
 };
 
 struct ButinStatus {
@@ -35,6 +36,8 @@ struct ButinStatus {
     std::vector<std::pair<int, int>> m_currentPossibleMoves;
     std::vector<std::pair<int, int>> m_lastPossibleMoves;
 
+    Player* m_winner = nullptr;
+    int m_winnerScore = 0;
     void SaveLastPossibleMoves() 
     {
         m_lastPossibleMoves = m_currentPossibleMoves;
@@ -63,32 +66,19 @@ class Butin
        
         void HandleFirstRoundSelection(const std::pair<int, int>& coords);
 
-      //  std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y) const;
-        //void UpdatePossibleMoves() const;
-
+     
         void SelectPiece(std::pair<int, int> coord);
         void DeselectPiece();
         void SetSelectedPiece(const std::pair<int, int>& coords);
-        
-        
-      //  bool IsPieceOfCurrentPlayer(std::pair<int, int> coord) const;
-        //void CheckForWin();
-
-        // piece
-        //void SelectPiece(std::pair<int, int> coord);
-        //void DeselectPiece();
+       
         bool IsMovePossible(std::pair<int, int> coord) const;
         void ApplyMove(std::pair<int, int> coord);
-        //bool CheckCapture(std::pair<int, int> coord);
-        //void CapturePiece(std::pair<int, int> coord);
-        //bool CanPromotePiece(std::pair<int, int> coord) const;
-        //void PromotePiece(std::pair<int, int> coord);
+      
 
         // Change the value of boolean flags
         bool AreCoordinatesValid(std::pair<int, int> coord) const;
 
         
-
     public:
         Butin();
         ~Butin();
@@ -106,10 +96,9 @@ class Butin
          bool IsFirstRound() const;
         void EndFirstRound();
         void EndFirstRoundIfNeeded();
-        //void ResetCurrentPlayerChangedFlag();
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
-        //std::pair<int, int> GetSelectedPiece() const;
+        
 
         ButinPiece* GetPiece(std::pair<int, int> coord) const;
         bool hasPieceMoved() const ;
@@ -118,7 +107,7 @@ class Butin
         std::vector<std::pair<int, int>> GetPossibleMoves(int x, int y) const;
         std::unique_ptr<ButinBoard>& GetBoard();
         bool& IsGameStarted();
-        //bool& IsGameFinished();
+        bool& IsGameFinished();
         std::pair<int, int> GetSelectedPiece() const;
         std::pair<int, int> GetLastSelectedPiece() const;
         bool IsPieceSelected() const;
@@ -128,5 +117,10 @@ class Butin
         bool IsCurrentPlayerChanged() const;
         void UpdatePossibleMoves() const;
         void UpdatePlayerScore(char pieceType);
-        
+        bool CheckForWinner() const;
+        Player* GetWinner() const;
+        void setWinner(Player* winner);
+        void setWinnerScore(int score);
+        int getWinnerScore() const;
+        Player* DetermineWinner() ;
 };

@@ -27,23 +27,22 @@ void ButinBoard::Init()
 
 void ButinBoard::FillBoard() 
 {
-// Assuming constants for the number of each type of piece
     const int numYellow = 34;
     const int numRed = 20;
     const int numBlack = 10;
     const int totalPieces = numYellow + numRed + numBlack;
 
     std::vector<char> pieces(totalPieces);
-    std::fill_n(pieces.begin(), numYellow, 'Y'); // 'Y' for yellow
-    std::fill_n(pieces.begin() + numYellow, numRed, 'R'); // 'R' for red
-    std::fill_n(pieces.begin() + numYellow + numRed, numBlack, 'B'); // 'B' for black
+    std::fill_n(pieces.begin(), numYellow, 'Y'); 
+    std::fill_n(pieces.begin() + numYellow, numRed, 'R'); 
+    std::fill_n(pieces.begin() + numYellow + numRed, numBlack, 'B'); 
 
-    // Shuffle the pieces to randomize their placement
+    // Shuffle 
     std::random_device rd;
     std::mt19937 g(rd());
     std::shuffle(pieces.begin(), pieces.end(), g);
 
-    // Place the pieces on the board
+    // Place the pieces 
     int pieceIndex = 0;
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
@@ -81,13 +80,8 @@ void ButinBoard::removeJumpedPiece(int startX, int startY, int endX, int endY) {
     int jumpedX = (startX + endX) / 2;
     int jumpedY = (startY + endY) / 2;
 
-    // Assuming board is a 2D array representing the game board
-    RemovePiece(jumpedX,jumpedY); // Set the cell to empty
-     // Update the player's score (if needed
-   
+    RemovePiece(jumpedX,jumpedY); 
 }
-
-
 
 void ButinBoard::CheckBounds(int x, int y) const
 {
@@ -102,21 +96,18 @@ bool ButinBoard::IsJumpablePiece(int sx, int sy, int dx, int dy) const
     CheckBounds(sx, sy);
     CheckBounds(dx, dy);
 
-    // Assuming GetSymbol returns the color/type of the piece
     char startSymbol = GetValueAt(sx, sy)->GetSymbol();
     char destSymbol = GetValueAt(dx, dy)->GetSymbol();
 
-    // Check if the destination cell is empty (i.e., a valid space to jump to)
-    if (destSymbol == 'T') { // 'T' for transparent/empty
+    //destination empty
+    if (destSymbol == 'T') { 
         return false;
     }
 
-    // Check if the start cell is a yellow piece (the only movable piece in Butin)
-    if (startSymbol != 'Y') { // 'Y' for yellow
+    // Check if the start cell is a yellow piece 
+    if (startSymbol != 'Y') { 
         return false;
     }
-
-    
 
     return true;
 }
@@ -139,23 +130,23 @@ std::unique_ptr<ButinPiece> ButinBoard::CreatePiece(int x, int y, char color) co
 }
 
 std::unique_ptr<ButinPiece> ButinBoard::CreateYellowPiece(int x, int y) const {
-    // Logic to create a yellow Butin piece
-    return std::make_unique<ButinPiece>(x, y, 'Y'); // Adjust constructor as needed
+    
+    return std::make_unique<ButinPiece>(x, y, 'Y'); 
 }
 
 std::unique_ptr<ButinPiece> ButinBoard::CreateRedPiece(int x, int y) const {
-    // Logic to create a red Butin piece
-    return std::make_unique<ButinPiece>(x, y,'R'); // Adjust constructor as needed
+    
+    return std::make_unique<ButinPiece>(x, y,'R'); 
 }
 
 std::unique_ptr<ButinPiece> ButinBoard::CreateBlackPiece(int x, int y) const {
-    // Logic to create a black Butin piece
-    return std::make_unique<ButinPiece>(x, y, 'B'); // Adjust constructor as needed
+    
+    return std::make_unique<ButinPiece>(x, y, 'B'); 
 }
 
 std::unique_ptr<ButinPiece> ButinBoard::CreateTransparentPiece(int x, int y) const {
-    // Logic to create a transparent (empty) cell
-    return std::make_unique<ButinPiece>(x, y, 'T'); // Adjust constructor as needed
+    
+    return std::make_unique<ButinPiece>(x, y, 'T'); 
 }
 bool ButinBoard::EmptyCell(int x, int y) const
 {

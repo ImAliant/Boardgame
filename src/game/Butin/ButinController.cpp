@@ -1,4 +1,5 @@
 #include "../../../include/game/Butin/ButinController.hpp"
+#include "../../../include/GameChoice.hpp"
 
 
 ButinController::ButinController(std::shared_ptr<Context> context)
@@ -48,7 +49,8 @@ void ButinController::ProcessInput()
         
     }
 }
-void ButinController::Update(){
+void ButinController::Update()
+{
     m_view->Render();
     if (m_model->IsPieceSelected() && !m_view->HasHighLightedCell())
     {
@@ -83,18 +85,13 @@ void ButinController::Update(){
     
     if (m_view->IsLaunchgameButtonPressed())
     {
-        Start();
+        Start();   
     }
-    
-    
-
 
     if (m_view->IsExitButtonPressed())
     {
         CloseWindow();
-    }
-
-    
+    }    
 }
 
 void ButinController::Draw() {
@@ -105,8 +102,16 @@ void ButinController::Start() {
     m_view->HideLaunchgameButton();
     m_model->GameStart();
     m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
-
     m_view->ResetLaunchPressedFlag();
+}
+
+void ButinController::End() 
+{
+        Player* winner =m_model->DetermineWinner();
+        m_view->printWinner(m_model->GetWinner());
+        m_view->printScore(m_model->getWinnerScore());
+        m_model->IsGameFinished();
+        m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
 }
 
 void ButinController::UpdateButtonHoverState(const sf::Event& event) {
@@ -161,6 +166,11 @@ void ButinController::HandleMousePressed(const sf::Event& event) {
             
             m_model->Turn(coord);
         }
+        if (m_model->IsGameFinished())
+        {
+            End();
+        }
+
     }
 }
 
