@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Piece.hpp"
+#include "../../Piece.hpp"
+#include "../../Constants.hpp"
 #include "CheckersBoard.hpp"
-#include "Constants.hpp"
 
 class CheckersBoard;
 

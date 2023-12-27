@@ -2,14 +2,13 @@
 
 #include "../../UIHandler.hpp"
 #include "../../Launcher.hpp"
-#include "CheckersBoard.hpp"
+#include "ButinBoard.hpp"
 #include "../../Constants.hpp"
-#include "../../Types.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-struct flagsview_t {
+struct Butin_flagsview_t {
     bool m_isLaunchgameButtonSelected = false;
     bool m_isLaunchgameButtonPressed = false;
     bool m_isLaunchgameButtonHovered = false;
@@ -23,7 +22,7 @@ struct flagsview_t {
     bool m_isPlayerturnTextVisible = false;
 };
 
-class CheckersView: public UI::UIHandler
+class ButinView: public UI::UIHandler
 {
     private:
         sf::RectangleShape m_boardBackgroud;
@@ -38,41 +37,40 @@ class CheckersView: public UI::UIHandler
         sf::Text m_lauchgameButton;
         sf::Text m_exitButton;
 
-        flagsview_t m_flags;
+        Butin_flagsview_t m_flags;
 
         void InitPieceTexture(std::shared_ptr<Context> context);
-        void LoadTexture(const int textureID, std::shared_ptr<Context> context);
+        void LoadTexture(int textureID, std::shared_ptr<Context> context);
         void InitBoardBackground();
-        void InitBoardCell(const CheckersBoard& board);
-        sf::Vector2f CalculatePosition(float offset, const coord_t coord) const;
+        void InitBoardCell(const ButinBoard& board);
+        sf::Vector2f CalculatePosition(float offset, coord_t coord) const;
 
-        void InitBoardPiece(const CheckersBoard& board);
+        void InitBoardPiece(const ButinBoard& board);
     public:
-        CheckersView();
-        ~CheckersView() override;
+        ButinView();
+        ~ButinView() override;
 
-        void Init(std::shared_ptr<Context> context, const CheckersBoard& board);
+        void Init(std::shared_ptr<Context> context, const ButinBoard& board);
 
         void Draw(sf::RenderWindow& window);
         void DrawBoardCells(sf::RenderWindow& window);
         void DrawBoardPiece(sf::RenderWindow& window);
-        void UpdateBoard(const CheckersBoard& board);
+        void UpdateBoard(const ButinBoard& board);
 
-        void SetupBoardPiece(const coord_t coord, const CheckersBoard &board);
+        void SetupBoardPiece(int i, int j, const ButinBoard &board);
         
-        void SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted);
+        void SetPieceTexture(sf::RectangleShape &piece, char color);
 
-        void HighlightCell(const coord_t coord, const sf::Color color);
-        void RemoveHighlightCell(const coord_t coord);
-        void HighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
-        void RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
+        void HighlightCell(std::pair<int, int> coord, sf::Color color);
+    void RemoveHighlightCell(std::pair<int, int> coord);
+        void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
+        void RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
 
         void Render();
 
         void PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const;
-        void PrintWinner(char winner) const;
 
-        coord_t GetBoardCoord(int x, int y) const;
+        std::pair<int, int> GetBoardCoord(int x, int y) const;
 
         void UpdateExitSelectedFlag(bool newValue);
         void UpdateLaunchSelectedFlag(bool newValue);
@@ -103,4 +101,7 @@ class CheckersView: public UI::UIHandler
         bool& IsExitButtonHovered();
         bool& WasExitButtonHovered();
         bool& HasHighLightedCell();
+        void printWinner(Player* winner)const;
+        void printScore(int score) const;
+
 };

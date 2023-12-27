@@ -21,8 +21,14 @@ set(SOURCES
     src/game/checkers/Checkers.cpp
     src/game/checkers/CheckersController.cpp
     src/game/checkers/CheckersView.cpp
-    src/CheckersBoard.cpp
-    src/CheckersPiece.cpp
+    src/game/checkers/CheckersBoard.cpp
+    src/game/checkers/CheckersPiece.cpp
+
+    src/game/butin/Butin.cpp
+    src/game/butin/ButinController.cpp
+    src/game/butin/ButinView.cpp
+    src/game/butin/ButinBoard.cpp
+    src/game/butin/ButinPiece.cpp
 
     src/exception/PathNotFoundException.cpp
     src/exception/InitializationException.cpp

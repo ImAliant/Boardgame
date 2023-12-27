@@ -10,20 +10,22 @@ Checkers::Checkers() {}
 Checkers::~Checkers() {}
 
 void Checkers::SwitchPlayer() {
-    if (m_status.m_currentPlayer == m_players[CheckersConstants::PLAYER_ONEID])
-        m_status.SetCurrentPlayer(m_players[CheckersConstants::PLAYER_TWOID]);
-    else m_status.SetCurrentPlayer(m_players[CheckersConstants::PLAYER_ONEID]);
+    if (m_status.m_currentPlayer == m_players[GameConstants::PLAYER_ONEID])
+        m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_TWOID]);
+    else m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_ONEID]);
 
     m_flags.CurrentPlayerChanged();
 }
 
 void Checkers::Turn(coord_t coord) {
     // On teste si la partie est déjà terminée
-    if (IsGameFinished()) {
+    if (IsGameFinished()) 
+    {
         throw InvalidUsageException("Checkers::Turn() : m_isGameFinished is true");
     }
     // On teste si la partie n'est pas encore commencée
-    if (!IsGameStarted()) {
+    if (!IsGameStarted()) 
+    {
         throw InvalidUsageException("Checkers::Turn() : m_isGameStarted is false");
     }
     // On teste si les coordonnées sont valides
@@ -59,7 +61,7 @@ void Checkers::Turn(coord_t coord) {
     }
     else
     {
-        if (m_flags.m_isPieceSelected)
+        if (IsPieceSelected())
             DeselectPiece();
     }
 }
@@ -92,6 +94,9 @@ void Checkers::CheckForWin() {
     int nbWhitePieces = 0;
     int nbBlackPieces = 0;
 
+    auto white = GameConstants::CheckersConstants::WHITE;
+    auto black = GameConstants::CheckersConstants::BLACK;
+
     auto rows = m_board->GetRows();
     auto cols = m_board->GetCols();
 
@@ -100,14 +105,14 @@ void Checkers::CheckForWin() {
         for (int j = 0; j < cols; j++) {
             auto piece = GetPiece(std::make_pair(i, j));
             if (piece == nullptr) continue;
-            if (piece->GetSymbol() == CheckersConstants::WHITE) nbWhitePieces++;
-            else if (piece->GetSymbol() == CheckersConstants::BLACK) nbBlackPieces++;
+            if (piece->GetSymbol() == white) nbWhitePieces++;
+            else if (piece->GetSymbol() == black) nbBlackPieces++;
         }
     }
 
     if (nbWhitePieces == 0 || nbBlackPieces == 0)
     {
-        m_status.m_winner = (nbWhitePieces == 0) ? CheckersConstants::BLACK : CheckersConstants::WHITE;
+        m_status.m_winner = (nbWhitePieces == 0) ? black : white;
         m_flags.GameFinished();
         return;
     }
@@ -116,7 +121,7 @@ void Checkers::CheckForWin() {
     bool CanMove = HavePieceWithCapturingMoves() || HavePieceWithNonCapturingMoves();
     if (!CanMove)
     {
-        m_status.m_winner = (m_status.m_currentPlayer->GetId() == CheckersConstants::PLAYER_ONEID) ? CheckersConstants::BLACK : CheckersConstants::WHITE;
+        m_status.m_winner = (m_status.m_currentPlayer->GetId() == GameConstants::PLAYER_ONEID) ? black : white;
         m_flags.GameFinished();
         return;
     }
@@ -242,7 +247,7 @@ void Checkers::PerformCapturingMove(coord_t coord)
     // Sauvegarde de la nouvelle position de la piece
     // Si la piece peut encore capturer, on la selectionne
     m_status.m_savedNewPosition = coord;
-    if (m_flags.m_isPieceCaptured && HasCapturingMoves(coord))
+    if (HasCapturingMoves(m_status.m_savedNewPosition))
     {
         SelectPiece(coord);
         m_flags.m_replay = true;
@@ -335,8 +340,8 @@ bool Checkers::CanPromotePiece(coord_t coord) const
 
     auto x = piece->GetX();
 
-    if (piece->GetSymbol() == CheckersConstants::WHITE) return (x == CheckersConstants::BOARD_UPPER_LIMIT);
-    else return (x == CheckersConstants::BOARD_LOWER_LIMIT);
+    if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
+    else return (x == GameConstants::BOARD_LOWER_LIMIT);
 }
 
 void Checkers::PromotePiece(coord_t coord)
@@ -369,7 +374,7 @@ void Checkers::InitPlayers() {
     m_players.push_back(std::make_shared<Player>());
 
     // On définit le joueur courant
-    m_status.SetCurrentPlayer(m_players[CheckersConstants::PLAYER_ONEID]);
+    m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_ONEID]);
 }
 
 void Checkers::InitBoard() {
@@ -387,7 +392,7 @@ void Checkers::InitBoard() {
     int row = m_board->GetRows();
     int col = m_board->GetCols();
 
-    if (row != CheckersConstants::CHECKERSROWS || col != CheckersConstants::CHECKERSCOLS) {
+    if (row != GameConstants::CheckersConstants::CHECKERSROWS || col != GameConstants::CheckersConstants::CHECKERSCOLS) {
         throw std::runtime_error("Checkers::InitBoard() : row and col have incorrect values");
     }
 }
@@ -402,8 +407,9 @@ void Checkers::UpdatePossibleMoves() const
         for (int j = 0; j < cols; j++) {
             const auto& coord = std::make_pair(i, j);
             const auto& piece = GetPiece(coord);
-            if (piece != nullptr)
-                piece->FindPossibleMoves(*m_board);
+            if (piece == nullptr) continue;
+                
+            piece->FindPossibleMoves(*m_board);
         }
     }
 }

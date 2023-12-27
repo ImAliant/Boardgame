@@ -1,4 +1,4 @@
-#include "../include/CheckersPiece.hpp"
+#include "../../../include/game/checkers/CheckersPiece.hpp"
 
 CheckersPiece::CheckersPiece(coord_t coord, std::shared_ptr<Player> owner, char symbol)
     : Piece(coord, std::move(owner), symbol)
@@ -23,19 +23,24 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
 
 void CheckersPiece::SimpleMoves(const CheckersBoard& board) 
 {
+    const auto white = GameConstants::CheckersConstants::WHITE;
+    const auto black = GameConstants::CheckersConstants::BLACK;
+    const auto& wdir = GameConstants::CheckersConstants::WHITE_DIRECTION;
+    const auto& bdir = GameConstants::CheckersConstants::BLACK_DIRECTION;
+
     std::vector<direction_t> const* directions;
     if (m_state.type == PieceType::PAWN)
     {
-        if (m_state.m_symbol == CheckersConstants::WHITE)
-            directions = &CheckersConstants::WHITE_DIRECTION;
-        else if (m_state.m_symbol == CheckersConstants::BLACK)
-            directions = &CheckersConstants::BLACK_DIRECTION;
+        if (m_state.m_symbol == white)
+            directions = &wdir;
+        else if (m_state.m_symbol == black)
+            directions = &bdir;
         else
             return; 
     }
     else 
     {
-        directions = &CheckersConstants::ALL_DIRECTION;
+        directions = &GameConstants::CheckersConstants::ALL_DIRECTION;
     }
 
     AddPossibleMoves(board, *directions);
@@ -66,7 +71,7 @@ void CheckersPiece::AddPossibleMoves(const CheckersBoard& board, std::vector<dir
 
 void CheckersPiece::CaptureMoves(const CheckersBoard& board)
 {
-    std::vector<direction_t> const* directions = &CheckersConstants::ALL_DIRECTION;
+    std::vector<direction_t> const* directions = &GameConstants::CheckersConstants::ALL_DIRECTION;
 
     if (m_state.type == PieceType::PAWN)
     {
@@ -133,6 +138,7 @@ bool CheckersPiece::IsWithinBoard(const CheckersBoard& board, const coord_t coor
     const auto& [x, y] = coord;
     return x >= 0 && x < board.GetRows() && y >= 0 && y < board.GetCols();
 }
+
 bool CheckersPiece::IsOpponentPiece(const CheckersBoard& board, const coord_t coord) const
 {
     if (IsWithinBoard(board, coord)) 

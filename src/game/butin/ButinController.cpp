@@ -1,24 +1,25 @@
-#include "../../../include/game/checkers/CheckersController.hpp"
+#include "../../../include/game/butin/ButinController.hpp"
 #include "../../../include/GameChoice.hpp"
 
-CheckersController::CheckersController(std::shared_ptr<Context> context)
+
+ButinController::ButinController(std::shared_ptr<Context> context)
     : m_context(context)
 {
-    m_model = std::make_unique<Checkers>();
-    m_view = std::make_unique<CheckersView>();
+    m_model = std::make_unique<Butin>();
+    m_view = std::make_unique<ButinView>();
 }
 
-CheckersController::~CheckersController() {}
+ButinController::~ButinController() {}
 
-void CheckersController::Init()
+void ButinController::Init()
 {
-    m_context->m_window->setTitle(WindowConstants::CHECKERS_TITLE);
+    m_context->m_window->setTitle("Butin - Diamant/Hamdi");
 
     m_model->Init();
     m_view->Init(m_context, *m_model->GetBoard());
 }
 
-void CheckersController::ProcessInput() 
+void ButinController::ProcessInput() 
 {
     sf::Event event;
     
@@ -27,6 +28,12 @@ void CheckersController::ProcessInput()
         if (event.type == sf::Event::Closed)
         {
             CloseWindow();
+        }else if (event.type == sf::Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::Space)
+            {
+                m_model->SwitchPlayer();
+            }
         }
 
         UpdateButtonHoverState(event);
@@ -39,98 +46,75 @@ void CheckersController::ProcessInput()
         {
             HandleMousePressed(event);
         }
+        
     }
 }
-
-void CheckersController::Update() {
-    m_view->Render();
-
-    // On change de couleur la case lorsqu'un pion est sélectionné
-    UpdateHighlight();
-    UpdateBoard();
-    UpdateCurrentPlayer();
-    UpdateButtonPushed();
-}
-
-void CheckersController::UpdateHighlight() const
+void ButinController::Update()
 {
+    m_view->Render();
     if (m_model->IsPieceSelected() && !m_view->HasHighLightedCell())
     {
-        HighlightSelectedPiece();
-    }
-    else if (m_model->IsSelectedPieceChanged() && 
+        m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Blue);
+        auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece());
+        m_view->HighlightPossibleMoves(possibleMoves);
+        m_view->NeedHighlight();
+        
+        if (m_model->hasPieceMoved() && possibleMoves.empty()) {
+            m_view->RemoveHighlightPossibleMoves(possibleMoves);
+            m_model->SwitchPlayer(); // Switch player when no more moves are possible
+        }
+        
+    }   
+    if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 
         m_model->GetLastSelectedPiece().second != -1 &&
         m_model->GetLastSelectedPiece() != m_model->GetSelectedPiece())
     {
-        RemoveHighlightSelectedPiece();
+        m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
+        auto lastPossibleMoves = m_model->GetPossibleMoves(m_model->GetLastSelectedPiece());
+        
+        m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
+        m_model->ResetSelectedPieceFlag();
+        m_view->RemoveHighlight();
     }
-}
-
-void CheckersController::HighlightSelectedPiece() const
-{
-    const auto& selectedPiece = m_model->GetSelectedPiece();
-    const auto& possibleMoves = m_model->GetPossibleMoves(selectedPiece);
-    
-    m_view->HighlightCell(selectedPiece, sf::Color::Yellow);
-    m_view->HighlightPossibleMoves(possibleMoves);
-    m_view->NeedHighlight();
-}
-
-void CheckersController::RemoveHighlightSelectedPiece() const
-{
-    const auto& lastSelectedPiece = m_model->GetLastSelectedPiece();
-    const auto& lastPossibleMoves = m_model->GetLastPossibleMoves();
-    
-    m_view->RemoveHighlightCell(lastSelectedPiece);
-    m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
-    m_model->ResetSelectedPieceFlag();
-    m_view->RemoveHighlight();
-}
-
-void CheckersController::UpdateBoard() const
-{
     if (m_model->IsBoardNeedUpdate())
     {
-        m_view->UpdateBoard(*m_model->GetBoard());
+       m_view->UpdateBoard(*m_model->GetBoard());
         m_model->ResetBoardNeedUpdateFlag();
     }
-}
-
-void CheckersController::UpdateCurrentPlayer() const
-{
-    if (m_model->IsCurrentPlayerChanged() && !m_model->IsGameFinished())
+    
+    if (m_view->IsLaunchgameButtonPressed())
     {
-        m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
-        m_model->ResetCurrentPlayerChangedFlag();
+        Start();   
     }
+
+    if (m_view->IsExitButtonPressed())
+    {
+        CloseWindow();
+    }    
 }
 
-void CheckersController::UpdateButtonPushed()
-{
-    if (m_view->IsLaunchgameButtonPressed()) Start();
-
-    if (m_view->IsExitButtonPressed()) CloseWindow();
-}
-
-void CheckersController::Draw() {
+void ButinController::Draw() {
     m_view->Draw(*m_context->m_window);
 }
 
-void CheckersController::Start() {
+void ButinController::Start() {
     m_view->HideLaunchgameButton();
     m_model->GameStart();
     m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
-
     m_view->ResetLaunchPressedFlag();
 }
 
-void CheckersController::End() {
-    m_view->PrintWinner(m_model->GetWinner());
-    m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
+void ButinController::End() 
+{
+        Player* winner = m_model->DetermineWinner();
+        m_view->printWinner(m_model->GetWinner());
+        m_view->printScore(m_model->getWinnerScore());
+        m_model->IsGameFinished();
+        m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
 }
 
-void CheckersController::UpdateButtonHoverState(const sf::Event& event) {
+void ButinController::UpdateButtonHoverState(const sf::Event& event) {
     bool isExitHovered = m_view->GetExitButton().getGlobalBounds().contains(
         static_cast<float>(event.mouseButton.x), 
         static_cast<float>(event.mouseButton.y)
@@ -145,7 +129,7 @@ void CheckersController::UpdateButtonHoverState(const sf::Event& event) {
     m_view->UpdateLaunchHoveredFlag(isLaunchgameHovered);
 }
 
-void CheckersController::UpdateButtonSelectionState() {
+void ButinController::UpdateButtonSelectionState() {
     bool isExitSelected = m_view->GetExitButton().getGlobalBounds().contains(
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
@@ -160,7 +144,7 @@ void CheckersController::UpdateButtonSelectionState() {
     m_view->UpdateLaunchSelectedFlag(isLaunchgameSelected);
 }
 
-void CheckersController::HandleMousePressed(const sf::Event& event) {
+void ButinController::HandleMousePressed(const sf::Event& event) {
     bool isMousePressed = event.mouseButton.button == sf::Mouse::Left;
 
     if (isMousePressed)
@@ -179,20 +163,18 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
                 return;
 
             std::pair<int, int> coord = m_view->GetBoardCoord(x, y);
-        
+            
             m_model->Turn(coord);
         }
         if (m_model->IsGameFinished())
         {
             End();
         }
+
     }
 }
 
-void CheckersController::CloseWindow() const {
+void ButinController::CloseWindow() const {
     m_context->m_states->PopAll();
     m_context->m_window->close();
 }
-
-
-

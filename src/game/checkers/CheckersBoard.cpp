@@ -1,6 +1,6 @@
-#include "../include/CheckersBoard.hpp"
+#include "../../../include/game/checkers/CheckersBoard.hpp"
 
-using namespace CheckersConstants;
+using namespace GameConstants::CheckersConstants;
 
 CheckersBoard::CheckersBoard(std::vector<std::shared_ptr<Player>> players)
 : Board(std::move(players))
@@ -103,11 +103,11 @@ std::unique_ptr<CheckersPiece> CheckersBoard::CreatePiece(coord_t coord, char co
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(coord_t coord) const
 {
-    return std::make_unique<CheckersPiece>(coord, m_players[PLAYER_TWOID], BLACK);
+    return std::make_unique<CheckersPiece>(coord, m_players[GameConstants::PLAYER_TWOID], BLACK);
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateWhitePiece(coord_t coord) const
 {
-    return std::make_unique<CheckersPiece>(coord, m_players[PLAYER_ONEID], WHITE);
+    return std::make_unique<CheckersPiece>(coord, m_players[GameConstants::PLAYER_ONEID], WHITE);
 }
 
 std::ostream &operator<<(std::ostream &os, const CheckersBoard &board)

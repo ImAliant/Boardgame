@@ -1,6 +1,7 @@
 #include "../../../include/game/checkers/CheckersView.hpp"
 #include "../../../include/exception/AssetNotFoundException.hpp"
 
+using namespace GameConstants;
 using namespace CheckersConstants;
 using namespace UIConstants;
 
@@ -21,10 +22,10 @@ void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& b
         throw std::runtime_error("CheckersView::Init() : font is nullptr");
     }
 
-    InitRectangleShape(m_lineSeparator, CheckersContext::LINESEPARATOR_SIZE, CheckersContext::LINESEPARATOR_POSITION);
+    InitRectangleShape(m_lineSeparator, GameContext::LINESEPARATOR_SIZE, GameContext::LINESEPARATOR_POSITION);
 
-    InitText(m_lauchgameButton, "Lancer la partie", CheckersContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
-    InitText(m_exitButton, "Quitter", CheckersContext::EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
+    InitText(m_lauchgameButton, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
+    InitText(m_exitButton, "Quitter", GameContext::EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
 }
 
 void CheckersView::InitPieceTexture(std::shared_ptr<Context> context)

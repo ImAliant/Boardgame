@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../../CheckersBoard.hpp"
+#include "CheckersBoard.hpp"
 #include "../../Player.hpp"
 #include "../../Types.hpp"
 
@@ -83,7 +83,7 @@ struct CheckersStatus {
     std::vector<coord_t> m_lastPossibleMoves;
     /// @brief Représente le gagnant de la partie.
     /// @details -1 = pas de gagnant, 0 = blanc, 1 = noir
-    char m_winner = CheckersConstants::NOWINNER;
+    char m_winner = GameConstants::CheckersConstants::NOWINNER;
 
     /// @brief Défini le joueur courant.
     /// @param player Joueur courant.
@@ -211,6 +211,8 @@ class Checkers
     
         void GameStart();
         
+        bool& IsGameStarted();
+        bool& IsGameFinished();
         void ResetCurrentPlayerChangedFlag();
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
@@ -222,8 +224,7 @@ class Checkers
         std::shared_ptr<Player> GetCurrentPlayer() const;
         std::vector<coord_t> GetPossibleMoves(coord_t coord) const;
         std::unique_ptr<CheckersBoard>& GetBoard();
-        bool& IsGameStarted();
-        bool& IsGameFinished();
+        
         coord_t GetSelectedPiece() const;
         coord_t GetLastSelectedPiece() const;
         bool IsPieceSelected() const;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CheckersPiece.hpp"
-#include "Constants.hpp"
+#include "../../Constants.hpp"
 
 #include <vector>
 
@@ -14,7 +14,6 @@ class CheckersBoard: public Board
 
         void CheckBounds(coord_t coord) const;
         std::unique_ptr<CheckersPiece> CreatePiece(coord_t coord, char color) const;
-        std::unique_ptr<CheckersPiece> CreateTransparentPiece(coord_t coord) const;
         std::unique_ptr<CheckersPiece> CreateBlackPiece(coord_t coord) const;
         std::unique_ptr<CheckersPiece> CreateWhitePiece(coord_t coord) const;
     public:

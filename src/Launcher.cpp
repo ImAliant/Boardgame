@@ -38,5 +38,8 @@ void Launcher::InitAssets() const
     m_context->m_assets->AddTexture(CHECKERS_WHITE_PAWN, AssetsConstants::CHECKERS_WHITE_PAWN);
     m_context->m_assets->AddTexture(CHECKERS_BLACK_QUEEN, AssetsConstants::CHECKERS_BLACK_QUEEN);
     m_context->m_assets->AddTexture(CHECKERS_WHITE_QUEEN, AssetsConstants::CHECKERS_WHITE_QUEEN);
+    m_context->m_assets->AddTexture(BUTIN_YELLOW_PIECE, AssetsConstants::BUTIN_YELLOW_PIECE);
+    m_context->m_assets->AddTexture(BUTIN_RED_PIECE, AssetsConstants::BUTIN_RED_PIECE);
+    m_context->m_assets->AddTexture(BUTIN_BLACK_PIECE, AssetsConstants::BUTIN_BLACK_PIECE);
     m_context->m_assets->AddTexture(EMPTY_ASSET, AssetsConstants::EMPTY_ASSET);
 }

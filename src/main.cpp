@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "../include/Launcher.hpp"
-
 #include "../include/Board.hpp"
 
 int main() {

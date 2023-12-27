@@ -1,5 +1,6 @@
 #include "../include/GameChoice.hpp"
 #include "../include/game/checkers/CheckersController.hpp"
+#include "../include/game/butin/ButinController.hpp"
 #include "../include/Constants.hpp"
 
 #include <iostream>
@@ -45,8 +46,7 @@ void GameChoice::Update()
 
     if(m_isButinButtonPressed)
     {
-        // TODO : Change the current state to Butin
-        std::cout << "Butin" << std::endl;
+        m_context->m_states->Add(std::make_unique<ButinController>(m_context), true);
 
         m_isButinButtonPressed = false;
     }

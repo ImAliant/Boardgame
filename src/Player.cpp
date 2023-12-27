@@ -7,9 +7,20 @@ int Player::m_idCounter = 0;
 Player::Player()
 {
     m_id = m_idCounter++;
+    m_score = 0;
 }
 
 Player::~Player() {}
+
+void Player::AddScore(int score)
+{
+    m_score += score;
+}
+
+int Player::GetScore() const
+{
+    return m_score;
+}
 
 std::string Player::ToString() const
 {
