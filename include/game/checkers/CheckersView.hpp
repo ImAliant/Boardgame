@@ -2,7 +2,7 @@
 
 #include "../../UIHandler.hpp"
 #include "../../Launcher.hpp"
-#include "../../CheckersBoard.hpp"
+#include "CheckersBoard.hpp"
 #include "../../Constants.hpp"
 #include "../../Types.hpp"
 

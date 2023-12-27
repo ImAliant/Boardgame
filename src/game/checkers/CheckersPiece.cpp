@@ -1,4 +1,4 @@
-#include "../include/CheckersPiece.hpp"
+#include "../../../include/game/checkers/CheckersPiece.hpp"
 
 CheckersPiece::CheckersPiece(coord_t coord, std::shared_ptr<Player> owner, char symbol)
     : Piece(coord, std::move(owner), symbol)

@@ -1,4 +1,4 @@
-#include "../include/CheckersBoard.hpp"
+#include "../../../include/game/checkers/CheckersBoard.hpp"
 
 using namespace CheckersConstants;
 

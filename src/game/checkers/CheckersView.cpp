@@ -222,10 +222,12 @@ void CheckersView::Render()
 
 void CheckersView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const
 {
+    system("clear");
     std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
 }
 void CheckersView::PrintWinner(char winner) const
-{
+{   
+    system("clear");
     std::string winnerStr;
     if (winner == WHITE) winnerStr = "White";
     else if (winner == BLACK) winnerStr = "Black";

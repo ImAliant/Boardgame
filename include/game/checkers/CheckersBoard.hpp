@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CheckersPiece.hpp"
-#include "Constants.hpp"
+#include "../../Constants.hpp"
 
 #include <vector>
 
