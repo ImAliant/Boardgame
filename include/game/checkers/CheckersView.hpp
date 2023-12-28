@@ -15,10 +15,10 @@ struct flagsview_t {
     bool m_isLaunchgameButtonHovered = false;
     bool m_wasLaunchgameButtonHovered = false;
     bool m_isLaunchgameButtonVisible = true;
-    bool m_isExitButtonSelected = false;
-    bool m_isExitButtonPressed = false;
-    bool m_isExitButtonHovered = false;
-    bool m_wasExitButtonHovered = false;
+    bool m_isMenuButtonSelected = false;
+    bool m_isMenuButtonPressed = false;
+    bool m_isMenuButtonHovered = false;
+    bool m_wasMenuButtonHovered = false;
     bool m_hasHighLightedCell = false;
     bool m_isPlayerturnTextVisible = false;
 };
@@ -36,7 +36,7 @@ class CheckersView: public UI::UIHandler
         sf::RectangleShape m_lineSeparator;
 
         sf::Text m_lauchgameButton;
-        sf::Text m_exitButton;
+        sf::Text m_menuButton;
 
         flagsview_t m_flags;
 
@@ -74,28 +74,28 @@ class CheckersView: public UI::UIHandler
 
         coord_t GetBoardCoord(int x, int y) const;
 
-        void UpdateExitSelectedFlag(bool newValue);
+        void UpdateMenuSelectedFlag(bool newValue);
         void UpdateLaunchSelectedFlag(bool newValue);
-        void UpdateExitHoveredFlag(bool newValue);
+        void UpdateMenuHoveredFlag(bool newValue);
         void UpdateLaunchHoveredFlag(bool newValue);
 
         void HideLaunchgameButton();
         void NeedHighlight();
         void RemoveHighlight();
         void LauchButtonPressed();
-        void ExitButtonPressed();
+        void MenuButtonPressed();
 
         void ResetLaunchPressedFlag();
 
         // getters
         sf::Text& GetLaunchgameButton();
-        sf::Text& GetExitButton();
+        sf::Text& GetMenuButton();
 
         // getters for boolean flags
         bool IsLaunchgameButtonSelected() const;
         bool IsLaunchgameButtonPressed() const;
         bool IsLaunchgameButtonVisible() const;
-        bool IsExitButtonSelected() const;
-        bool IsExitButtonPressed() const;
+        bool IsMenuButtonSelected() const;
+        bool IsMenuButtonPressed() const;
         bool HasHighLightedCell() const;
 };

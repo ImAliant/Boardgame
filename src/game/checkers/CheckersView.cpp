@@ -25,7 +25,7 @@ void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& b
     InitRectangleShape(m_lineSeparator, GameContext::LINESEPARATOR_SIZE, GameContext::LINESEPARATOR_POSITION);
 
     InitText(m_lauchgameButton, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
-    InitText(m_exitButton, "Quitter", GameContext::EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
+    InitText(m_menuButton, "Menu", GameContext::MENUBUTTON_POSITION, *font, CHARACTER_SIZE);
 }
 
 void CheckersView::InitPieceTexture(std::shared_ptr<Context> context)
@@ -160,7 +160,7 @@ void CheckersView::Draw(sf::RenderWindow& window)
     DrawBoardCells(window);
     DrawBoardPiece(window);
     window.draw(m_lineSeparator);
-    window.draw(m_exitButton);
+    window.draw(m_menuButton);
     if (IsLaunchgameButtonVisible())
         window.draw(m_lauchgameButton);
     window.display();
@@ -215,7 +215,7 @@ void CheckersView::RemoveHighlightPossibleMoves(const std::vector<coord_t>& poss
 
 void CheckersView::Render()
 {
-    UpdateButtonState(m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered);
+    UpdateButtonState(m_menuButton, m_flags.m_isMenuButtonSelected, m_flags.m_isMenuButtonHovered, m_flags.m_wasMenuButtonHovered);
     
     if (IsLaunchgameButtonVisible())
         UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
@@ -245,17 +245,17 @@ coord_t CheckersView::GetBoardCoord(int x, int y) const
     return std::make_pair(cY, cX);
 }
 
-void CheckersView::UpdateExitSelectedFlag(bool newValue)
+void CheckersView::UpdateMenuSelectedFlag(bool newValue)
 {
-    m_flags.m_isExitButtonSelected = newValue;
+    m_flags.m_isMenuButtonSelected = newValue;
 }
 void CheckersView::UpdateLaunchSelectedFlag(bool newValue)
 {
     m_flags.m_isLaunchgameButtonSelected = newValue;
 }
-void CheckersView::UpdateExitHoveredFlag(bool newValue)
+void CheckersView::UpdateMenuHoveredFlag(bool newValue)
 {
-    m_flags.m_isExitButtonHovered = newValue;
+    m_flags.m_isMenuButtonHovered = newValue;
 }
 void CheckersView::UpdateLaunchHoveredFlag(bool newValue)
 {
@@ -278,9 +278,9 @@ void CheckersView::LauchButtonPressed()
 {
     m_flags.m_isLaunchgameButtonPressed = true;
 }
-void CheckersView::ExitButtonPressed()
+void CheckersView::MenuButtonPressed()
 {
-    m_flags.m_isExitButtonPressed = true;
+    m_flags.m_isMenuButtonPressed = true;
 }
 
 void CheckersView::ResetLaunchPressedFlag()
@@ -292,9 +292,9 @@ sf::Text& CheckersView::GetLaunchgameButton()
 {
     return m_lauchgameButton;
 }
-sf::Text& CheckersView::GetExitButton()
+sf::Text& CheckersView::GetMenuButton()
 {
-    return m_exitButton;
+    return m_menuButton;
 }
 
 bool CheckersView::IsLaunchgameButtonSelected() const
@@ -309,13 +309,13 @@ bool CheckersView::IsLaunchgameButtonVisible() const
 {
     return m_flags.m_isLaunchgameButtonVisible;
 }
-bool CheckersView::IsExitButtonSelected() const
+bool CheckersView::IsMenuButtonSelected() const
 {
-    return m_flags.m_isExitButtonSelected;
+    return m_flags.m_isMenuButtonSelected;
 }
-bool CheckersView::IsExitButtonPressed() const
+bool CheckersView::IsMenuButtonPressed() const
 {
-    return m_flags.m_isExitButtonPressed;
+    return m_flags.m_isMenuButtonPressed;
 }
 bool CheckersView::HasHighLightedCell() const
 {

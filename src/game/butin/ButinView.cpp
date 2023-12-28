@@ -25,7 +25,7 @@ void ButinView::Init(std::shared_ptr<Context> context, const ButinBoard& board)
     InitRectangleShape(m_lineSeparator, GameContext::LINESEPARATOR_SIZE, GameContext::LINESEPARATOR_POSITION);
 
     InitText(m_lauchgameButton, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
-    InitText(m_exitButton, "Quitter", GameContext::EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
+    InitText(m_menuButton, "Menu", GameContext::MENUBUTTON_POSITION, *font, CHARACTER_SIZE);
 }
 
 void ButinView::PrintTurn(const std::shared_ptr<Player> currentPlayer, const std::vector<std::shared_ptr<Player>>& players) const
@@ -188,7 +188,7 @@ void ButinView::Draw(sf::RenderWindow& window)
     DrawBoardCells(window);
     DrawBoardPiece(window);
     window.draw(m_lineSeparator);
-    window.draw(m_exitButton);
+    window.draw(m_menuButton);
     if (IsLaunchgameButtonVisible())
         window.draw(m_lauchgameButton);
     window.display();
@@ -220,7 +220,7 @@ void ButinView::DrawBoardPiece(sf::RenderWindow& window)
 
 void ButinView::Render()
 {
-    UpdateButtonState(m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered);
+    UpdateButtonState(m_menuButton, m_flags.m_isMenuButtonSelected, m_flags.m_isMenuButtonHovered, m_flags.m_wasMenuButtonHovered);
     
     if (IsLaunchgameButtonVisible())
         UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered, m_flags.m_isLaunchgameButtonVisible);
@@ -235,17 +235,17 @@ std::pair<int, int> ButinView::GetBoardCoord(int x, int y) const
     return std::make_pair(cY, cX);
 }
 
-void ButinView::UpdateExitSelectedFlag(bool newValue)
+void ButinView::UpdateMenuSelectedFlag(bool newValue)
 {
-    m_flags.m_isExitButtonSelected = newValue;
+    m_flags.m_isMenuButtonSelected = newValue;
 }
 void ButinView::UpdateLaunchSelectedFlag(bool newValue)
 {
     m_flags.m_isLaunchgameButtonSelected = newValue;
 }
-void ButinView::UpdateExitHoveredFlag(bool newValue)
+void ButinView::UpdateMenuHoveredFlag(bool newValue)
 {
-    m_flags.m_isExitButtonHovered = newValue;
+    m_flags.m_isMenuButtonHovered = newValue;
 }
 void ButinView::UpdateLaunchHoveredFlag(bool newValue)
 {
@@ -261,9 +261,9 @@ void ButinView::LauchButtonPressed()
 {
     m_flags.m_isLaunchgameButtonPressed = true;
 }
-void ButinView::ExitButtonPressed()
+void ButinView::MenuButtonPressed()
 {
-    m_flags.m_isExitButtonPressed = true;
+    m_flags.m_isMenuButtonPressed = true;
 }
 
 
@@ -271,9 +271,9 @@ sf::Text& ButinView::GetLaunchgameButton()
 {
     return m_lauchgameButton;
 }
-sf::Text& ButinView::GetExitButton()
+sf::Text& ButinView::GetMenuButton()
 {
-    return m_exitButton;
+    return m_menuButton;
 }
 
 bool& ButinView::IsLaunchgameButtonSelected() 
@@ -288,13 +288,13 @@ bool& ButinView::IsLaunchgameButtonVisible()
 {
     return ButinView::m_flags.m_isLaunchgameButtonVisible;
 }
-bool& ButinView::IsExitButtonSelected() 
+bool& ButinView::IsMenuButtonSelected() 
 {
-    return ButinView::m_flags.m_isExitButtonSelected;
+    return ButinView::m_flags.m_isMenuButtonSelected;
 }
-bool& ButinView::IsExitButtonPressed() 
+bool& ButinView::IsMenuButtonPressed() 
 {
-    return ButinView::m_flags.m_isExitButtonPressed;
+    return ButinView::m_flags.m_isMenuButtonPressed;
 }
 
 void ButinView::ResetLaunchPressedFlag()

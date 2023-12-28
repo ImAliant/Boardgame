@@ -37,6 +37,7 @@ class ButinController: public Engine::State, public EventHandler
         void RemoveHighlightSelectedPiece() const;
 
         void CloseWindow() const;
+        void CloseGame() const;
     public:
         explicit ButinController(std::shared_ptr<Context> context);
         ~ButinController() override;

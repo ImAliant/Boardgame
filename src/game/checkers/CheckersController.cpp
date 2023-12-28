@@ -108,7 +108,7 @@ void CheckersController::UpdateButtonPushed()
 {
     if (m_view->IsLaunchgameButtonPressed()) Start();
 
-    if (m_view->IsExitButtonPressed()) CloseWindow();
+    if (m_view->IsMenuButtonPressed()) CloseGame();
 }
 
 void CheckersController::Draw() {
@@ -129,7 +129,7 @@ void CheckersController::End() {
 }
 
 void CheckersController::UpdateButtonHoverState(const sf::Event& event) {
-    bool isExitHovered = m_view->GetExitButton().getGlobalBounds().contains(
+    bool isMenuHovered = m_view->GetMenuButton().getGlobalBounds().contains(
         static_cast<float>(event.mouseButton.x), 
         static_cast<float>(event.mouseButton.y)
     );
@@ -139,12 +139,12 @@ void CheckersController::UpdateButtonHoverState(const sf::Event& event) {
         static_cast<float>(event.mouseButton.y)
     );
 
-    m_view->UpdateExitHoveredFlag(isExitHovered);
+    m_view->UpdateMenuHoveredFlag(isMenuHovered);
     m_view->UpdateLaunchHoveredFlag(isLaunchgameHovered);
 }
 
 void CheckersController::UpdateButtonSelectionState() {
-    bool isExitSelected = m_view->GetExitButton().getGlobalBounds().contains(
+    bool isMenuSelected = m_view->GetMenuButton().getGlobalBounds().contains(
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
     );
@@ -154,7 +154,7 @@ void CheckersController::UpdateButtonSelectionState() {
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
     );
 
-    m_view->UpdateExitSelectedFlag(isExitSelected);
+    m_view->UpdateMenuSelectedFlag(isMenuSelected);
     m_view->UpdateLaunchSelectedFlag(isLaunchgameSelected);
 }
 
@@ -165,8 +165,8 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
     {
         if (m_view->IsLaunchgameButtonSelected())
             m_view->LauchButtonPressed();
-        if (m_view->IsExitButtonSelected())
-            m_view->ExitButtonPressed();
+        if (m_view->IsMenuButtonSelected())
+            m_view->MenuButtonPressed();
         if (m_model->IsGameStarted())
         {
             auto x = event.mouseButton.x;
@@ -185,6 +185,10 @@ void CheckersController::HandleMousePressed(const sf::Event& event) {
             End();
         }
     }
+}
+
+void CheckersController::CloseGame() const {
+    m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
 }
 
 void CheckersController::CloseWindow() const {

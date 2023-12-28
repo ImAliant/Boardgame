@@ -119,7 +119,7 @@ void ButinController::UpdateButtonPushed()
 {
     if (m_view->IsLaunchgameButtonPressed()) Start();
     
-    if (m_view->IsExitButtonPressed()) CloseWindow();
+    if (m_view->IsMenuButtonPressed()) CloseGame();
 }   
 
 void ButinController::Draw() {
@@ -141,7 +141,7 @@ void ButinController::End()
 }
 
 void ButinController::UpdateButtonHoverState(const sf::Event& event) {
-    bool isExitHovered = m_view->GetExitButton().getGlobalBounds().contains(
+    bool isMenuHovered = m_view->GetMenuButton().getGlobalBounds().contains(
         static_cast<float>(event.mouseButton.x), 
         static_cast<float>(event.mouseButton.y)
     );
@@ -151,12 +151,12 @@ void ButinController::UpdateButtonHoverState(const sf::Event& event) {
         static_cast<float>(event.mouseButton.y)
     );
 
-    m_view->UpdateExitHoveredFlag(isExitHovered);
+    m_view->UpdateMenuHoveredFlag(isMenuHovered);
     m_view->UpdateLaunchHoveredFlag(isLaunchgameHovered);
 }
 
 void ButinController::UpdateButtonSelectionState() {
-    bool isExitSelected = m_view->GetExitButton().getGlobalBounds().contains(
+    bool isMenuSelected = m_view->GetMenuButton().getGlobalBounds().contains(
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
     );
@@ -166,7 +166,7 @@ void ButinController::UpdateButtonSelectionState() {
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
     );
 
-    m_view->UpdateExitSelectedFlag(isExitSelected);
+    m_view->UpdateMenuSelectedFlag(isMenuSelected);
     m_view->UpdateLaunchSelectedFlag(isLaunchgameSelected);
 }
 
@@ -177,8 +177,8 @@ void ButinController::HandleMousePressed(const sf::Event& event) {
     {
         if (m_view->IsLaunchgameButtonSelected())
             m_view->LauchButtonPressed();
-        if (m_view->IsExitButtonSelected())
-            m_view->ExitButtonPressed();
+        if (m_view->IsMenuButtonSelected())
+            m_view->MenuButtonPressed();
         if (m_model->IsGameStarted())
         {
             auto x = event.mouseButton.x;
@@ -203,4 +203,8 @@ void ButinController::HandleMousePressed(const sf::Event& event) {
 void ButinController::CloseWindow() const {
     m_context->m_states->PopAll();
     m_context->m_window->close();
+}
+
+void ButinController::CloseGame() const {
+    m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
 }

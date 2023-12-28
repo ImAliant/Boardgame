@@ -38,6 +38,7 @@ class CheckersController: public Engine::State, public EventHandler
         void RemoveHighlightSelectedPiece() const;
 
         void CloseWindow() const;
+        void CloseGame() const;
     public:
         explicit CheckersController(std::shared_ptr<Context> context);
         ~CheckersController() override;
