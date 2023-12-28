@@ -2,12 +2,11 @@
 #include "../../../include/GameChoice.hpp"
 
 
-ButinController::ButinController(std::shared_ptr<Context> context)
-    : m_context(context)
-{
-    m_model = std::make_unique<Butin>();
-    m_view = std::make_unique<ButinView>();
-}
+ButinController::ButinController(std::shared_ptr<Context> context): 
+    m_context{context},
+    m_model{std::make_unique<Butin>()},
+    m_view{std::make_unique<ButinView>()}
+{}
 
 ButinController::~ButinController() {}
 

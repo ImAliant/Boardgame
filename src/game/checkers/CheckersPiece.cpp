@@ -166,16 +166,6 @@ bool CheckersPiece::IsPromoted() const
     return m_state.type == PieceType::QUEEN;
 }
 
-std::string CheckersPiece::GetType() const
-{
-    std::string res;
-    if (m_state.type == PAWN) res = "PAWN";
-    else if (m_state.type == QUEEN) res = "QUEEN";
-    else res = "EMPTY";
-
-    return res;
-}
-
 std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece)
 {
     os << piece.m_state.m_symbol;

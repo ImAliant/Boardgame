@@ -12,12 +12,11 @@ struct Context
     std::unique_ptr<Engine::AssetManager> m_assets;
     std::unique_ptr<Engine::StateManager> m_states;
 
-    Context()
-    {
-        m_window = std::make_unique<sf::RenderWindow>();
-        m_assets = std::make_unique<Engine::AssetManager>();
-        m_states = std::make_unique<Engine::StateManager>();
-    }
+    Context(): 
+        m_window{std::make_unique<sf::RenderWindow>()}, 
+        m_assets{std::make_unique<Engine::AssetManager>()}, 
+        m_states{std::make_unique<Engine::StateManager>()}
+    {}
 };
 
 class Launcher

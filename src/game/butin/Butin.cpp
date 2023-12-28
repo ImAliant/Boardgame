@@ -98,9 +98,9 @@ void Butin::PerformMove(const coord_t coord)
     const auto y = coord.second - capty;
 
     const auto& captureCoord = std::make_pair(x, y);
-    const auto& pieceCapture = GetPiece(captureCoord);
     if (!AreCoordinatesValid(captureCoord)) throw InvalidCoordinatesException("Butin::PerformMove() : captureCoord are invalid");
 
+    const auto pieceCapture = GetPiece(captureCoord);
     if (pieceCapture == nullptr) throw InvalidUsageException("Butin::PerformMove() : pieceCapture is null");
 
     m_board->MovePiece(GetSelectedPiece(), coord);
@@ -143,7 +143,7 @@ void Butin::UpdatePlayerScore(const char color) const
 
 void Butin::HandleFirstRoundSelection(const coord_t coord)
 {
-    const auto& piece = GetPiece(coord);
+    const auto piece = GetPiece(coord);
     if (piece == nullptr) return;
     
     if (IsYellowPiece(coord))
@@ -174,7 +174,7 @@ void Butin::CheckForWin()
         for (int j = 0; j < cols; j++)
         {
             const auto& coord = std::make_pair(i, j);
-            const auto& piece = GetPiece(coord);
+            const auto piece = GetPiece(coord);
             if (piece == nullptr) continue;
             
             if (IsYellowPiece(coord) && HasCapturingMoves(coord))
@@ -201,7 +201,7 @@ void Butin::DetermineWinner()
 
 bool Butin::IsYellowPiece(const coord_t coord) const
 {
-    const auto& piece = GetPiece(coord);
+    const auto piece = GetPiece(coord);
     if (piece == nullptr) return false;
 
     return piece->GetSymbol() == GameConstants::ButinConstants::BUTIN_YELLOW;
@@ -261,7 +261,7 @@ void Butin::UpdatePossibleMoves() const
         for (int j = 0; j < cols; j++) 
         {
             const auto& coord = std::make_pair(i, j);
-            const auto& piece = GetPiece(coord);
+            const auto piece = GetPiece(coord);
             if (piece == nullptr) continue;
 
             piece->FindPossibleMoves(*m_board);

@@ -5,10 +5,8 @@
 
 using namespace WindowConstants;
 
-Launcher::Launcher()
+Launcher::Launcher(): m_context{std::make_shared<Context>()}
 {
-    m_context = std::make_shared<Context>();
-
     m_context->m_window->create(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), WINDOW_TITLE, sf::Style::Close);
     m_context->m_window->setFramerateLimit(FRAMERATE_LIMIT);
     m_context->m_window->setVerticalSyncEnabled(VERTICAL_SYNC_ENABLED);

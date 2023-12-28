@@ -264,11 +264,6 @@ sf::Text& ButinView::GetExitButton()
     return m_exitButton;
 }
 
-std::vector<std::vector<sf::RectangleShape>>& ButinView::GetBoardCell()
-{
-    return m_boardCell;
-}
-
 bool& ButinView::IsLaunchgameButtonSelected() 
 {
     return ButinView::m_flags.m_isLaunchgameButtonSelected;
@@ -276,14 +271,6 @@ bool& ButinView::IsLaunchgameButtonSelected()
 bool& ButinView::IsLaunchgameButtonPressed() 
 {
     return ButinView::m_flags.m_isLaunchgameButtonPressed;
-}
-bool& ButinView::IsLaunchgameButtonHovered() 
-{
-    return ButinView::m_flags.m_isLaunchgameButtonHovered;
-}
-bool& ButinView::WasLaunchgameButtonHovered() 
-{
-    return ButinView::m_flags.m_wasLaunchgameButtonHovered;
 }
 bool& ButinView::IsLaunchgameButtonVisible() 
 {
@@ -296,14 +283,6 @@ bool& ButinView::IsExitButtonSelected()
 bool& ButinView::IsExitButtonPressed() 
 {
     return ButinView::m_flags.m_isExitButtonPressed;
-}
-bool& ButinView::IsExitButtonHovered() 
-{
-    return ButinView::m_flags.m_isExitButtonHovered;
-}
-bool& ButinView::WasExitButtonHovered() 
-{
-    return ButinView::m_flags.m_wasExitButtonHovered;
 }
 
 void ButinView::ResetLaunchPressedFlag()

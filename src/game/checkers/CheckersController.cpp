@@ -1,12 +1,11 @@
 #include "../../../include/game/checkers/CheckersController.hpp"
 #include "../../../include/GameChoice.hpp"
 
-CheckersController::CheckersController(std::shared_ptr<Context> context)
-    : m_context(context)
-{
-    m_model = std::make_unique<Checkers>();
-    m_view = std::make_unique<CheckersView>();
-}
+CheckersController::CheckersController(std::shared_ptr<Context> context): 
+    m_context{context},
+    m_model{std::make_unique<Checkers>()},
+    m_view{std::make_unique<CheckersView>()}
+{}
 
 CheckersController::~CheckersController() {}
 

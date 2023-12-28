@@ -29,10 +29,7 @@ class ButinBoard: public Board
         void MovePiece(coord_t coord, coord_t newCoord) override;
         void RemovePiece(coord_t coord) override;
 
-        void RemoveJumpedPiece(coord_t start, coord_t end);
-        
         bool EmptyCell(coord_t coord) const;
-        bool IsJumpablePiece(coord_t srcCoord, coord_t dstCoord) const;
 
         ButinPiece* GetValueAt(coord_t coord) const
         {

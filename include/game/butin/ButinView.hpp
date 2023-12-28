@@ -90,17 +90,12 @@ class ButinView: public UI::UIHandler
         // getters
         sf::Text& GetLaunchgameButton();
         sf::Text& GetExitButton();
-        std::vector<std::vector<sf::RectangleShape>>& GetBoardCell();
 
         // getters for boolean flags
         bool& IsLaunchgameButtonSelected();
         bool& IsLaunchgameButtonPressed();
-        bool& IsLaunchgameButtonHovered();
-        bool& WasLaunchgameButtonHovered();
         bool& IsLaunchgameButtonVisible();
         bool& IsExitButtonSelected();
         bool& IsExitButtonPressed();
-        bool& IsExitButtonHovered();
-        bool& WasExitButtonHovered();
         bool& HasHighLightedCell();
 };

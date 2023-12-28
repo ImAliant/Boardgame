@@ -35,6 +35,4 @@ class CheckersPiece: public Piece
 
         void Promote();
         bool IsPromoted() const;
-
-        std::string GetType() const;
 };

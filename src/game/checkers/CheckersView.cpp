@@ -296,48 +296,28 @@ sf::Text& CheckersView::GetExitButton()
 {
     return m_exitButton;
 }
-std::vector<std::vector<sf::RectangleShape>>& CheckersView::GetBoardCell()
-{
-    return m_boardCell;
-}
 
-bool& CheckersView::IsLaunchgameButtonSelected() 
+bool CheckersView::IsLaunchgameButtonSelected() const
 {
     return m_flags.m_isLaunchgameButtonSelected;
 }
-bool& CheckersView::IsLaunchgameButtonPressed() 
+bool CheckersView::IsLaunchgameButtonPressed() const
 {
     return m_flags.m_isLaunchgameButtonPressed;
 }
-bool& CheckersView::IsLaunchgameButtonHovered() 
-{
-    return m_flags.m_isLaunchgameButtonHovered;
-}
-bool& CheckersView::WasLaunchgameButtonHovered() 
-{
-    return m_flags.m_wasLaunchgameButtonHovered;
-}
-bool& CheckersView::IsLaunchgameButtonVisible() 
+bool CheckersView::IsLaunchgameButtonVisible() const
 {
     return m_flags.m_isLaunchgameButtonVisible;
 }
-bool& CheckersView::IsExitButtonSelected() 
+bool CheckersView::IsExitButtonSelected() const
 {
     return m_flags.m_isExitButtonSelected;
 }
-bool& CheckersView::IsExitButtonPressed() 
+bool CheckersView::IsExitButtonPressed() const
 {
     return m_flags.m_isExitButtonPressed;
 }
-bool& CheckersView::IsExitButtonHovered() 
-{
-    return m_flags.m_isExitButtonHovered;
-}
-bool& CheckersView::WasExitButtonHovered() 
-{
-    return m_flags.m_wasExitButtonHovered;
-}
-bool& CheckersView::HasHighLightedCell()
+bool CheckersView::HasHighLightedCell() const
 {
     return m_flags.m_hasHighLightedCell;
 }

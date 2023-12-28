@@ -83,19 +83,6 @@ bool ButinBoard::EmptyCell(coord_t coord) const
     return GetValueAt(coord) == nullptr;
 }
 
-//
-void ButinBoard::RemoveJumpedPiece(coord_t start, coord_t end) {
-    const auto& [startX, startY] = start;
-    const auto& [endX, endY] = end;
-    
-    int jumpedX = (startX + endX) / 2;
-    int jumpedY = (startY + endY) / 2;
-
-    const auto& jumped = std::make_pair(jumpedX, jumpedY);
-    RemovePiece(jumped); 
-}
-//
-
 void ButinBoard::CheckBounds(coord_t coord) const
 {
     const auto& [x, y] = coord;
@@ -105,23 +92,6 @@ void ButinBoard::CheckBounds(coord_t coord) const
         throw std::out_of_range("x or y is out of range");
     }
 }
-
-bool ButinBoard::IsJumpablePiece(coord_t srcCoord, coord_t dstCoord) const
-{
-    CheckBounds(srcCoord);
-    CheckBounds(dstCoord);
-
-    //destination empty
-    if (GetValueAt(dstCoord) != nullptr) return false;
-
-    // Check if the start cell is a yellow piece 
-    char startSymbol = GetValueAt(srcCoord)->GetSymbol();
-
-    if (startSymbol != BUTIN_YELLOW) return false;
-
-    return true;
-}
-
 
 std::unique_ptr<ButinPiece> ButinBoard::CreatePiece(coord_t coord, char color) const
 {

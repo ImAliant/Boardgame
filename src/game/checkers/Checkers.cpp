@@ -194,7 +194,8 @@ bool Checkers::IsCapturingMove(const coord_t coord) const
 void Checkers::PerformCapturingMove(coord_t coord)
 {
     auto piece = GetPiece(GetSelectedPiece());
-    if (piece == nullptr) throw InvalidUsageException("Checkers::PerformCapturingMove() : piece is nullptr");
+    if (piece == nullptr) 
+        throw InvalidUsageException("Checkers::PerformCapturingMove() : piece is nullptr");
 
     auto possibleCaptures = piece->GetPossibleCaptures();
     auto possibleMoves = piece->GetPossibleMoves();
@@ -214,9 +215,10 @@ void Checkers::PerformCapturingMove(coord_t coord)
     while (!capt)
     {
         const auto& captureCoord = std::make_pair(x, y);
-        const auto& pieceCapture = GetPiece(captureCoord);
-        if (!AreCoordinatesValid(captureCoord)) throw InvalidCoordinatesException("Checkers::PerformCapturingMove() : captureCoord are invalid");
+        if (!AreCoordinatesValid(captureCoord)) 
+            throw InvalidCoordinatesException("Checkers::PerformCapturingMove() : captureCoord are invalid");
 
+        const auto pieceCapture = GetPiece(captureCoord);
         if (pieceCapture == nullptr)
         {
             x -= captx;
@@ -314,12 +316,12 @@ bool Checkers::CanPromotePiece(coord_t coord) const
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Checkers::CanPromotePiece() : coord are invalid");
 
-    auto piece = GetPiece(coord);
+    const auto piece = GetPiece(coord);
 
-    if (piece->IsPromoted()) return false;
     if (piece == nullptr) return false;
-
-    auto x = piece->GetX();
+    if (piece->IsPromoted()) return false;
+    
+    const auto x = piece->GetX();
 
     if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
     else return (x == GameConstants::BOARD_LOWER_LIMIT);
@@ -387,7 +389,7 @@ void Checkers::UpdatePossibleMoves() const
     {
         for (int j = 0; j < cols; j++) {
             const auto& coord = std::make_pair(i, j);
-            const auto& piece = GetPiece(coord);
+            const auto piece = GetPiece(coord);
             if (piece == nullptr) continue;
                 
             piece->FindPossibleMoves(*m_board);

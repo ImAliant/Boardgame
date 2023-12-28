@@ -10,11 +10,6 @@ void Engine::StateManager::Add(std::unique_ptr<State> toAdd, bool replace)
     m_replace = replace;
 }
 
-void Engine::StateManager::PopCurrent()
-{
-    m_remove = true;
-}
-
 void Engine::StateManager::PopAll()
 {
     m_removeAll = true;

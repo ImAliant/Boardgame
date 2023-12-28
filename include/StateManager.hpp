@@ -16,13 +16,12 @@ namespace Engine
             bool m_add = false;
             bool m_replace = false;
             bool m_remove = false;
-            bool m_removeAll;
+            bool m_removeAll = false;
         public:
             StateManager();
             ~StateManager();
 
             void Add(std::unique_ptr<State> toAdd, bool replace = false);
-            void PopCurrent();
             void PopAll();
             void ProcessStateChange();
             
