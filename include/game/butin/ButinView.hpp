@@ -57,7 +57,7 @@ class ButinView: public UI::UIHandler
         void DrawBoardPiece(sf::RenderWindow& window);
         void UpdateBoard(const ButinBoard& board);
 
-        void SetupBoardPiece(int i, int j, const ButinBoard &board);
+        void SetupBoardPiece(const coord_t coord, const ButinBoard &board);
         
         void SetPieceTexture(sf::RectangleShape &piece, char color);
 

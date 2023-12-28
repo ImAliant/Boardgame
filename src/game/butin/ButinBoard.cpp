@@ -68,7 +68,7 @@ void ButinBoard::MovePiece(coord_t coord, coord_t newCoord)
     m_board[newX][newY] = std::move(piece);
 
     // TODO : remove jumped piece (a supprimer)
-    removeJumpedPiece(x, y, newX, newY);
+    RemoveJumpedPiece(coord, newCoord);
 }
 
 void ButinBoard::RemovePiece(coord_t coord)
@@ -88,10 +88,14 @@ bool ButinBoard::EmptyCell(coord_t coord) const
 
 //
 void ButinBoard::RemoveJumpedPiece(coord_t start, coord_t end) {
+    const auto& [startX, startY] = start;
+    const auto& [endX, endY] = end;
+    
     int jumpedX = (startX + endX) / 2;
     int jumpedY = (startY + endY) / 2;
 
-    RemovePiece(jumpedX,jumpedY); 
+    const auto& jumped = std::make_pair(jumpedX, jumpedY);
+    RemovePiece(jumped); 
 }
 //
 

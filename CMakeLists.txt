@@ -23,6 +23,7 @@ set(SOURCES
     src/game/checkers/CheckersView.cpp
     src/game/checkers/CheckersBoard.cpp
     src/game/checkers/CheckersPiece.cpp
+    src/game/checkers/CheckersFlags.cpp
 
     src/game/butin/Butin.cpp
     src/game/butin/ButinController.cpp

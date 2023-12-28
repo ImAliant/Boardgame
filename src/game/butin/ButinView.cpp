@@ -82,10 +82,12 @@ void ButinView::InitBoardCell(const ButinBoard& board)
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
+            const auto coord = std::make_pair(i, j);
+
             InitRectangleShape(
                 m_boardCell[i][j],
                 BOARDCELL_SIZE,
-                CalculatePosition(10.f, i, j)
+                CalculatePosition(10.f, coord)
             );
 
             if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(GameConstants::WHITECELL_COLOR);
@@ -96,7 +98,6 @@ void ButinView::InitBoardCell(const ButinBoard& board)
 
 void ButinView::InitBoardPiece(const ButinBoard& board)
 {   
-   
     auto rows = board.GetRows();
     auto cols = board.GetCols();
 
@@ -107,7 +108,9 @@ void ButinView::InitBoardPiece(const ButinBoard& board)
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols ; j++) {
-            SetupBoardPiece(i, j, board);
+            const auto coord = std::make_pair(i, j);
+
+            SetupBoardPiece(coord, board);
         }
     }
 }
@@ -120,22 +123,26 @@ void ButinView::UpdateBoard(const ButinBoard& board)
     {
         for (int j = 0; j < cols; j++)
         {
-            SetupBoardPiece(i, j, board);
+            const auto coord = std::make_pair(i, j);
+
+            SetupBoardPiece(coord, board);
         }
     }
 }
 
 
 
-void ButinView::SetupBoardPiece(int i, int j, const ButinBoard &board)
+void ButinView::SetupBoardPiece(const coord_t coord, const ButinBoard &board)
 {
+    const auto& [i, j] = coord;
+
     InitRectangleShape(
         m_boardPiece[i][j],
         BOARDPIECE_SIZE,
-        CalculatePosition(15.f, i, j)
+        CalculatePosition(15.f, coord)
     );
 
-    auto piece = board.GetValueAt(i, j);
+    auto piece = board.GetValueAt(coord);
     SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol());
 }
 
@@ -155,8 +162,10 @@ void ButinView::SetPieceTexture(sf::RectangleShape &piece, char color)
 
 
 
-sf::Vector2f ButinView::CalculatePosition(float offset, int i, int j) const
+sf::Vector2f ButinView::CalculatePosition(float offset, coord_t coord) const
 {
+    const auto& [i, j] = coord;
+
     return sf::Vector2f(
         offset + (BOARDCELL_SIZE.x * static_cast<float>(j)),
         offset + (BOARDCELL_SIZE.y * static_cast<float>(i))
@@ -215,8 +224,8 @@ void ButinView::Render()
 
 std::pair<int, int> ButinView::GetBoardCoord(int x, int y) const 
 {
-    auto cX = static_cast<int>((x - BOARDOFFSET.x) / BOARDCELL_SIZE.x);
-    auto cY = static_cast<int>((y - BOARDOFFSET.y) / BOARDCELL_SIZE.y);
+    auto cX = static_cast<int>((x - GameConstants::BOARDOFFSET.x) / BOARDCELL_SIZE.x);
+    auto cY = static_cast<int>((y - GameConstants::BOARDOFFSET.y) / BOARDCELL_SIZE.y);
 
     return std::make_pair(cY, cX);
 }
@@ -318,8 +327,8 @@ void ButinView::HighlightCell(std::pair<int, int> coord, sf::Color color)
 }
 void ButinView::RemoveHighlightCell(std::pair<int, int> coord)
 {
-    if ((coord.first + coord.second) % 2 == 0) m_boardCell[coord.first][coord.second].setFillColor(WHITECELL_COLOR);
-    else m_boardCell[coord.first][coord.second].setFillColor(BLACKCELL_COLOR);
+    if ((coord.first + coord.second) % 2 == 0) m_boardCell[coord.first][coord.second].setFillColor(GameConstants::WHITECELL_COLOR);
+    else m_boardCell[coord.first][coord.second].setFillColor(GameConstants::BLACKCELL_COLOR);
 }
 
 void ButinView::HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves)
