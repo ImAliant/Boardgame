@@ -30,10 +30,12 @@ void ButinController::ProcessInput()
             CloseWindow();
         }else if (event.type == sf::Event::KeyPressed)
         {
+            //
             if (event.key.code == sf::Keyboard::Space)
             {
                 m_model->SwitchPlayer();
             }
+            //
         }
 
         UpdateButtonHoverState(event);
@@ -52,47 +54,71 @@ void ButinController::ProcessInput()
 void ButinController::Update()
 {
     m_view->Render();
+
+    UpdateHighlight();
+    UpdateBoard();
+    UpdateCurrentPlayer();
+    UpdateButtonPushed();  
+}
+
+void ButinController::UpdateHighlight() const
+{
     if (m_model->IsPieceSelected() && !m_view->HasHighLightedCell())
     {
-        m_view->HighlightCell(m_model->GetSelectedPiece(), sf::Color::Blue);
-        auto possibleMoves = m_model->GetPossibleMoves(m_model->GetSelectedPiece());
-        m_view->HighlightPossibleMoves(possibleMoves);
-        m_view->NeedHighlight();
-        
-        if (m_model->hasPieceMoved() && possibleMoves.empty()) {
-            m_view->RemoveHighlightPossibleMoves(possibleMoves);
-            m_model->SwitchPlayer(); // Switch player when no more moves are possible
-        }
-        
-    }   
-    if (m_model->IsSelectedPieceChanged() && 
+        HighlightSelectedPiece();
+    }
+    else if (m_model->IsSelectedPieceChanged() && 
         m_model->GetLastSelectedPiece().first != -1 && 
         m_model->GetLastSelectedPiece().second != -1 &&
         m_model->GetLastSelectedPiece() != m_model->GetSelectedPiece())
     {
-        m_view->RemoveHighlightCell(m_model->GetLastSelectedPiece());
-        auto lastPossibleMoves = m_model->GetPossibleMoves(m_model->GetLastSelectedPiece());
-        
-        m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
-        m_model->ResetSelectedPieceFlag();
-        m_view->RemoveHighlight();
+        RemoveHighlightSelectedPiece();
     }
+}
+void ButinController::HighlightSelectedPiece() const
+{
+    const auto& selectedPiece = m_model->GetSelectedPiece();
+    const auto& possibleMoves = m_model->GetPossibleMoves(selectedPiece);
+    
+    m_view->HighlightCell(selectedPiece, sf::Color::Blue);
+    m_view->HighlightPossibleMoves(possibleMoves);
+    m_view->NeedHighlight();
+}
+void ButinController::RemoveHighlightSelectedPiece() const
+{
+    const auto& lastSelectedPiece = m_model->GetLastSelectedPiece();
+    const auto& lastPossibleMoves = m_model->GetLastPossibleMoves();
+    
+    m_view->RemoveHighlightCell(lastSelectedPiece);
+    m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
+    m_model->ResetSelectedPieceFlag();
+    m_view->RemoveHighlight();
+}
+
+void ButinController::UpdateBoard() const
+{
     if (m_model->IsBoardNeedUpdate())
     {
-       m_view->UpdateBoard(*m_model->GetBoard());
+        m_view->UpdateBoard(*m_model->GetBoard());
         m_model->ResetBoardNeedUpdateFlag();
     }
-    
-    if (m_view->IsLaunchgameButtonPressed())
-    {
-        Start();   
-    }
-
-    if (m_view->IsExitButtonPressed())
-    {
-        CloseWindow();
-    }    
 }
+
+void ButinController::UpdateCurrentPlayer() const
+{
+    if (m_model->IsCurrentPlayerChanged() && !m_model->IsGameFinished())
+    {
+        m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
+        m_model->ResetCurrentPlayerChangedFlag();
+    }
+}
+
+void ButinController::UpdateButtonPushed()
+{
+    if (m_view->IsLaunchgameButtonPressed()) Start();
+    
+    if (m_view->IsExitButtonPressed()) CloseWindow();
+}   
 
 void ButinController::Draw() {
     m_view->Draw(*m_context->m_window);
@@ -107,11 +133,9 @@ void ButinController::Start() {
 
 void ButinController::End() 
 {
-        Player* winner = m_model->DetermineWinner();
-        m_view->printWinner(m_model->GetWinner());
-        m_view->printScore(m_model->getWinnerScore());
-        m_model->IsGameFinished();
-        m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
+    m_view->PrintWinner(m_model->GetWinner());
+    m_view->PrintScore(m_model->GetWinnerScore());
+    m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
 }
 
 void ButinController::UpdateButtonHoverState(const sf::Event& event) {

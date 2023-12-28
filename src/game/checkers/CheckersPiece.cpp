@@ -166,11 +166,6 @@ bool CheckersPiece::IsPromoted() const
     return m_state.type == PieceType::QUEEN;
 }
 
-std::vector<direction_t> CheckersPiece::GetPossibleCaptures() const
-{
-    return m_possibleCaptures;
-}
-
 std::string CheckersPiece::GetType() const
 {
     std::string res;

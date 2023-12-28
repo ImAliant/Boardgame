@@ -27,11 +27,19 @@ class ButinController: public Engine::State, public EventHandler
         void UpdateButtonSelectionState() override;
         void HandleMousePressed(const sf::Event& event) override;
         
+        // Update methods
+        void UpdateHighlight() const;
+        void UpdateBoard() const;
+        void UpdateCurrentPlayer() const;
+        void UpdateButtonPushed();
+
+        void HighlightSelectedPiece() const;
+        void RemoveHighlightSelectedPiece() const;
+
         void CloseWindow() const;
     public:
         explicit ButinController(std::shared_ptr<Context> context);
         ~ButinController() override;
-
 
         // State handling
         void Init() override;

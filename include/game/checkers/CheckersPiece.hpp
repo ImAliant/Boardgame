@@ -16,8 +16,6 @@ enum PieceType
 class CheckersPiece: public Piece
 {
     private:
-        std::vector<direction_t> m_possibleCaptures;
-
         bool IsWithinBoard(const CheckersBoard& board, coord_t coord) const;
         bool IsOpponentPiece(const CheckersBoard& board, coord_t coord) const;
         bool IsEmptyCell(const CheckersBoard& board, coord_t coord) const;
@@ -37,8 +35,6 @@ class CheckersPiece: public Piece
 
         void Promote();
         bool IsPromoted() const;
-
-        std::vector<direction_t> GetPossibleCaptures() const;
 
         std::string GetType() const;
 };

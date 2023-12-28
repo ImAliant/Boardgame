@@ -24,6 +24,7 @@ class Piece
         coord_t m_coord;
         state_t m_state;
         std::vector<coord_t> m_possibleMoves;
+        std::vector<direction_t> m_possibleCaptures;
     public:
         Piece();
         Piece(coord_t coord, std::shared_ptr<Player> owner, char symbol);
@@ -34,6 +35,7 @@ class Piece
         void SetPosition(coord_t coord);
 
         std::vector<coord_t> GetPossibleMoves() const;
+        std::vector<direction_t> GetPossibleCaptures() const;
         coord_t GetPosition() const;
         int GetX() const;
         int GetY() const;

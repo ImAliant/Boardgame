@@ -62,13 +62,15 @@ class ButinView: public UI::UIHandler
         void SetPieceTexture(sf::RectangleShape &piece, char color);
 
         void HighlightCell(std::pair<int, int> coord, sf::Color color);
-    void RemoveHighlightCell(std::pair<int, int> coord);
+        void RemoveHighlightCell(std::pair<int, int> coord);
         void HighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
         void RemoveHighlightPossibleMoves(const std::vector<std::pair<int, int>>& possibleMoves);
 
         void Render();
 
-        void PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const;
+        void PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const;
+        void PrintWinner(const Player* winner)const;
+        void PrintScore(const int score) const;
 
         std::pair<int, int> GetBoardCoord(int x, int y) const;
 
@@ -101,7 +103,4 @@ class ButinView: public UI::UIHandler
         bool& IsExitButtonHovered();
         bool& WasExitButtonHovered();
         bool& HasHighLightedCell();
-        void printWinner(Player* winner)const;
-        void printScore(int score) const;
-
 };

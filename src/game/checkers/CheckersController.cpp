@@ -45,7 +45,6 @@ void CheckersController::ProcessInput()
 void CheckersController::Update() {
     m_view->Render();
 
-    // On change de couleur la case lorsqu'un pion est sélectionné
     UpdateHighlight();
     UpdateBoard();
     UpdateCurrentPlayer();

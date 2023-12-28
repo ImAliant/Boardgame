@@ -14,6 +14,7 @@ void Checkers::SwitchPlayer() {
         m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_TWOID]);
     else m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_ONEID]);
 
+    m_flags.ResetCapturingMoveRequiredFlag();
     m_flags.CurrentPlayerChanged();
 }
 
@@ -41,7 +42,7 @@ void Checkers::Turn(coord_t coord) {
             m_flags.CapturingMoveRequired();
         }
     }
-    else if (IsMovePossible(coord) && m_flags.IsPieceSelected())
+    else if (IsMovePossible(coord) && IsPieceSelected())
     {
         PerformMove(coord);
 
@@ -49,16 +50,13 @@ void Checkers::Turn(coord_t coord) {
 
         if (IsGameFinished()) return;
 
-        if (!m_flags.IsReplay())
-            SwitchPlayer();
+        if (!m_flags.IsReplay()) SwitchPlayer();
 
-        m_flags.ResetPieceCapturedFlag();
-        if (!m_flags.IsReplay())
-            m_flags.ResetCapturingMoveRequiredFlag();
+        m_flags.ResetPieceCapturedFlag();   
     }
     else
     {
-        if (m_flags.IsPieceSelected() && m_flags.IsReplay())
+        if (IsPieceSelected() && m_flags.IsReplay())
             DeselectPiece();
     }
 }
@@ -78,9 +76,7 @@ bool Checkers::IsPieceOfCurrentPlayer(coord_t coord) const
 bool Checkers::IsMovePossible(coord_t coord) const
 {
     // On teste si la piece est selectionnée
-    if (!m_flags.IsPieceSelected()) {
-        return false;
-    }
+    if (!IsPieceSelected()) return false;
 
     // On teste si la piece peut se déplacer à la coordonnée
     auto possibleMoves = GetPossibleMoves(GetSelectedPiece());
@@ -176,7 +172,7 @@ void Checkers::PerformMove(coord_t coord)
     }
 }
 
-bool Checkers::HasCapturingMoves(coord_t coord) const
+bool Checkers::HasCapturingMoves(const coord_t coord) const
 {
     auto piece = GetPiece(coord);
     if (piece == nullptr) return false;
@@ -198,7 +194,7 @@ bool Checkers::IsCapturingMove(const coord_t coord) const
 void Checkers::PerformCapturingMove(coord_t coord)
 {
     auto piece = GetPiece(GetSelectedPiece());
-    if (piece == nullptr) return;
+    if (piece == nullptr) throw InvalidUsageException("Checkers::PerformCapturingMove() : piece is nullptr");
 
     auto possibleCaptures = piece->GetPossibleCaptures();
     auto possibleMoves = piece->GetPossibleMoves();
@@ -401,7 +397,10 @@ void Checkers::UpdatePossibleMoves() const
 
 bool Checkers::AreCoordinatesValid(coord_t coord) const
 {
-    return coord.first >= 0 && coord.first < 10 && coord.second >= 0 && coord.second < 10;
+    return coord.first >= 0 
+        && coord.first < GameConstants::CheckersConstants::CHECKERSROWS 
+        && coord.second >= 0 
+        && coord.second < GameConstants::CheckersConstants::CHECKERSCOLS;
 }
 
 void Checkers::GameStart()

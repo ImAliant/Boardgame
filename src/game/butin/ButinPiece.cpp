@@ -12,23 +12,10 @@ void ButinPiece::FindPossibleMoves(const Board& board)
     const auto& butinBoard = dynamic_cast<const ButinBoard&>(board);
 
     m_possibleMoves.clear();
+    m_possibleCaptures.clear();
 
     std::vector<direction_t> const* directions;
     directions = &GameConstants::ButinConstants::ALL_DIRECTION;
-
-    /*for (const auto& dir : *directions) {
-        int nextX = GetPosition().first+ dir.first;
-        int nextY = GetPosition().second + dir.second;
-        int landX = nextX + dir.first;
-        int landY = nextY + dir.second;
-            
-        if (IsWithinBoard(butinBoard,nextX,nextY) && HasPieceToJump(butinBoard,GetPosition().first, GetPosition().second, landX, landY)) {
-            if (IsWithinBoard(butinBoard,landX, landY) &&  
-                EmptyCell(butinBoard,landX, landY)) {
-                m_possibleMoves.push_back({landX, landY});
-            }
-        }
-    }*/
 
     for (const auto& dir: *directions)
     {
@@ -47,6 +34,7 @@ void ButinPiece::FindPossibleMoves(const Board& board)
             if (IsWithinBoard(butinBoard, land) && IsEmptyCell(butinBoard, land))
             {
                 m_possibleMoves.push_back(land);
+                m_possibleCaptures.push_back(dir);
             }
         }
     }

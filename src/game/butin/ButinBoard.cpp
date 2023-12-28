@@ -52,8 +52,8 @@ void ButinBoard::FillBoard()
             } 
         }
     }
-
 }
+
 void ButinBoard::MovePiece(coord_t coord, coord_t newCoord)
 {   
     CheckBounds(coord);
@@ -66,9 +66,6 @@ void ButinBoard::MovePiece(coord_t coord, coord_t newCoord)
 
     const auto& [newX, newY] = newCoord;
     m_board[newX][newY] = std::move(piece);
-
-    // TODO : remove jumped piece (a supprimer)
-    RemoveJumpedPiece(coord, newCoord);
 }
 
 void ButinBoard::RemovePiece(coord_t coord)

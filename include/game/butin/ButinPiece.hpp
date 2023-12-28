@@ -17,10 +17,6 @@ enum Butin_PieceType
 class ButinPiece: public Piece
 {
     private:
-        bool m_canBeCaptured = false;
-
-        std::vector<direction_t> m_possibleCaptures;
-
         bool IsWithinBoard(const ButinBoard& board, coord_t coord) const;
         bool IsEmptyCell(const ButinBoard& board, coord_t coord) const;
     public:
@@ -33,6 +29,4 @@ class ButinPiece: public Piece
         void FindPossibleMoves(const Board& board) override;
 
         bool HasPieceToJump(const ButinBoard& board, coord_t current, coord_t next) const;
-        
-        std::vector<direction_t> GetPossibleCaptures() const;
 };

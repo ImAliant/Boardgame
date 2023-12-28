@@ -30,6 +30,9 @@ set(SOURCES
     src/game/butin/ButinView.cpp
     src/game/butin/ButinBoard.cpp
     src/game/butin/ButinPiece.cpp
+    src/game/butin/ButinFlags.cpp
+
+    src/game/ModelFlags.cpp
 
     src/exception/PathNotFoundException.cpp
     src/exception/InitializationException.cpp

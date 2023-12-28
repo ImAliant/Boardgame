@@ -18,6 +18,11 @@ std::vector<coord_t> Piece::GetPossibleMoves() const
     return m_possibleMoves;
 }
 
+std::vector<direction_t> Piece::GetPossibleCaptures() const
+{
+    return m_possibleCaptures;
+}
+
 coord_t Piece::GetPosition() const
 {
     return m_coord;

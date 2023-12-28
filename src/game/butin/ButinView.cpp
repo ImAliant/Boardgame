@@ -28,6 +28,7 @@ void ButinView::Init(std::shared_ptr<Context> context, const ButinBoard& board)
 }
 void ButinView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const
 {
+    system("clear");
     std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
 }
 
@@ -35,10 +36,9 @@ void ButinView::InitPieceTexture(std::shared_ptr<Context> context)
 {
     try 
     {
-        LoadTexture(BUTIN_BLACK_PIECE, context);
-       
-        LoadTexture(BUTIN_RED_PIECE, context);
         LoadTexture(BUTIN_YELLOW_PIECE, context);
+        LoadTexture(BUTIN_RED_PIECE, context);
+        LoadTexture(BUTIN_BLACK_PIECE, context);
         LoadTexture(EMPTY_ASSET, context);
     }
     catch (AssetNotFoundException& e)
@@ -52,12 +52,9 @@ void ButinView::LoadTexture(int textureID, std::shared_ptr<Context> context)
     if (!context->m_assets->HasTexture(textureID)) {
         throw AssetNotFoundException("Texture not found" + std::to_string(textureID));
     }
-    
 
     m_pieceTexture.push_back(context->m_assets->GetTexture(textureID));
-    
 }
-
 
 void ButinView::InitBoardBackground()
 {
@@ -68,7 +65,6 @@ void ButinView::InitBoardBackground()
     );
     m_boardBackgroud.setFillColor(GameConstants::BOARDBACKGROUND_COLOR);
 }
-
 
 void ButinView::InitBoardCell(const ButinBoard& board)
 {
@@ -130,8 +126,6 @@ void ButinView::UpdateBoard(const ButinBoard& board)
     }
 }
 
-
-
 void ButinView::SetupBoardPiece(const coord_t coord, const ButinBoard &board)
 {
     const auto& [i, j] = coord;
@@ -143,9 +137,11 @@ void ButinView::SetupBoardPiece(const coord_t coord, const ButinBoard &board)
     );
 
     auto piece = board.GetValueAt(coord);
-    SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol());
+    if (piece != nullptr)
+        SetPieceTexture(m_boardPiece[i][j], piece->GetSymbol());
+    else
+        SetPieceTexture(m_boardPiece[i][j], EMPTY_ID);
 }
-
 
 void ButinView::SetPieceTexture(sf::RectangleShape &piece, char color)
 {  
@@ -158,9 +154,6 @@ void ButinView::SetPieceTexture(sf::RectangleShape &piece, char color)
     else 
         piece.setTexture(&m_pieceTexture[EMPTY_ID]);
 }
-
-
-
 
 sf::Vector2f ButinView::CalculatePosition(float offset, coord_t coord) const
 {
@@ -210,8 +203,6 @@ void ButinView::DrawBoardPiece(sf::RenderWindow& window)
         }
     }
 }
-
-
 
 void ButinView::Render()
 {
@@ -358,14 +349,15 @@ void ButinView::RemoveHighlight()
     m_flags.m_hasHighLightedCell = false;
 }
 
-void ButinView::printWinner(Player* winner) const
+void ButinView::PrintWinner(const Player* winner) const
 {
+    system("clear");
     if (winner != nullptr) {
         std::cout << "The winner is: " << winner->ToString() << std::endl;
     } else {
         std::cout << "No winner determined." << std::endl;
     }
 }
-void ButinView::printScore(int score) const{
+void ButinView::PrintScore(int score) const{
     std::cout << "Score: " << score << std::endl;
 }

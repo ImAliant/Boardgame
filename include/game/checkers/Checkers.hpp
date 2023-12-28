@@ -51,7 +51,6 @@ class Checkers
         /// @brief Termine la partie si un joueur n'a plus de mouvements possibles.
         void EndGameIfNoMoves();
 
-
         /// @brief Sélectionne une pièce sur le plateau.
         /// @param coord Coordonnées de la pièce.
         void SelectPiece(coord_t coord);
