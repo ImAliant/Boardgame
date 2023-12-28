@@ -4,23 +4,10 @@
 #include "../../Launcher.hpp"
 #include "ButinBoard.hpp"
 #include "../../Constants.hpp"
+#include "../ViewFlags.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
-
-struct Butin_flagsview_t {
-    bool m_isLaunchgameButtonSelected = false;
-    bool m_isLaunchgameButtonPressed = false;
-    bool m_isLaunchgameButtonHovered = false;
-    bool m_wasLaunchgameButtonHovered = false;
-    bool m_isLaunchgameButtonVisible = true;
-    bool m_isMenuButtonSelected = false;
-    bool m_isMenuButtonPressed = false;
-    bool m_isMenuButtonHovered = false;
-    bool m_wasMenuButtonHovered = false;
-    bool m_hasHighLightedCell = false;
-    bool m_isPlayerturnTextVisible = false;
-};
 
 class ButinView: public UI::UIHandler
 {
@@ -37,7 +24,7 @@ class ButinView: public UI::UIHandler
         sf::Text m_lauchgameButton;
         sf::Text m_menuButton;
 
-        Butin_flagsview_t m_flags;
+        ViewFlags m_flags;
 
         void InitPieceTexture(std::shared_ptr<Context> context);
         void LoadTexture(int textureID, std::shared_ptr<Context> context);
