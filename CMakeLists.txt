@@ -12,7 +12,6 @@ set(SOURCES
     src/AssetManager.cpp
     src/StateManager.cpp
     src/Launcher.cpp
-    src/MainMenu.cpp
     src/GameChoice.cpp
     src/Piece.cpp
     src/Player.cpp

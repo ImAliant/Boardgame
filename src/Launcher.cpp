@@ -1,5 +1,5 @@
 #include "../include/Launcher.hpp"
-#include "../include/MainMenu.hpp"
+#include "../include/GameChoice.hpp"
 
 #include <SFML/Window/Event.hpp>
 
@@ -14,7 +14,7 @@ Launcher::Launcher(): m_context{std::make_shared<Context>()}
     
     InitAssets();
 
-    m_context->m_states->Add(std::make_unique<MainMenu>(m_context));
+    m_context->m_states->Add(std::make_unique<GameChoice>(m_context));
 }
 
 Launcher::~Launcher(){}

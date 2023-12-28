@@ -51,12 +51,6 @@ namespace UIConstants {
             static_cast<float>(WindowConstants::WINDOW_SIZE.y) - 30.f
         );
     };
-    namespace MainMenuContext {
-        const sf::Vector2f CHOICEBUTTON_POSITION = sf::Vector2f(
-            static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
-            static_cast<float>(WindowConstants::WINDOW_SIZE.y) / 2
-        );
-    };
     namespace GameChoiceContext {
         const sf::Vector2f BUTINBUTTON_POSITION = sf::Vector2f(
             static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
