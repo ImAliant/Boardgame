@@ -2,6 +2,7 @@
 #include "../../../include/exception/AssetNotFoundException.hpp"
 
 using namespace GameConstants::ButinConstants;
+using namespace UIConstants;
 
 ButinView::ButinView() {}
 
@@ -21,10 +22,10 @@ void ButinView::Init(std::shared_ptr<Context> context, const ButinBoard& board)
         return;
     }
 
-    InitRectangleShape(m_lineSeparator, UIConstants::GameContext::LINESEPARATOR_SIZE, UIConstants::GameContext::LINESEPARATOR_POSITION);
+    InitRectangleShape(m_lineSeparator, GameContext::LINESEPARATOR_SIZE, GameContext::LINESEPARATOR_POSITION);
 
-    InitText(m_lauchgameButton, "Lancer la partie", UIConstants::GameContext::LAUNCHBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
-    InitText(m_exitButton, "Quitter", UIConstants::EXITBUTTON_POSITION, *font, UIConstants::CHARACTER_SIZE);
+    InitText(m_lauchgameButton, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
+    InitText(m_exitButton, "Quitter", GameContext::EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
 }
 void ButinView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const
 {
