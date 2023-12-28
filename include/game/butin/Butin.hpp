@@ -67,6 +67,7 @@ class Butin
 
         ButinPiece* GetPiece(coord_t coord) const;
         std::unique_ptr<ButinBoard>& GetBoard();
+        std::vector<std::shared_ptr<Player>>& GetPlayers();
         coord_t GetSelectedPiece() const;
         coord_t GetLastSelectedPiece() const;
         std::vector<coord_t> GetPossibleMoves(coord_t coord) const;

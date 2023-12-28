@@ -68,7 +68,9 @@ class ButinView: public UI::UIHandler
 
         void Render();
 
+        void PrintTurn(const std::shared_ptr<Player> currentPlayer, const std::vector<std::shared_ptr<Player>>& players) const;
         void PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const;
+        void PrintPlayersScore(const std::vector<std::shared_ptr<Player>>& players) const;
         void PrintWinner(const Player* winner)const;
         void PrintScore(const int score) const;
 

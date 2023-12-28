@@ -27,10 +27,24 @@ void ButinView::Init(std::shared_ptr<Context> context, const ButinBoard& board)
     InitText(m_lauchgameButton, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
     InitText(m_exitButton, "Quitter", GameContext::EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
 }
-void ButinView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const
+
+void ButinView::PrintTurn(const std::shared_ptr<Player> currentPlayer, const std::vector<std::shared_ptr<Player>>& players) const
 {
     system("clear");
+    PrintCurrentPlayer(currentPlayer);
+    PrintPlayersScore(players);
+}
+
+void ButinView::PrintCurrentPlayer(std::shared_ptr<Player> currentPlayer) const
+{
     std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
+}
+
+void ButinView::PrintPlayersScore(const std::vector<std::shared_ptr<Player>>& players) const
+{
+    for (const auto& player : players) {
+        PrintScore(player->GetScore());
+    }
 }
 
 void ButinView::InitPieceTexture(std::shared_ptr<Context> context)
@@ -192,7 +206,6 @@ void ButinView::DrawBoardCells(sf::RenderWindow& window)
     }
 }
 
-
 void ButinView::DrawBoardPiece(sf::RenderWindow& window)
 {
     auto rows = m_boardPiece.size();
@@ -221,7 +234,6 @@ std::pair<int, int> ButinView::GetBoardCoord(int x, int y) const
 
     return std::make_pair(cY, cX);
 }
-
 
 void ButinView::UpdateExitSelectedFlag(bool newValue)
 {
@@ -290,8 +302,6 @@ void ButinView::ResetLaunchPressedFlag()
     ButinView::m_flags.m_isLaunchgameButtonPressed = false;
 }
 
-
-//highlight
 void ButinView::HighlightCell(std::pair<int, int> coord, sf::Color color)
 {
     m_boardCell[coord.first][coord.second].setFillColor(color);
@@ -338,6 +348,7 @@ void ButinView::PrintWinner(const Player* winner) const
         std::cout << "No winner determined." << std::endl;
     }
 }
+
 void ButinView::PrintScore(int score) const{
     std::cout << "Score: " << score << std::endl;
 }

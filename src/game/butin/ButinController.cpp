@@ -27,14 +27,16 @@ void ButinController::ProcessInput()
         if (event.type == sf::Event::Closed)
         {
             CloseWindow();
-        }else if (event.type == sf::Event::KeyPressed)
+        }
+        else if (event.type == sf::Event::KeyPressed)
         {
-            //
-            if (event.key.code == sf::Keyboard::Space)
+            if (!m_model->IsFirstRound())
             {
-                m_model->SwitchPlayer();
+                if (event.key.code == sf::Keyboard::Space)
+                {
+                    m_model->SwitchPlayer();
+                }
             }
-            //
         }
 
         UpdateButtonHoverState(event);
@@ -107,7 +109,8 @@ void ButinController::UpdateCurrentPlayer() const
 {
     if (m_model->IsCurrentPlayerChanged() && !m_model->IsGameFinished())
     {
-        m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
+        //m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
+        m_view->PrintTurn(m_model->GetCurrentPlayer(), m_model->GetPlayers());
         m_model->ResetCurrentPlayerChangedFlag();
     }
 }

@@ -46,7 +46,7 @@ void Butin::Turn(coord_t coord)
         }
         else
         {
-            if (IsPieceSelected() && m_flags.IsReplay()) DeselectPiece();
+            if (IsPieceSelected() && !m_flags.IsReplay()) DeselectPiece();
         }
     }
 }
@@ -197,6 +197,8 @@ void Butin::DetermineWinner()
     else if (playerOneScore < playerTwoScore) winner = m_players[GameConstants::PLAYER_TWOID].get();
 
     m_status.SetWinner(winner);
+    if (winner != nullptr)
+        m_status.SetWinnerScore(winner->GetScore());
 }
 
 bool Butin::IsYellowPiece(const coord_t coord) const
@@ -213,6 +215,7 @@ void Butin::SwitchPlayer()
         m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_TWOID]);
     else m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_ONEID]);
 
+    m_flags.ResetReplayFlag();
     m_flags.CurrentPlayerChanged();
 }
 
@@ -338,6 +341,10 @@ ButinPiece* Butin::GetPiece(coord_t coord) const
 std::unique_ptr<ButinBoard>& Butin::GetBoard()
 {
     return m_board;
+}
+std::vector<std::shared_ptr<Player>>& Butin::GetPlayers()
+{
+    return m_players;
 }
 coord_t Butin::GetSelectedPiece() const
 {
