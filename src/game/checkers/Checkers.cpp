@@ -5,19 +5,6 @@
 #include <algorithm>
 #include <random>
 
-Checkers::Checkers() {}
-
-Checkers::~Checkers() {}
-
-void Checkers::SwitchPlayer() {
-    if (GetCurrentPlayer() == m_players[GameConstants::PLAYER_ONEID])
-        m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_TWOID]);
-    else m_status.SetCurrentPlayer(m_players[GameConstants::PLAYER_ONEID]);
-
-    m_flags.ResetCapturingMoveRequiredFlag();
-    m_flags.CurrentPlayerChanged();
-}
-
 void Checkers::Turn(coord_t coord) {
     // On teste si la partie est déjà terminée
     if (IsGameFinished()) 
@@ -31,7 +18,8 @@ void Checkers::Turn(coord_t coord) {
 
     if (IsPieceOfCurrentPlayer(coord))
     {
-        m_flags.SetCapturingMoveRequiredFlag(HasCapturingMoves(coord));
+        if (HasCapturingMoves(coord)) m_flags.CapturingMoveRequired();
+        else m_flags.ResetCapturingMoveRequiredFlag();
 
         if (m_flags.IsCapturingMoveRequired() || !HavePieceWithCapturingMoves())
             SelectPiece(coord);
@@ -50,7 +38,7 @@ void Checkers::Turn(coord_t coord) {
 
         if (IsGameFinished()) return;
 
-        if (!m_flags.IsReplay()) SwitchPlayer();
+        if (!m_flags.IsReplay()) SwitchPlayer(m_status, m_flags);
 
         m_flags.ResetPieceCapturedFlag();   
     }
@@ -447,7 +435,7 @@ std::vector<coord_t> Checkers::GetPossibleMoves(coord_t coord) const
 {
     return GetPiece(coord)->GetPossibleMoves();
 }
-std::unique_ptr<CheckersBoard>& Checkers::GetBoard()
+std::unique_ptr<Board>& Checkers::GetBoard()
 {
     return m_board;
 }

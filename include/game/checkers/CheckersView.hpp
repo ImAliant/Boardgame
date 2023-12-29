@@ -12,9 +12,9 @@ class CheckersView: public View
         CheckersView();
         ~CheckersView() override;
 
-        void Init(std::shared_ptr<Context> context, const CheckersBoard& board);
+        void Init(std::shared_ptr<Context> context, const Board& board);
 
-        void UpdateBoard(const CheckersBoard& board);
+        void UpdateBoard(const Board& board);
 
         void PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const override;
         void PrintWinner(const char winner) const;

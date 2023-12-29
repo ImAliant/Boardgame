@@ -6,6 +6,8 @@
 #include "../../Player.hpp"
 #include "../../Types.hpp"
 
+#include "../Model.hpp"
+
 #include <memory>
 #include <vector>
 #include <SFML/System/Vector2.hpp>
@@ -14,13 +16,9 @@
  * @class Checkers
  * @brief Classe représentant le modèle du jeu de dames.
  */
-class Checkers
+class Checkers: public Model
 {
     private:
-        /// @brief Plateau de jeu.
-        std::unique_ptr<CheckersBoard> m_board;
-        /// @brief Vecteur contenant les joueurs.
-        std::vector<std::shared_ptr<Player>> m_players;
         /// @brief Etat du jeu.
         CheckersStatus m_status;
         /// @brief Indicateurs du modèle.
@@ -101,12 +99,8 @@ class Checkers
         /// @return \b true si les coordonnées sont dans le plateau, \b false sinon.
         bool AreCoordinatesValid(coord_t coord) const;
     public:
-        Checkers();
-        ~Checkers();
+        ~Checkers() override = default;
 
-        void SwitchPlayer();
-
-        // turn
         void Turn(coord_t coord);
 
         // initialization
@@ -126,7 +120,7 @@ class Checkers
         // getters
         std::shared_ptr<Player> GetCurrentPlayer() const;
         std::vector<coord_t> GetPossibleMoves(coord_t coord) const;
-        std::unique_ptr<CheckersBoard>& GetBoard();
+        std::unique_ptr<Board>& GetBoard();
         
         coord_t GetSelectedPiece() const;
         coord_t GetLastSelectedPiece() const;

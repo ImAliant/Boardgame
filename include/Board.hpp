@@ -37,6 +37,5 @@ class Board
         int GetRows() const { return m_rows; };
         int GetCols() const { return m_cols; };
 
-        //std::unique_ptr<Piece>& operator[](const coord_t& coord) { return m_board[coord.first][coord.second]; };
         Piece* GetPiece(const coord_t coord) const;
 };

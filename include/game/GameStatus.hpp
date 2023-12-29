@@ -11,6 +11,7 @@ class GameStatus
 {
     friend class Butin;
     friend class Checkers;
+    friend class Model;
 
     protected:
         /// @brief Joueur courant.

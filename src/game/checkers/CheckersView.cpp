@@ -9,7 +9,7 @@ CheckersView::CheckersView() {}
 
 CheckersView::~CheckersView() {}
 
-void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& board)
+void CheckersView::Init(std::shared_ptr<Context> context, const Board& board)
 {
     const std::vector<int> textureIDs = {
         CHECKERS_BLACK_PAWN,
@@ -22,7 +22,7 @@ void CheckersView::Init(std::shared_ptr<Context> context, const CheckersBoard& b
     InitBase(context, board, textureIDs, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
-void CheckersView::UpdateBoard(const CheckersBoard& board)
+void CheckersView::UpdateBoard(const Board& board)
 {
     UpdateBoardBase(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }

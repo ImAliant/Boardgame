@@ -8,6 +8,7 @@ class ModelFlags
 {
     friend class Butin;
     friend class Checkers;
+    friend class Model;
 
     protected:
         /// @brief Indique si la partie a commencée.
@@ -73,4 +74,9 @@ class ModelFlags
         bool IsPieceCaptured() const;
         /// @brief Indique si le joueur doit continuer sont tour pour capturer une autre piece adverse.
         bool IsReplay() const;
+    public:
+        ModelFlags() = default;
+        virtual ~ModelFlags() = default;
+
+        virtual void ResetFlags() = 0;
 };
