@@ -6,6 +6,7 @@
 
 #include "Player.hpp"
 #include "Board.hpp"
+#include "Types.hpp"
 
 class Board;
 
@@ -15,9 +16,6 @@ struct state_t {
     char m_symbol;
 };
 
-/*
- * Piece interface
- */
 class Piece 
 {
     protected:

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Piece.hpp"
 #include "CheckersPiece.hpp"
 #include "../../Constants.hpp"
 
