@@ -4,24 +4,10 @@
 #include <random>
 using namespace GameConstants::ButinConstants;
 
-ButinBoard::ButinBoard(std::vector<std::shared_ptr<Player>> players)
-: Board(std::move(players))
+ButinBoard::ButinBoard(std::vector<std::shared_ptr<Player>> players): 
+    Board(std::move(players), BUTINROWS, BUTINCOLS)
 {
-    m_rows = BUTINROWS;
-    m_cols = BUTINCOLS;
-
-    ButinBoard::Init();
-}
-
-void ButinBoard::Init()
-{
-    m_board.resize(m_rows);
-    for (int i = 0; i < m_rows; i++)
-    {
-        m_board[i].resize(m_cols);
-    }
-
-    FillBoard();
+    Init();
 }
 
 void ButinBoard::FillBoard() 
@@ -54,46 +40,7 @@ void ButinBoard::FillBoard()
     }
 }
 
-void ButinBoard::MovePiece(coord_t coord, coord_t newCoord)
-{   
-    CheckBounds(coord);
-    CheckBounds(newCoord);
-
-    // On recupere la piece a deplacer
-    const auto& [x, y] = coord;
-    auto piece = std::move(m_board[x][y]);
-    piece->SetPosition(newCoord);
-
-    const auto& [newX, newY] = newCoord;
-    m_board[newX][newY] = std::move(piece);
-}
-
-void ButinBoard::RemovePiece(coord_t coord)
-{   
-    CheckBounds(coord);
-
-    const auto& [x, y] = coord;
-    m_board[x][y] = nullptr;
-}
-
-bool ButinBoard::EmptyCell(coord_t coord) const
-{
-    CheckBounds(coord);
-
-    return GetValueAt(coord) == nullptr;
-}
-
-void ButinBoard::CheckBounds(coord_t coord) const
-{
-    const auto& [x, y] = coord;
-
-    if (x < 0 || x >= m_rows || y < 0 || y >= m_cols)
-    {
-        throw std::out_of_range("x or y is out of range");
-    }
-}
-
-std::unique_ptr<ButinPiece> ButinBoard::CreatePiece(coord_t coord, char color) const
+std::unique_ptr<Piece> ButinBoard::CreatePiece(const coord_t coord, const char color) const
 {
     if (color == BUTIN_YELLOW)
         return CreateYellowPiece(coord);
@@ -104,17 +51,17 @@ std::unique_ptr<ButinPiece> ButinBoard::CreatePiece(coord_t coord, char color) c
     else throw std::invalid_argument("Invalid color");
 }
 
-std::unique_ptr<ButinPiece> ButinBoard::CreateYellowPiece(coord_t coord) const {
+std::unique_ptr<ButinPiece> ButinBoard::CreateYellowPiece(const coord_t coord) const {
     
     return std::make_unique<ButinPiece>(coord, BUTIN_YELLOW); 
 }
 
-std::unique_ptr<ButinPiece> ButinBoard::CreateRedPiece(coord_t coord) const {
+std::unique_ptr<ButinPiece> ButinBoard::CreateRedPiece(const coord_t coord) const {
     
     return std::make_unique<ButinPiece>(coord, BUTIN_RED); 
 }
 
-std::unique_ptr<ButinPiece> ButinBoard::CreateBlackPiece(coord_t coord) const {
+std::unique_ptr<ButinPiece> ButinBoard::CreateBlackPiece(const coord_t coord) const {
     
     return std::make_unique<ButinPiece>(coord, BUTIN_BLACK); 
 }
@@ -125,7 +72,10 @@ std::ostream &operator<<(std::ostream &os, const ButinBoard &board)
     {
         for (int j = 0; j < board.m_cols; j++)
         {
-            os << *board.m_board[i][j] << " ";
+            if (board.m_board[i][j] == nullptr)
+                os << " ";
+            else
+                os << board.m_board[i][j]->GetSymbol();
         }
         os << std::endl;
     }

@@ -65,7 +65,7 @@ class Butin
         void ResetBoardNeedUpdateFlag();
         void ResetCurrentPlayerChangedFlag();
 
-        ButinPiece* GetPiece(coord_t coord) const;
+        Piece* GetPiece(coord_t coord) const;
         std::unique_ptr<ButinBoard>& GetBoard();
         std::vector<std::shared_ptr<Player>>& GetPlayers();
         coord_t GetSelectedPiece() const;

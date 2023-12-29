@@ -317,9 +317,10 @@ bool Checkers::CanPromotePiece(coord_t coord) const
         throw InvalidCoordinatesException("Checkers::CanPromotePiece() : coord are invalid");
 
     const auto piece = GetPiece(coord);
-
     if (piece == nullptr) return false;
-    if (piece->IsPromoted()) return false;
+
+    const auto checkersPiece = dynamic_cast<CheckersPiece*>(piece);
+    if (checkersPiece->IsPromoted()) return false;
     
     const auto x = piece->GetX();
 
@@ -333,8 +334,10 @@ void Checkers::PromotePiece(coord_t coord)
         throw InvalidCoordinatesException("Checkers::PromotePiece() : coord are invalid");
 
     auto piece = GetPiece(coord);
+    if (piece == nullptr) return;
 
-    piece->Promote();
+    auto checkersPiece = dynamic_cast<CheckersPiece*>(piece);
+    checkersPiece->Promote();
 
     m_flags.BoardNeedUpdate();
 }
@@ -392,7 +395,8 @@ void Checkers::UpdatePossibleMoves() const
             const auto piece = GetPiece(coord);
             if (piece == nullptr) continue;
                 
-            piece->FindPossibleMoves(*m_board);
+            auto checkersBoard = dynamic_cast<Board*>(m_board.get());
+            piece->FindPossibleMoves(*checkersBoard);
         }
     }
 }
@@ -427,12 +431,12 @@ std::shared_ptr<Player> Checkers::GetCurrentPlayer() const
 {
     return m_status.GetCurrentPlayer();
 }
-CheckersPiece* Checkers::GetPiece(coord_t coord) const
+Piece* Checkers::GetPiece(coord_t coord) const
 {
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Checkers::GetPiece(): coord are invalid");
 
-    return m_board->GetValueAt(coord);
+    return m_board->GetPiece(coord);
 }
 char Checkers::GetWinner() const
 {

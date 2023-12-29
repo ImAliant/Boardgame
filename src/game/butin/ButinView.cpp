@@ -29,7 +29,7 @@ void ButinView::SetupBoardPiece(const coord_t coord, const Board &board, const s
 {
     View::SetupBoardPiece(coord, board, piecesize, cellsize);
 
-    const auto piece = dynamic_cast<const ButinBoard&>(board).GetValueAt(coord);
+    const auto piece = dynamic_cast<const ButinBoard&>(board).GetPiece(coord);
 
     if (piece != nullptr)
         SetPieceTexture(m_boardPiece[coord.first][coord.second], piece->GetSymbol(), false);

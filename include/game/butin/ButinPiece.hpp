@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Piece.hpp"
-#include "ButinBoard.hpp"
+#include "../../Board.hpp"
 #include "../../Constants.hpp"
 
 class ButinBoard;
@@ -17,16 +17,10 @@ enum Butin_PieceType
 class ButinPiece: public Piece
 {
     private:
-        bool IsWithinBoard(const ButinBoard& board, coord_t coord) const;
-        bool IsEmptyCell(const ButinBoard& board, coord_t coord) const;
+        void CaptureMoves(const Board& board) override;
     public:
-        ButinPiece() = default;
-        ButinPiece(coord_t coord, char symbol);
+        ButinPiece(const coord_t coord, const char symbol);
         ~ButinPiece() override;
 
         friend std::ostream& operator<<(std::ostream& os, const ButinPiece& piece);
-
-        void FindPossibleMoves(const Board& board) override;
-
-        bool HasPieceToJump(const ButinBoard& board, coord_t current, coord_t next) const;
 };

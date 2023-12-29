@@ -31,10 +31,10 @@ void CheckersView::SetupBoardPiece(const coord_t coord, const Board &board, cons
 {
     View::SetupBoardPiece(coord, board, piecesize, cellsize);
 
-    const auto piece = dynamic_cast<const CheckersBoard&>(board).GetValueAt(coord);
-
-    if (piece != nullptr)
-        SetPieceTexture(m_boardPiece[coord.first][coord.second], piece->GetSymbol(), piece->IsPromoted());
+    const auto piece = dynamic_cast<const CheckersBoard&>(board).GetPiece(coord);
+    const auto checkersPiece = dynamic_cast<const CheckersPiece*>(piece);
+    if (checkersPiece != nullptr)
+        SetPieceTexture(m_boardPiece[coord.first][coord.second], checkersPiece->GetSymbol(), checkersPiece->IsPromoted());
     else SetPieceTexture(m_boardPiece[coord.first][coord.second], EMPTY_ID, false);
 }
 

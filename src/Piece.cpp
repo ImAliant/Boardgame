@@ -2,13 +2,30 @@
 
 #include <vector>
 
-Piece::Piece() {}
-
-Piece::Piece(coord_t coord, std::shared_ptr<Player> owner, char symbol)
-    : m_coord(coord), m_state({0, std::move(owner), symbol})
+Piece::Piece(const coord_t coord, const std::shared_ptr<Player> owner, const char symbol): 
+    m_coord{coord},
+    m_state{0, owner, symbol}
 {}
 
-void Piece::SetPosition(coord_t coord)
+void Piece::FindPossibleMoves(const Board& board)
+{
+    m_possibleMoves.clear();
+    m_possibleCaptures.clear();
+
+    CaptureMoves(board);
+}
+
+bool Piece::IsWithinBoard(const coord_t coord, const Board& board) const
+{
+    const auto& [x, y] = coord;
+    return (x >= 0 && x < board.GetRows()) && (y >= 0 && y < board.GetRows());
+}
+bool Piece::IsEmptyCell(const coord_t coord, const Board& board) const
+{
+    return IsWithinBoard(coord, board) && board.IsEmptyCell(coord);
+}
+
+void Piece::SetPosition(const coord_t coord)
 {
     m_coord = coord;
 }

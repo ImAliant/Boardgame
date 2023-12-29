@@ -120,7 +120,7 @@ class Checkers
         void ResetSelectedPieceFlag();
         void ResetBoardNeedUpdateFlag();
 
-        CheckersPiece* GetPiece(coord_t coord) const;
+        Piece* GetPiece(coord_t coord) const;
         char GetWinner() const;
 
         // getters

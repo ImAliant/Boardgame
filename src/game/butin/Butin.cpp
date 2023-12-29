@@ -331,12 +331,12 @@ void Butin::ResetCurrentPlayerChangedFlag()
     return m_flags.ResetCurrentPlayerChangedFlag();
 }
 
-ButinPiece* Butin::GetPiece(coord_t coord) const
+Piece* Butin::GetPiece(coord_t coord) const
 {
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Butin::GetPiece(): coord are invalid");
 
-    return m_board->GetValueAt(coord);
+    return m_board->GetPiece(coord);
 }
 std::unique_ptr<ButinBoard>& Butin::GetBoard()
 {

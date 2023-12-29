@@ -2,7 +2,7 @@
 
 #include "../../Piece.hpp"
 #include "../../Constants.hpp"
-#include "CheckersBoard.hpp"
+#include "../../Board.hpp"
 
 class CheckersBoard;
 
@@ -16,17 +16,14 @@ enum PieceType
 class CheckersPiece: public Piece
 {
     private:
-        bool IsWithinBoard(const CheckersBoard& board, coord_t coord) const;
-        bool IsOpponentPiece(const CheckersBoard& board, coord_t coord) const;
-        bool IsEmptyCell(const CheckersBoard& board, coord_t coord) const;
+        bool IsOpponentPiece(const coord_t coord, const Board& board) const;
         
-        void SimpleMoves(const CheckersBoard& board);
-        void CaptureMoves(const CheckersBoard& board);
-        void AddPossibleMoves(const CheckersBoard& board, std::vector<direction_t> const& directions);
-        void QueenCaptureDirections(const CheckersBoard& board, direction_t direction);
+        void SimpleMoves(const Board& board);
+        void CaptureMoves(const Board& board) override;
+        void AddPossibleMoves(const std::vector<direction_t>& directions, const Board& board);
+        void QueenCaptureDirections(const direction_t direction, const Board& board);
     public:
-        CheckersPiece() = default;
-        CheckersPiece(coord_t coord, std::shared_ptr<Player> owner, char symbol);
+        CheckersPiece(const coord_t coord, const std::shared_ptr<Player> owner, const char symbol);
         ~CheckersPiece() override;
 
         friend std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece);

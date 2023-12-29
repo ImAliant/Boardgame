@@ -14,6 +14,7 @@ set(SOURCES
     src/Launcher.cpp
     src/GameChoice.cpp
     src/Piece.cpp
+    src/Board.cpp
     src/Player.cpp
     src/EventHandler.cpp
 
