@@ -50,7 +50,8 @@ void CheckersView::SetPieceTexture(sf::RectangleShape &piece, char color, bool p
 void CheckersView::PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const
 {
     system("clear");
-    std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
+    if (currentPlayer->GetId()%2 == PLAYER_ONEID) std::cout << "Current player: White" << std::endl;
+    else std::cout << "Current player: Black" << std::endl;
 }
 void CheckersView::PrintWinner(const char winner) const
 {

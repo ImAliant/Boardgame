@@ -55,7 +55,10 @@ void ButinView::PrintTurn(const std::shared_ptr<Player> currentPlayer, const std
 }
 void ButinView::PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const
 {
-    std::cout << "Current player: " << currentPlayer->ToString() << std::endl;
+    system("clear");
+    if (currentPlayer->GetId()%2 == GameConstants::PLAYER_ONEID) 
+        std::cout << "Current player: " << GameConstants::PLAYER_ONEID << std::endl;
+    else std::cout << "Current player: " << GameConstants::PLAYER_TWOID << std::endl;
 }
 void ButinView::PrintPlayersScore(const std::vector<std::shared_ptr<Player>>& players) const
 {
