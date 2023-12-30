@@ -34,7 +34,7 @@ void Model::HandleMove(const coord_t coord, GameStatus& status, ModelFlags& flag
     CheckForWin();
 
     if (flags.IsGameFinished()) return;
-    if (!flags.IsReplay()) SwitchPlayer(status, flags);
+    if (!flags.IsReplay()) SwitchPlayer();
 
     flags.ResetPieceCapturedFlag();
 }
@@ -158,7 +158,7 @@ void Model::UpdatePossibleMoves() const
     }
 }
 
-void Model::SwitchPlayer(GameStatus& m_status, ModelFlags& m_flags)
+void Model::SwitchPlayerBase(GameStatus& m_status, ModelFlags& m_flags)
 {
     m_status.SetCurrentPlayer(
         m_status.GetCurrentPlayer() == m_players[GameConstants::PLAYER_ONEID] ? 

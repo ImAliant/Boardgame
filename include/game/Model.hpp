@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Board.hpp"
+#include "../Player.hpp"
 #include "../game/GameStatus.hpp"
 #include "../game/ModelFlags.hpp"
 
@@ -38,7 +39,8 @@ class Model
 
         void UpdatePossibleMoves() const;
 
-        void SwitchPlayer(GameStatus& status, ModelFlags& flags);
+        virtual void SwitchPlayer() = 0;
+        void SwitchPlayerBase(GameStatus& status, ModelFlags& flags);
 
         virtual void CheckForWin();
         virtual void EndGameIfNoMoves() = 0;

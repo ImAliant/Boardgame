@@ -3,76 +3,69 @@
 #include "ButinBoard.hpp"
 #include "ButinStatus.hpp"
 #include "ButinFlags.hpp"
-#include "../../Player.hpp"
+
+#include "../Model.hpp"
 
 #include <memory>
 #include <vector>
 #include <SFML/System/Vector2.hpp>
 
-class Butin
+class Butin: public Model
 {
     private:
-        std::unique_ptr<ButinBoard> m_board;
-        std::vector<std::shared_ptr<Player>> m_players;
-
         ButinStatus m_status;
         ButinFlags m_flags;
 
-        void InitBoard();
-        void InitPlayers();
+        void SelectPiece(const coord_t coord) override;
+        void DeselectPiece() override;
 
-        void HandleFirstRoundSelection(const coord_t coord);
         bool IsYellowPiece(const coord_t coord) const;
 
-        void SelectPiece(const coord_t coord);
-        void DeselectPiece();
+        bool IsMovePossible(const coord_t coord) const override;
+        void PerformMove(const coord_t coord) override;
+        void ProcessConditionalMove(const coord_t coord) override;
+        void ApplyCapture(const coord_t coord) override;
+        void HandlePieceCaptureAndReplay(const coord_t coord) override;
 
-        bool IsMovePossible(const coord_t coord) const;
-        void PerformMove(const coord_t coord);
-        bool HasCapturingMoves(const coord_t coord) const;
+        void InitPlayers() override;
 
         void UpdatePlayerScore(const char pieceType) const;
-        void UpdatePossibleMoves() const;
-
+        
+        void HandleFirstRoundSelection(const coord_t coord);
         void EndFirstRoundIfNeeded();
-
-        void CheckForWin();
-        void DetermineWinner();
-
-        bool AreCoordinatesValid(const coord_t coord) const;
-    public:
-        Butin();
-        ~Butin();
-
-        void SwitchPlayer();
-
-        void Turn(coord_t coord);
-
-        void Init();        
-
-        void GameStart();
         void EndFirstRound();
 
+        void EndGameIfNoMoves() override;
+        void DetermineWinner();
+
+        void CreateGameBoard() override;
+        void CheckBoardDimensions(const int row, const int col) const override;
+    public:
+        ~Butin() override = default;
+
+        void Turn(const coord_t coord) override;
+
+        void GameStart() override;
+
+        void SwitchPlayer() override;
+
         bool IsFirstRound() const;
-        bool IsGameStarted() const;
-        bool IsGameFinished() const;
-        bool IsPieceSelected() const;
-        bool IsSelectedPieceChanged() const;
-        bool IsBoardNeedUpdate() const;
-        bool IsCurrentPlayerChanged() const;
+        bool IsGameStarted() const override;
+        bool IsGameFinished() const override;
+        bool IsPieceSelected() const override;
+        bool IsSelectedPieceChanged() const override;
+        bool IsBoardNeedUpdate() const override;
+        bool IsCurrentPlayerChanged() const override;
 
-        void ResetSelectedPieceFlag();
-        void ResetBoardNeedUpdateFlag();
-        void ResetCurrentPlayerChangedFlag();
+        void ResetSelectedPieceFlag() override;
+        void ResetBoardNeedUpdateFlag() override;
+        void ResetCurrentPlayerChangedFlag() override;
 
-        Piece* GetPiece(coord_t coord) const;
-        std::unique_ptr<ButinBoard>& GetBoard();
-        std::vector<std::shared_ptr<Player>>& GetPlayers();
-        coord_t GetSelectedPiece() const;
-        coord_t GetLastSelectedPiece() const;
-        std::vector<coord_t> GetPossibleMoves(coord_t coord) const;
-        std::vector<coord_t> GetLastPossibleMoves() const;
-        std::shared_ptr<Player> GetCurrentPlayer() const;
         Player* GetWinner() const;
         int GetWinnerScore() const;
+
+        std::shared_ptr<Player> GetCurrentPlayer() const override;
+        coord_t GetSelectedPiece() const override;
+        coord_t GetLastSelectedPiece() const override;
+        std::vector<coord_t> GetLastPossibleMoves() const override;
 };

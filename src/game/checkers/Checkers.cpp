@@ -22,13 +22,8 @@ void Checkers::Turn(const coord_t coord) {
         }
     }
     else if (IsMovePossible(coord) && IsPieceSelected())
-    {
         HandleMove(coord, m_status, m_flags);
-    }
-    else
-    {
-        DeselectPieceIfNotReplaying(m_flags);
-    }
+    else DeselectPieceIfNotReplaying(m_flags);
 }
 
 bool Checkers::IsPieceOfCurrentPlayer(coord_t coord) const
@@ -130,7 +125,7 @@ void Checkers::ProcessConditionalMove(const coord_t coord)
 
 void Checkers::ApplyCapture(const coord_t coord)
 {
-    const auto piece = m_board->GetPiece(m_status.GetSelectedPiece());
+    const auto piece = GetPiece(GetSelectedPiece());
     auto [x, y, captx, capty] = GetCoordAndDirFromPossibleCapture(coord, piece);
 
     m_board->MovePiece(GetSelectedPiece(), coord);
@@ -167,7 +162,7 @@ void Checkers::HandlePieceCaptureAndReplay(const coord_t coord)
     {
         SelectPiece(coord);
         m_flags.NeedReplay();
-        m_flags.CapturingMoveRequired();
+        //m_flags.CapturingMoveRequired();
     }
     else m_flags.ResetReplayFlag();
 
@@ -269,6 +264,11 @@ void Checkers::PromotePiece(coord_t coord)
     m_flags.BoardNeedUpdate();
 }
 
+void Checkers::SwitchPlayer()
+{
+    SwitchPlayerBase(m_status, m_flags);
+}
+
 void Checkers::InitPlayers() {
     InitPlayersBase(m_status);
 }
@@ -280,7 +280,7 @@ void Checkers::CreateGameBoard()
 void Checkers::CheckBoardDimensions(const int row, const int col) const
 {
     if (row != GameConstants::CheckersConstants::CHECKERSROWS || col != GameConstants::CheckersConstants::CHECKERSCOLS)
-        throw std::runtime_error("Checkers::CheckBoardDimensions() : row and col have incorrect values");
+        throw InvalidUsageException("Checkers::CheckBoardDimensions(): Invalid board dimensions");
 }
 
 void Checkers::GameStart()

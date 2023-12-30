@@ -8,7 +8,7 @@ ButinView::ButinView() {}
 
 ButinView::~ButinView() {}
 
-void ButinView::Init(std::shared_ptr<Context> context, const ButinBoard& board)
+void ButinView::Init(std::shared_ptr<Context> context, const Board& board)
 {
     const std::vector<int> textureIDs = {
         BUTIN_YELLOW_PIECE,
@@ -20,7 +20,7 @@ void ButinView::Init(std::shared_ptr<Context> context, const ButinBoard& board)
     InitBase(context, board, textureIDs, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
-void ButinView::UpdateBoard(const ButinBoard& board)
+void ButinView::UpdateBoard(const Board& board)
 {
     UpdateBoardBase(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
