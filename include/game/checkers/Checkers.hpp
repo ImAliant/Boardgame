@@ -23,49 +23,25 @@ class Checkers: public Model
         CheckersStatus m_status;
         /// @brief Indicateurs du modèle.
         CheckersFlags m_flags;
-
-        /// @brief Initialise le plateau de jeu.
-        void InitBoard();
-        /// @brief Initialise les joueurs.
-        void InitPlayers();
-
-        /// @brief Met à jour les mouvements possibles.
-        void UpdatePossibleMoves() const;
+    
+        /// @brief Sélectionne une pièce sur le plateau.
+        /// @param coord Coordonnées de la pièce.
+        void SelectPiece(const coord_t coord) override;
+        /// @brief Désélectionne la pièce sélectionnée.
+        void DeselectPiece() override;
 
         /// @brief Vérifie si la pièce sélectionnée est de la couleur du joueur courant.
         /// @param coord Coordonnées de la pièce.
         /// @return \b true si la pièce est de la couleur du joueur courant, \b false sinon.
         bool IsPieceOfCurrentPlayer(coord_t coord) const;
-        /// @brief Permet de savoir si le joueur courant a gagné.
-        void CheckForWin();
-        /// @brief Compte les pièces restantes de chaque joueur.
-        /// @param whitePieces Nombre de pièces blanches.
-        /// @param blackPieces Nombre de pièces noires.
-        void CountPieces(int& whitePieces, int& blackPieces) const;
-        /// @brief Termine la partie si un joueur n'a plus de pièces.
-        /// @param whitePieces Nombre de pièces blanches.
-        /// @param blackPieces Nombre de pièces noires.
-        void EndGameIfNoPieces(int whitePieces, int blackPieces);
-        /// @brief Termine la partie si un joueur n'a plus de mouvements possibles.
-        void EndGameIfNoMoves();
 
-        /// @brief Sélectionne une pièce sur le plateau.
-        /// @param coord Coordonnées de la pièce.
-        void SelectPiece(coord_t coord);
-        /// @brief Désélectionne la pièce sélectionnée.
-        void DeselectPiece();
-        
         /// @brief Vérifie si le mouvement est possible.
         /// @param coord Coordonnées de la destination.
         /// @return \b true si le mouvement est possible, \b false sinon.
-        bool IsMovePossible(coord_t coord) const;
+        bool IsMovePossible(const coord_t coord) const override;
         /// @brief Effectue le mouvement d'une pièce.
-        /// @param coord Coordonnées de la destination.
-        void PerformMove(coord_t coord);
-        /// @brief Vérifie si la pièce sélectionnée peut capturer une autre pièce.
-        /// @param coord Coordonnées de la pièce.
-        /// @return \b true si la pièce peut capturer une autre pièce, \b false sinon.
-        bool HasCapturingMoves(coord_t coord) const;
+        /// @param coord Coordonnées de la destination
+        void PerformMove(const coord_t coord) override;
         /// @brief Vérifie si la coordonnée est un mouvement de capture.
         /// @param coord Coordonnées de la destination.
         /// @return \b true si la coordonnée est un mouvement de capture, \b false sinon.
@@ -77,6 +53,12 @@ class Checkers: public Model
         /// @param coord Coordonnées de la destination.
         void PerformNonCapturingMove(coord_t coord);
         
+        void ProcessConditionalMove(const coord_t coord) override;
+        void ApplyCapture(const coord_t coord) override;
+        void HandlePieceCaptureAndReplay(const coord_t coord) override;
+
+        void InitPlayers() override;
+
         /// @brief Vérifie si une pièce du joueur courant peut effectuer un mouvement.
         /// @param capturing Vérifie si le mouvement est une capture.
         bool HavePieceWithMoves(bool capturing) const;
@@ -94,39 +76,43 @@ class Checkers: public Model
         /// @param coord Coordonnées de la pièce.
         void PromotePiece(coord_t coord);
 
-        /// @brief Vérifie si les coordonnées sont bien dans le plateau.
-        /// @param coord Coordonnées.
-        /// @return \b true si les coordonnées sont dans le plateau, \b false sinon.
-        bool AreCoordinatesValid(coord_t coord) const;
+        /// @brief Vérifie si le joueur courant a gagné.
+        void CheckForWin() override;
+        /// @brief Compte les pièces restantes de chaque joueur.
+        /// @param whitePieces Nombre de pièces blanches.
+        /// @param blackPieces Nombre de pièces noires.
+        void CountPieces(int& whitePieces, int& blackPieces) const;
+        /// @brief Termine la partie si un joueur n'a plus de pièces.
+        /// @param whitePieces Nombre de pièces blanches.
+        /// @param blackPieces Nombre de pièces noires.
+        void EndGameIfNoPieces(int whitePieces, int blackPieces);
+        /// @brief Termine la partie si un joueur n'a plus de mouvements possibles.
+        void EndGameIfNoMoves() override;
+
+        void CreateGameBoard() override;
+        void CheckBoardDimensions(const int row, const int col) const override;
     public:
         ~Checkers() override = default;
 
         void Turn(coord_t coord);
 
-        // initialization
-        void Init();
-    
-        void GameStart();
+        void GameStart() override;
         
-        bool IsGameStarted() const;
-        bool IsGameFinished() const;
-        void ResetCurrentPlayerChangedFlag();
-        void ResetSelectedPieceFlag();
-        void ResetBoardNeedUpdateFlag();
+        bool IsGameStarted() const override;
+        bool IsGameFinished() const override;
+        bool IsPieceSelected() const override;
+        bool IsSelectedPieceChanged() const override;
+        bool IsBoardNeedUpdate() const override;
+        bool IsCurrentPlayerChanged() const override;
 
-        Piece* GetPiece(coord_t coord) const;
+        void ResetCurrentPlayerChangedFlag() override;
+        void ResetSelectedPieceFlag() override;
+        void ResetBoardNeedUpdateFlag() override;
+
         char GetWinner() const;
 
-        // getters
-        std::shared_ptr<Player> GetCurrentPlayer() const;
-        std::vector<coord_t> GetPossibleMoves(coord_t coord) const;
-        std::unique_ptr<Board>& GetBoard();
-        
-        coord_t GetSelectedPiece() const;
-        coord_t GetLastSelectedPiece() const;
-        bool IsPieceSelected() const;
-        bool IsSelectedPieceChanged() const;
-        std::vector<coord_t> GetLastPossibleMoves() const;
-        bool IsBoardNeedUpdate() const;
-        bool IsCurrentPlayerChanged() const;
+        std::shared_ptr<Player> GetCurrentPlayer() const override;
+        coord_t GetSelectedPiece() const override;
+        coord_t GetLastSelectedPiece() const override;
+        std::vector<coord_t> GetLastPossibleMoves() const override;
 };

@@ -82,43 +82,54 @@ void Butin::PerformMove(const coord_t coord)
 
     if (!AreCoordinatesValid(coord)) throw InvalidCoordinatesException("Butin::PerformMove() : coord are invalid");
 
+    // TODO Modifier piece
     auto piece = GetPiece(GetSelectedPiece());
-    if (piece == nullptr) throw InvalidUsageException("Butin::PerformMove() : piece is null");
+    // TODO Appel GetCoordAndDirFromPossibleCapture
+    if (piece == nullptr) 
+        throw InvalidUsageException("Butin::PerformMove() : piece is null");
 
-    auto possibleCaptures = piece->GetPossibleCaptures();
     auto possibleMoves = piece->GetPossibleMoves();
   
     auto it = std::find(possibleMoves.begin(), possibleMoves.end(), coord);
     if (it == possibleMoves.end()) throw InvalidUsageException("Butin::PerformMove() : move is not possible");
+
+    auto possibleCaptures = piece->GetPossibleCaptures();
 
     const auto index = std::distance(possibleMoves.begin(), it);
     const auto [captx, capty] = possibleCaptures[index];
 
     const auto x = coord.first - captx;
     const auto y = coord.second - capty;
+    // FIN TODO
 
-    const auto& captureCoord = std::make_pair(x, y);
-    if (!AreCoordinatesValid(captureCoord)) throw InvalidCoordinatesException("Butin::PerformMove() : captureCoord are invalid");
+    m_board->MovePiece(GetSelectedPiece(), coord);
+
+    // TODO ApplyCapture
+    /*const auto& captureCoord = std::make_pair(x, y);
+    if (!AreCoordinatesValid(captureCoord)) 
+        throw InvalidCoordinatesException("Butin::PerformMove() : captureCoord are invalid");
 
     const auto pieceCapture = GetPiece(captureCoord);
     if (pieceCapture == nullptr) throw InvalidUsageException("Butin::PerformMove() : pieceCapture is null");
 
     m_board->MovePiece(GetSelectedPiece(), coord);
     UpdatePlayerScore(pieceCapture->GetSymbol());
-    m_board->RemovePiece(captureCoord);
+    m_board->RemovePiece(captureCoord);*/
 
-    DeselectPiece();
+    // TODO HandlePieceDeselectionAndUpdate
+    /*DeselectPiece();
     UpdatePossibleMoves();
-    m_flags.PieceIsCaptured();
+    m_flags.PieceIsCaptured();*/
 
-    if (m_flags.IsPieceCaptured() && HasCapturingMoves(coord))
+    // TODO HandlePieceCaptureAndReplay
+    /*if (m_flags.IsPieceCaptured() && HasCapturingMoves(coord))
     {
         SelectPiece(coord);
         m_flags.NeedReplay();
     }
     else m_flags.ResetReplayFlag();
 
-    m_flags.BoardNeedUpdate();
+    m_flags.BoardNeedUpdate();*/
 }
 
 bool Butin::HasCapturingMoves(const coord_t coord) const
