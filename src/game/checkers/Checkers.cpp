@@ -191,7 +191,7 @@ void Checkers::PerformCapturingMove(coord_t coord)
 void Checkers::PerformNonCapturingMove(coord_t coord)
 {
     const auto piece = m_board->GetPiece(m_status.GetSelectedPiece());
-    const auto possibleMoves = ValidatePieceAndMoves(coord, piece);
+    ValidatePieceAndMoves(coord, piece);
 
     m_board->MovePiece(GetSelectedPiece(), coord);
 

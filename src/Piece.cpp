@@ -17,7 +17,7 @@ void Piece::FindPossibleMoves(const Board& board)
 
 bool Piece::IsWithinBoard(const coord_t coord, const Board& board) const
 {
-    const auto& [x, y] = coord;
+    const auto [x, y] = coord;
     return (x >= 0 && x < board.GetRows()) && (y >= 0 && y < board.GetRows());
 }
 bool Piece::IsEmptyCell(const coord_t coord, const Board& board) const

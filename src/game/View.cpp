@@ -108,7 +108,7 @@ void View::InitBoardPiece(const Board& board, const sf::Vector2f piecesize, cons
 
 void View::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
 {
-    const auto& [i, j] = coord;
+    const auto [i, j] = coord;
     InitRectangleShape(
         m_boardPiece[i][j],
         piecesize,
@@ -176,12 +176,12 @@ void View::UpdateBoardBase(const Board& board, const sf::Vector2f piecesize, con
 
 void View::HighlightCell(const coord_t coord, const sf::Color color)
 {
-    const auto& [i, j] = coord;
+    const auto [i, j] = coord;
     m_boardCell[i][j].setFillColor(color);
 }
 void View::RemoveHighlightCell(const coord_t coord)
 {
-    const auto& [i, j] = coord;
+    const auto [i, j] = coord;
     if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(GameConstants::WHITECELL_COLOR);
     else m_boardCell[i][j].setFillColor(GameConstants::BLACKCELL_COLOR);
 }

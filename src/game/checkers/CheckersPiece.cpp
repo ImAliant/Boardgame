@@ -43,7 +43,7 @@ void CheckersPiece::SimpleMoves(const Board& board)
 
 void CheckersPiece::AddPossibleMoves(const std::vector<direction_t>& directions, const Board& board)
 {
-    for (const auto& [dx, dy]: directions)
+    for (const auto [dx, dy]: directions)
     {
         int x = GetX() + dx;
         int y = GetY() + dy;
@@ -132,9 +132,9 @@ bool CheckersPiece::IsOpponentPiece(const coord_t coord, const Board& board) con
 {
     if (IsWithinBoard(coord, board)) 
     {
-        const auto& piece = board.GetPiece(coord);
+        const auto piece = board.GetPiece(coord);
         if (piece == nullptr) return false;
-        auto pieceColor = piece->GetSymbol();
+        const auto pieceColor = piece->GetSymbol();
         return pieceColor != m_state.m_symbol;
     }
 
