@@ -28,12 +28,12 @@ class Controller: public Engine::State
         void UpdateButtonHoverState(const sf::Event& event);
         void UpdateButtonSelectionState();
         void HandleMousePressed(const sf::Event& event);
+        void UpdateButtonPushed();
 
         // Update methods
         void UpdateHighlight() const;
         void UpdateBoard() const;
         void UpdateCurrentPlayer() const;
-        void UpdateButtonPushed();
 
         void HighlightSelectedPiece() const;
         void RemoveHighlightSelectedPiece() const;

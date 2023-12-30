@@ -8,15 +8,13 @@
 
 GameChoice::GameChoice(const std::shared_ptr<Context> &context): m_context(context) {}
 
-GameChoice::~GameChoice() {}
-
 void GameChoice::Init() 
 {
     using namespace UIConstants;
     using namespace UIConstants::GameChoiceContext;
 
     sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT);
-    if (font == nullptr)
+    if (!font)
     {
         throw std::runtime_error("MainMenu::Init() : font is nullptr");
     }
@@ -39,152 +37,131 @@ void GameChoice::Init()
 
 void GameChoice::Update()
 {
-    if(m_isButinButtonSelected) ActionButinButtonSelected();
-    else if(m_isCheckersButtonSelected) ActionCheckersButtonSelected();
-    else if(m_isBulltrickerButtonSelected) ActionBulltrickerButtonSelected();
-    else if(m_isExitButtonSelected) ActionExitButtonSelected();
+    UpdateButtonState(m_butinButton, m_isButinButtonSelected, m_isButinButtonHovered, m_wasButinButtonHovered);
+    UpdateButtonState(m_checkersButton, m_isCheckersButtonSelected, m_isCheckersButtonHovered, m_wasCheckersButtonHovered);
+    UpdateButtonState(m_bulltrickerButton, m_isBulltrickerButtonSelected, m_isBulltrickerButtonHovered, m_wasBulltrickerButtonHovered);
+    UpdateButtonState(m_exitButton, m_isExitButtonSelected, m_isExitButtonHovered, m_wasExitButtonHovered);
 
-    if(m_isButinButtonPressed)
-    {
-        m_context->m_states->Add(std::make_unique<ButinController>(m_context), true);
-
-        m_isButinButtonPressed = false;
-    }
-    else if(m_isCheckersButtonPressed)
-    {
-        m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true);
-
-        m_isCheckersButtonPressed = false;
-    }
-    else if(m_isBulltrickerButtonPressed)
-    {
-        std::cout << "Bulltricker" << std::endl;
-        // TODO : Change the current state to Bulltricker
-
-        m_isBulltrickerButtonPressed = false;
-    }
-    else if(m_isExitButtonPressed)
-    {
-        m_context->m_states->PopAll();
-        m_context->m_window->close();
-    }
-}
-
-void GameChoice::ActionButinButtonSelected()
-{
-    m_butinButton.setFillColor(sf::Color::Red);
-    m_checkersButton.setFillColor(sf::Color::White);
-}
-void GameChoice::ActionCheckersButtonSelected()
-{
-    m_checkersButton.setFillColor(sf::Color::Red);
-    m_butinButton.setFillColor(sf::Color::White);
-    m_bulltrickerButton.setFillColor(sf::Color::White);
-}
-void GameChoice::ActionBulltrickerButtonSelected()
-{
-    m_bulltrickerButton.setFillColor(sf::Color::Red);
-    m_checkersButton.setFillColor(sf::Color::White);
-    m_exitButton.setFillColor(sf::Color::White);
-}
-void GameChoice::ActionExitButtonSelected()
-{
-    m_exitButton.setFillColor(sf::Color::Red);
-    m_bulltrickerButton.setFillColor(sf::Color::White);
+    UpdateButtonPushed();
 }
 
 void GameChoice::ProcessInput()
 {
     sf::Event event;
+
     while (m_context->m_window->pollEvent(event)) 
     {
         if (event.type == sf::Event::Closed)
         {
-            m_context->m_window->close();
+            CloseWindow();
         }
-        else if(event.type == sf::Event::KeyPressed)
+
+        UpdateButtonHoverState(event);
+
+        if (event.type == sf::Event::MouseMoved)
         {
-            switch(event.key.code)
-            {
-                case sf::Keyboard::Up:
-                    InputUp();
-                    break;
-                case sf::Keyboard::Down:
-                    InputDown();
-                    break;
-                case sf::Keyboard::Return:
-                    InputReturn();
-                    break;
-                case sf::Keyboard::Escape:
-                    InputEscape();
-                    break;
-                default:
-                    break;
-            }
+            UpdateButtonSelectionState();
+        }
+        else if (event.type == sf::Event::MouseButtonPressed) 
+        {
+            HandleMousePressed(event);
         }
     }
 }
 
-void GameChoice::InputUp() 
+void GameChoice::UpdateButtonHoverState(const sf::Event& event)
 {
-    if (m_isCheckersButtonSelected)
+    bool isButinHovered = m_butinButton.getGlobalBounds().contains(
+        static_cast<float>(event.mouseButton.x), 
+        static_cast<float>(event.mouseButton.y)
+    );
+    bool isCheckersHovered = m_checkersButton.getGlobalBounds().contains(
+        static_cast<float>(event.mouseButton.x), 
+        static_cast<float>(event.mouseButton.y)
+    );
+    bool isBulltrickerHovered = m_bulltrickerButton.getGlobalBounds().contains(
+        static_cast<float>(event.mouseButton.x), 
+        static_cast<float>(event.mouseButton.y)
+    );
+    bool isExitHovered = m_exitButton.getGlobalBounds().contains(
+        static_cast<float>(event.mouseButton.x), 
+        static_cast<float>(event.mouseButton.y)
+    );
+    
+    m_isButinButtonHovered = isButinHovered;
+    m_isCheckersButtonHovered = isCheckersHovered;
+    m_isBulltrickerButtonHovered = isBulltrickerHovered;
+    m_isExitButtonHovered = isExitHovered;
+}
+void GameChoice::UpdateButtonSelectionState()
+{
+    bool isButinSelected = m_butinButton.getGlobalBounds().contains(
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
+    );
+    bool isCheckersSelected = m_checkersButton.getGlobalBounds().contains(
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
+    );
+    bool isBulltrickerSelected = m_bulltrickerButton.getGlobalBounds().contains(
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
+    );
+    bool isExitSelected = m_exitButton.getGlobalBounds().contains(
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
+        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
+    );
+    
+    m_isButinButtonSelected = isButinSelected;
+    m_isCheckersButtonSelected = isCheckersSelected;
+    m_isBulltrickerButtonSelected = isBulltrickerSelected;
+    m_isExitButtonSelected = isExitSelected;
+}
+void GameChoice::HandleMousePressed(const sf::Event& event)
+{
+    bool isMousePressed = event.mouseButton.button == sf::Mouse::Left;
+
+    if (isMousePressed)
     {
-        m_isCheckersButtonSelected = false;
-        m_isButinButtonSelected = true;
-    }
-    else if (m_isBulltrickerButtonSelected)
-    {
-        m_isBulltrickerButtonSelected = false;
-        m_isCheckersButtonSelected = true;
-    }
-    else if (m_isExitButtonSelected)
-    {
-        m_isExitButtonSelected = false;
-        m_isBulltrickerButtonSelected = true;
+        if (m_isButinButtonSelected)
+        {
+            m_isButinButtonPressed = true;
+        }
+        else if (m_isCheckersButtonSelected)
+        {
+            m_isCheckersButtonPressed = true;
+        }
+        else if (m_isBulltrickerButtonSelected)
+        {
+            m_isBulltrickerButtonPressed = true;
+        }
+        else if (m_isExitButtonSelected)
+        {
+            m_isExitButtonPressed = true;
+        }
     }
 }
-
-void GameChoice::InputDown() 
+void GameChoice::UpdateButtonPushed()
 {
-    if (m_isButinButtonSelected)
+    if (m_isButinButtonPressed)
     {
-        m_isButinButtonSelected = false;
-        m_isCheckersButtonSelected = true;
+        m_context->m_states->Add(std::make_unique<ButinController>(m_context), true);
+        m_isButinButtonPressed = false;
     }
-    else if (m_isCheckersButtonSelected)
+    else if (m_isCheckersButtonPressed)
     {
-        m_isCheckersButtonSelected = false;
-        m_isBulltrickerButtonSelected = true;
+        m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true);
+        m_isCheckersButtonPressed = false;
     }
-    else if (m_isBulltrickerButtonSelected)
+    else if (m_isBulltrickerButtonPressed)
     {
-        m_isBulltrickerButtonSelected = false;
-        m_isExitButtonSelected = true;
+        std::cout << "Bulltricker" << std::endl;
+        m_isBulltrickerButtonPressed = false;
     }
-}
-
-void GameChoice::InputReturn()
-{
-    resetButtonValues();
-
-    if (m_isButinButtonSelected) m_isButinButtonPressed = true;
-    else if (m_isCheckersButtonSelected) m_isCheckersButtonPressed = true;
-    else if (m_isBulltrickerButtonSelected) m_isBulltrickerButtonPressed = true;
-    else if (m_isExitButtonSelected) m_isExitButtonPressed = true;
-}
-
-void GameChoice::resetButtonValues()
-{
-    m_isButinButtonPressed = false;
-    m_isCheckersButtonPressed = false;
-    m_isBulltrickerButtonPressed = false;
-    m_isExitButtonPressed = false;
-}
-
-void GameChoice::InputEscape()
-{
-    m_context->m_states->PopAll();
-    m_context->m_window->close();
+    else if (m_isExitButtonPressed)
+    {
+        CloseWindow();
+    }
 }
 
 void GameChoice::Draw()
@@ -196,4 +173,10 @@ void GameChoice::Draw()
     m_context->m_window->draw(m_bulltrickerButton);
     m_context->m_window->draw(m_exitButton);
     m_context->m_window->display();
+}
+
+void GameChoice::CloseWindow() const
+{
+    m_context->m_states->PopAll();
+    m_context->m_window->close();
 }
