@@ -2,6 +2,13 @@
 #include "../../include/exception/InvalidUsageException.hpp"
 #include "../../include/exception/InvalidCoordinatesException.hpp"
 
+void Model::Turn(const coord_t coord)
+{
+    if (IsGameFinished()) throw InvalidUsageException("Model::Turn(): Game is finished");
+    if (!IsGameStarted()) throw InvalidUsageException("Model::Turn(): Game is not started");
+    if (!AreCoordinatesValid(coord)) throw InvalidCoordinatesException("Model::Turn(): Invalid coordinates");
+}
+
 void Model::SelectPieceBase(const coord_t coord, GameStatus& status, ModelFlags& flags)
 {
     if (flags.IsPieceSelected()) DeselectPiece();
@@ -18,6 +25,23 @@ void Model::DeselectPieceBase(GameStatus& status, ModelFlags& flags) const
     status.ResetSelectedPiece();
     flags.SelectPieceChanged();
     flags.PieceIsNotSelected();
+}
+
+void Model::HandleMove(const coord_t coord, GameStatus& status, ModelFlags& flags)
+{
+    PerformMove(coord);
+
+    CheckForWin();
+
+    if (flags.IsGameFinished()) return;
+    if (!flags.IsReplay()) SwitchPlayer(status, flags);
+
+    flags.ResetPieceCapturedFlag();
+}
+
+void Model::DeselectPieceIfNotReplaying(const ModelFlags& flags)
+{
+    if (flags.IsPieceSelected() && !flags.IsReplay()) DeselectPiece();
 }
 
 bool Model::IsMovePossibleBase(const coord_t coord, const GameStatus& status, const ModelFlags& flags) const

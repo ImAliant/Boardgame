@@ -5,16 +5,8 @@
 #include <algorithm>
 #include <random>
 
-void Checkers::Turn(coord_t coord) {
-    // On teste si la partie est déjà terminée
-    if (IsGameFinished()) 
-        throw InvalidUsageException("Checkers::Turn() : m_isGameFinished is true");
-    // On teste si la partie n'est pas encore commencée
-    if (!IsGameStarted()) 
-        throw InvalidUsageException("Checkers::Turn() : m_isGameStarted is false");
-    // On teste si les coordonnées sont valides
-    if (!AreCoordinatesValid(coord))
-        throw InvalidCoordinatesException("Checkers::Turn() : coord are invalid");
+void Checkers::Turn(const coord_t coord) {
+    Model::Turn(coord);
 
     if (IsPieceOfCurrentPlayer(coord))
     {
@@ -25,27 +17,17 @@ void Checkers::Turn(coord_t coord) {
             SelectPiece(coord);
         else 
         {
-            //ShowErrorMessage("You must capture an opponent's piece");
-            printf("You must select a piece that can capture an opponent's piece\n");
+            std::cout << "You must select a piece that can capture an opponent's piece" << std::endl;
             m_flags.CapturingMoveRequired();
         }
     }
     else if (IsMovePossible(coord) && IsPieceSelected())
     {
-        PerformMove(coord);
-
-        CheckForWin();
-
-        if (IsGameFinished()) return;
-
-        if (!m_flags.IsReplay()) SwitchPlayer(m_status, m_flags);
-
-        m_flags.ResetPieceCapturedFlag();   
+        HandleMove(coord, m_status, m_flags);
     }
     else
     {
-        if (IsPieceSelected() && m_flags.IsReplay())
-            DeselectPiece();
+        DeselectPieceIfNotReplaying(m_flags);
     }
 }
 

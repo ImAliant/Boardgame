@@ -15,6 +15,9 @@ class Model
         void SelectPieceBase(const coord_t coord, GameStatus& status, ModelFlags& flags);
         void DeselectPieceBase(GameStatus& status, ModelFlags& flags) const;
 
+        void HandleMove(const coord_t coord, GameStatus& status, ModelFlags& flags);
+        void DeselectPieceIfNotReplaying(const ModelFlags& flags);
+
         virtual bool IsMovePossible(const coord_t coord) const = 0;
         virtual void PerformMove(const coord_t coord) = 0;
         virtual void ProcessConditionalMove(const coord_t coord) = 0;
@@ -45,8 +48,9 @@ class Model
         Model() = default;
         virtual ~Model() = default;
 
+        virtual void Turn(const coord_t coord);
         void Init();
-
+        
         virtual void GameStart() = 0;
 
         virtual bool IsGameStarted() const = 0;

@@ -94,7 +94,7 @@ class Checkers: public Model
     public:
         ~Checkers() override = default;
 
-        void Turn(coord_t coord);
+        void Turn(const coord_t coord) override;
 
         void GameStart() override;
         
