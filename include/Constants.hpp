@@ -16,6 +16,7 @@ namespace WindowConstants
     };
     const std::string WINDOW_TITLE = "Boardgame - Diamant/Hamdi";
     const std::string CHECKERS_TITLE = "Les Dames - Diamant/Hamdi";
+    const std::string BUTIN_TITLE = "Butin - Diamant/Hamdi";
 };
 
 namespace AssetsConstants

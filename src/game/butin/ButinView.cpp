@@ -69,11 +69,13 @@ void ButinView::PrintPlayersScore(const std::vector<std::shared_ptr<Player>>& pl
 void ButinView::PrintWinner(const Player* winner) const
 {
     system("clear");
-    if (winner != nullptr) {
-        std::cout << "The winner is: " << winner->ToString() << std::endl;
-    } else {
-        std::cout << "No winner determined." << std::endl;
+    if (winner)
+    {
+        if (winner->GetId()%2 == GameConstants::PLAYER_ONEID) 
+            std::cout << "The winner is: " << GameConstants::PLAYER_ONEID << std::endl;
+        else std::cout << "The winner is: " << GameConstants::PLAYER_TWOID << std::endl;
     }
+    else std::cout << "No winner determined." << std::endl;
 }
 void ButinView::PrintScore(int score) const{
     std::cout << "Score: " << score << std::endl;

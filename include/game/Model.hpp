@@ -67,6 +67,8 @@ class Model
         virtual void ResetBoardNeedUpdateFlag() = 0;
 
         Piece* GetPiece(coord_t coord) const;
+
+        virtual Player* GetWinner() const = 0;
         
         std::vector<std::shared_ptr<Player>>& GetPlayers();
         std::unique_ptr<Board>& GetBoard();

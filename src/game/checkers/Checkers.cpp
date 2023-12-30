@@ -73,7 +73,7 @@ void Checkers::EndGameIfNoPieces(int whitePieces, int blackPieces)
 {
     if (whitePieces == 0 || blackPieces == 0)
     {
-        m_status.SetWinner((whitePieces == 0) ? GameConstants::CheckersConstants::BLACK : GameConstants::CheckersConstants::WHITE);
+        m_status.SetWinner((whitePieces == 0) ? m_players[GameConstants::PLAYER_TWOID].get() : m_players[GameConstants::PLAYER_ONEID].get());
         m_flags.GameFinished();
     }
 }
@@ -82,8 +82,8 @@ void Checkers::EndGameIfNoMoves()
     bool canMove = HavePieceWithCapturingMoves() || HavePieceWithNonCapturingMoves();
     if (!canMove)
     {
-        m_status.SetWinner((GetCurrentPlayer()->GetId() == GameConstants::PLAYER_ONEID) ? 
-            GameConstants::CheckersConstants::BLACK : GameConstants::CheckersConstants::WHITE);
+        m_status.SetWinner((GetCurrentPlayer()->GetId()%2 == GameConstants::PLAYER_ONEID) ?
+            m_players[GameConstants::PLAYER_TWOID].get() : m_players[GameConstants::PLAYER_ONEID].get());
         m_flags.GameFinished();
     }
 }
@@ -298,14 +298,14 @@ void Checkers::ResetSelectedPieceFlag()
 }
 void Checkers::ResetBoardNeedUpdateFlag()
 {
-    m_flags.ResetBoardNeedUpdateFlag();;
+    m_flags.ResetBoardNeedUpdateFlag();
 }
 
 std::shared_ptr<Player> Checkers::GetCurrentPlayer() const
 {
     return m_status.GetCurrentPlayer();
 }
-char Checkers::GetWinner() const
+Player* Checkers::GetWinner() const
 {
     return m_status.GetWinner();
 }

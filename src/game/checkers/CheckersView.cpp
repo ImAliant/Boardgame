@@ -53,14 +53,17 @@ void CheckersView::PrintCurrentPlayer(const std::shared_ptr<Player> currentPlaye
     if (currentPlayer->GetId()%2 == PLAYER_ONEID) std::cout << "Current player: White" << std::endl;
     else std::cout << "Current player: Black" << std::endl;
 }
-void CheckersView::PrintWinner(const char winner) const
+void CheckersView::PrintWinner(const Player* winner) const
 {
     system("clear");
     std::string winnerStr;
-    if (winner == WHITE) winnerStr = "White";
-    else if (winner == BLACK) winnerStr = "Black";
+    if (winner)
+    {
+        if (winner->GetId()%2 == PLAYER_ONEID) winnerStr = "White";
+        else winnerStr = "Black";
+    }
     else winnerStr = "No winner";
-    
+
     std::cout << "Winner: " << winnerStr << std::endl;
 }
 

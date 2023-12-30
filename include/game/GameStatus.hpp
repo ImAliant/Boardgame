@@ -25,6 +25,8 @@ class GameStatus
         /// @brief Vecteur contenant les coordonnées des mouvements possibles de la dernière pièce sélectionnée.
         std::vector<coord_t> m_lastPossibleMoves;
 
+        Player* m_winner = nullptr;
+
         /// @brief Défini le joueur courant.
         /// @param player Joueur courant.
         void SetCurrentPlayer(std::shared_ptr<Player> player)
@@ -77,4 +79,12 @@ class GameStatus
         {
             return m_lastPossibleMoves;
         }
+        Player* GetWinner() const
+        {
+            return m_winner;
+        }
+        void SetWinner(Player* winner)
+        {
+            m_winner = winner;
+        } 
 };

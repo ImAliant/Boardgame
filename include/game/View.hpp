@@ -51,6 +51,9 @@ class View: public UI::UIHandler
         View();
         ~View() override;
 
+        virtual void Init(std::shared_ptr<Context> context, const Board& board) = 0;
+        virtual void UpdateBoard(const Board& board) = 0;
+
         void Draw(sf::RenderWindow& window);
         void HighlightCell(const coord_t coord, const sf::Color color);
         void RemoveHighlightCell(const coord_t coord);
@@ -71,6 +74,9 @@ class View: public UI::UIHandler
 
         void ResetLaunchPressedFlag();
 
+        virtual coord_t GetBoardCoord(const int x, const int y) const = 0;
+
+        virtual void PrintWinner(const Player* winner) const = 0;
         virtual void PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const = 0;
 
         // getters

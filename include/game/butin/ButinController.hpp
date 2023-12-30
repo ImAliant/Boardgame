@@ -1,50 +1,23 @@
 #pragma once
 
-#include "../../State.hpp"
-#include "../../UIHandler.hpp"
-#include "../../Launcher.hpp"
-#include "../../AssetManager.hpp"
-#include "../../EventHandler.hpp"
-#include "../../Constants.hpp"
 #include "Butin.hpp"
 #include "ButinView.hpp"
+#include "../Controller.hpp"
 
 #include <memory>
 #include <vector>
 
-class ButinController: public Engine::State, public EventHandler 
+class ButinController: public Controller
 {
     private:
-        std::shared_ptr<Context> m_context;
-        std::unique_ptr<Butin> m_model;
-        std::unique_ptr<ButinView> m_view;
+        void End() override;
 
-        void Start();
-        void End();
+        void HandleEvent(const sf::Event& event) override;
 
-        // Event handling
-        void UpdateButtonHoverState(const sf::Event& event) override;
-        void UpdateButtonSelectionState() override;
-        void HandleMousePressed(const sf::Event& event) override;
-        
-        // Update methods
-        void UpdateHighlight() const;
-        void UpdateBoard() const;
-        void UpdateCurrentPlayer() const;
-        void UpdateButtonPushed();
+        void PrintAndResetPlayer() const override;
 
-        void HighlightSelectedPiece() const;
-        void RemoveHighlightSelectedPiece() const;
-
-        void CloseWindow() const;
-        void CloseGame() const;
+        void SetWindowTitle() const override;
     public:
         explicit ButinController(std::shared_ptr<Context> context);
-        ~ButinController() override;
-
-        // State handling
-        void Init() override;
-        void ProcessInput() override;
-        void Update() override;
-        void Draw() override;
+        ~ButinController() override = default;
 };

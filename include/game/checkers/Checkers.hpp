@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CheckersBoard.hpp"
-#include "CheckersStatus.hpp"
+#include "../GameStatus.hpp"
 #include "CheckersFlags.hpp"
 
 #include "../Model.hpp"
@@ -17,7 +17,7 @@
 class Checkers: public Model
 {
     private:
-        CheckersStatus m_status;
+        GameStatus m_status;
         CheckersFlags m_flags;
     
         void SelectPiece(const coord_t coord) override;
@@ -71,7 +71,7 @@ class Checkers: public Model
         void ResetSelectedPieceFlag() override;
         void ResetBoardNeedUpdateFlag() override;
 
-        char GetWinner() const;
+        Player* GetWinner() const override;
 
         std::shared_ptr<Player> GetCurrentPlayer() const override;
         coord_t GetSelectedPiece() const override;

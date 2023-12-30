@@ -61,7 +61,7 @@ class Butin: public Model
         void ResetBoardNeedUpdateFlag() override;
         void ResetCurrentPlayerChangedFlag() override;
 
-        Player* GetWinner() const;
+        Player* GetWinner() const override;
         int GetWinnerScore() const;
 
         std::shared_ptr<Player> GetCurrentPlayer() const override;

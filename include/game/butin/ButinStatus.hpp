@@ -9,8 +9,6 @@
 class ButinStatus: public GameStatus
 {
     private:
-        /// @brief Représente le gagnant de la partie.
-        Player* m_winner = nullptr;
         /// @brief Score du gagnant.
         int m_winnerScore = 0;
 
@@ -21,12 +19,6 @@ class ButinStatus: public GameStatus
             m_currentPlayerIndex++;
         }
 
-        /// @brief Défini le gagnant de la partie.
-        /// @param winner Joueur gagnant.
-        void SetWinner(Player* winner)
-        {
-            m_winner = winner;
-        } 
         void SetWinnerScore(int score)
         {
             m_winnerScore = score;
@@ -36,10 +28,7 @@ class ButinStatus: public GameStatus
             m_currentPlayerIndex = index;
         }
 
-        Player* GetWinner() const
-        {
-            return m_winner;
-        }
+        
         int GetWinnerScore() const
         {
             return m_winnerScore;

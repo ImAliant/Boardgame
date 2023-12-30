@@ -16,15 +16,15 @@ class ButinView: public View
         ButinView();
         ~ButinView() override;
 
-        void Init(std::shared_ptr<Context> context, const Board& board);
+        void Init(std::shared_ptr<Context> context, const Board& board) override;
 
-        void UpdateBoard(const Board& board);
+        void UpdateBoard(const Board& board) override;
 
         void PrintTurn(const std::shared_ptr<Player> currentPlayer, const std::vector<std::shared_ptr<Player>>& players) const;
         void PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const override;
         void PrintPlayersScore(const std::vector<std::shared_ptr<Player>>& players) const;
         void PrintScore(const int score) const;
-        void PrintWinner(const Player* winner) const;
+        void PrintWinner(const Player* winner) const override;
 
-        coord_t GetBoardCoord(int x, int y) const;
+        coord_t GetBoardCoord(const int x, const int y) const override;
 };

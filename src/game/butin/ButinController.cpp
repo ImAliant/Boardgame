@@ -1,210 +1,41 @@
 #include "../../../include/game/butin/ButinController.hpp"
 #include "../../../include/GameChoice.hpp"
 
-
 ButinController::ButinController(std::shared_ptr<Context> context): 
-    m_context{context},
-    m_model{std::make_unique<Butin>()},
-    m_view{std::make_unique<ButinView>()}
+    Controller{context, std::make_unique<Butin>(), std::make_unique<ButinView>()}
 {}
 
-ButinController::~ButinController() {}
-
-void ButinController::Init()
+void ButinController::SetWindowTitle() const
 {
-    m_context->m_window->setTitle("Butin - Diamant/Hamdi");
-
-    m_model->Init();
-    m_view->Init(m_context, *m_model->GetBoard());
+    m_context->m_window->setTitle(WindowConstants::BUTIN_TITLE);
 }
 
-void ButinController::ProcessInput() 
+void ButinController::HandleEvent(const sf::Event& event)
 {
-    sf::Event event;
-    
-    while (m_context->m_window->pollEvent(event))
+    Controller::HandleEvent(event);
+
+    if (event.type == sf::Event::KeyPressed)
     {
-        if (event.type == sf::Event::Closed)
+        bool firstRound = dynamic_cast<Butin*>(m_model.get())->IsFirstRound();
+        if (!firstRound && event.key.code == sf::Keyboard::Space)
         {
-            CloseWindow();
+            dynamic_cast<Butin*>(m_model.get())->SwitchPlayer();
         }
-        else if (event.type == sf::Event::KeyPressed)
-        {
-            if (!m_model->IsFirstRound())
-            {
-                if (event.key.code == sf::Keyboard::Space)
-                {
-                    m_model->SwitchPlayer();
-                }
-            }
-        }
-
-        UpdateButtonHoverState(event);
-
-        if (event.type == sf::Event::MouseMoved)
-        {
-            UpdateButtonSelectionState();
-        }
-        else if (event.type == sf::Event::MouseButtonPressed) 
-        {
-            HandleMousePressed(event);
-        }
-        
-    }
-}
-void ButinController::Update()
-{
-    m_view->Render();
-
-    UpdateHighlight();
-    UpdateBoard();
-    UpdateCurrentPlayer();
-    UpdateButtonPushed();  
-}
-
-void ButinController::UpdateHighlight() const
-{
-    if (m_model->IsPieceSelected() && !m_view->HasHighLightedCell())
-    {
-        HighlightSelectedPiece();
-    }
-    else if (m_model->IsSelectedPieceChanged() && 
-        m_model->GetLastSelectedPiece().first != -1 && 
-        m_model->GetLastSelectedPiece().second != -1 &&
-        m_model->GetLastSelectedPiece() != m_model->GetSelectedPiece())
-    {
-        RemoveHighlightSelectedPiece();
-    }
-}
-void ButinController::HighlightSelectedPiece() const
-{
-    const auto& selectedPiece = m_model->GetSelectedPiece();
-    const auto& possibleMoves = m_model->GetPossibleMoves(selectedPiece);
-    
-    m_view->HighlightCell(selectedPiece, sf::Color::Blue);
-    m_view->HighlightPossibleMoves(possibleMoves);
-    m_view->NeedHighlight();
-}
-void ButinController::RemoveHighlightSelectedPiece() const
-{
-    const auto& lastSelectedPiece = m_model->GetLastSelectedPiece();
-    const auto& lastPossibleMoves = m_model->GetLastPossibleMoves();
-    
-    m_view->RemoveHighlightCell(lastSelectedPiece);
-    m_view->RemoveHighlightPossibleMoves(lastPossibleMoves);
-    m_model->ResetSelectedPieceFlag();
-    m_view->RemoveHighlight();
-}
-
-void ButinController::UpdateBoard() const
-{
-    if (m_model->IsBoardNeedUpdate())
-    {
-        m_view->UpdateBoard(*m_model->GetBoard());
-        m_model->ResetBoardNeedUpdateFlag();
     }
 }
 
-void ButinController::UpdateCurrentPlayer() const
+void ButinController::PrintAndResetPlayer() const
 {
-    if (m_model->IsCurrentPlayerChanged() && !m_model->IsGameFinished())
-    {
-        //m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
-        m_view->PrintTurn(m_model->GetCurrentPlayer(), m_model->GetPlayers());
-        m_model->ResetCurrentPlayerChangedFlag();
-    }
-}
-
-void ButinController::UpdateButtonPushed()
-{
-    if (m_view->IsLaunchgameButtonPressed()) Start();
-    
-    if (m_view->IsMenuButtonPressed()) CloseGame();
-}   
-
-void ButinController::Draw() {
-    m_view->Draw(*m_context->m_window);
-}
-
-void ButinController::Start() {
-    m_view->HideLaunchgameButton();
-    m_model->GameStart();
-    m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
-    m_view->ResetLaunchPressedFlag();
+    dynamic_cast<ButinView*>(m_view.get())->PrintTurn(m_model->GetCurrentPlayer(), m_model->GetPlayers());
+    m_model->ResetCurrentPlayerChangedFlag();
 }
 
 void ButinController::End() 
 {
     m_view->PrintWinner(m_model->GetWinner());
-    m_view->PrintScore(m_model->GetWinnerScore());
-    m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
-}
-
-void ButinController::UpdateButtonHoverState(const sf::Event& event) {
-    bool isMenuHovered = m_view->GetMenuButton().getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
+    dynamic_cast<ButinView*>(
+        m_view.get())->PrintScore(dynamic_cast<Butin*>(m_model.get())->GetWinnerScore()
     );
-
-    bool isLaunchgameHovered = m_view->GetLaunchgameButton().getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
-    );
-
-    m_view->UpdateMenuHoveredFlag(isMenuHovered);
-    m_view->UpdateLaunchHoveredFlag(isLaunchgameHovered);
-}
-
-void ButinController::UpdateButtonSelectionState() {
-    bool isMenuSelected = m_view->GetMenuButton().getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
-
-    bool isLaunchgameSelected = m_view->GetLaunchgameButton().getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
-
-    m_view->UpdateMenuSelectedFlag(isMenuSelected);
-    m_view->UpdateLaunchSelectedFlag(isLaunchgameSelected);
-}
-
-void ButinController::HandleMousePressed(const sf::Event& event) {
-    bool isMousePressed = event.mouseButton.button == sf::Mouse::Left;
-
-    if (isMousePressed)
-    {
-        if (m_view->IsLaunchgameButtonSelected())
-            m_view->LauchButtonPressed();
-        if (m_view->IsMenuButtonSelected())
-            m_view->MenuButtonPressed();
-        if (m_model->IsGameStarted())
-        {
-            auto x = event.mouseButton.x;
-            auto y = event.mouseButton.y;
-
-            using namespace GameConstants;
-            if (x < CLICKABLE_ZONE.first || x > CLICKABLE_ZONE.second || y < CLICKABLE_ZONE.first || y > CLICKABLE_ZONE.second)
-                return;
-
-            std::pair<int, int> coord = m_view->GetBoardCoord(x, y);
-            
-            m_model->Turn(coord);
-        }
-        if (m_model->IsGameFinished())
-        {
-            End();
-        }
-
-    }
-}
-
-void ButinController::CloseWindow() const {
-    m_context->m_states->PopAll();
-    m_context->m_window->close();
-}
-
-void ButinController::CloseGame() const {
-    m_context->m_states->Add(std::make_unique<GameChoice>(m_context), true);
+    
+    Controller::End();
 }
