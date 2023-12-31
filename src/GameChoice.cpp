@@ -4,6 +4,7 @@
 #include "../include/Constants.hpp"
 
 #include <iostream>
+#include <algorithm>
 #include <SFML/Window/Event.hpp>
 
 GameChoice::GameChoice(const std::shared_ptr<Context> &context): m_context(context) {}
@@ -147,14 +148,7 @@ void GameChoice::HandleMousePressed(const sf::Event& event)
             ButtonPressedState{m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonPressed}
         };
 
-        for (const auto& button: buttons)
-        {
-            if (button.m_isSelected)
-            {
-                button.m_isPressed = true;
-                break;
-            }
-        }
+        std::find_if(buttons.begin(), buttons.end(), [](const auto& button) { return button.m_isSelected; })->m_isPressed = true;
     }
 }
 void GameChoice::UpdateButtonPushed()
