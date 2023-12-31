@@ -112,29 +112,15 @@ void Controller::Draw()
 
 void Controller::UpdateButtonHoverState(const sf::Event& event)
 {
-    bool isMenuHovered = m_view->GetMenuButton().getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
-    );
-
-    bool isLaunchgameHovered = m_view->GetLaunchgameButton().getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
-    );
+    bool isMenuHovered = IsButtonHovered(m_view->GetMenuButton(), event);
+    bool isLaunchgameHovered = IsButtonHovered(m_view->GetLaunchgameButton(), event);
 
     m_view->UpdateMenuHoveredFlag(isMenuHovered);
     m_view->UpdateLaunchHoveredFlag(isLaunchgameHovered);
 }
 void Controller::UpdateButtonSelectionState() {
-    bool isMenuSelected = m_view->GetMenuButton().getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
-
-    bool isLaunchgameSelected = m_view->GetLaunchgameButton().getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
+    bool isMenuSelected = IsButtonSelected(m_view->GetMenuButton(), *m_context->m_window);
+    bool isLaunchgameSelected = IsButtonSelected(m_view->GetLaunchgameButton(), *m_context->m_window);
 
     m_view->UpdateMenuSelectedFlag(isMenuSelected);
     m_view->UpdateLaunchSelectedFlag(isLaunchgameSelected);

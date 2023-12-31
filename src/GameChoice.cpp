@@ -37,10 +37,25 @@ void GameChoice::Init()
 
 void GameChoice::Update()
 {
-    UpdateButtonState(m_butinButton, m_flags.m_isButinButtonSelected, m_flags.m_isButinButtonHovered, m_flags.m_wasButinButtonHovered);
-    UpdateButtonState(m_checkersButton, m_flags.m_isCheckersButtonSelected, m_flags.m_isCheckersButtonHovered, m_flags.m_wasCheckersButtonHovered);
-    UpdateButtonState(m_bulltrickerButton, m_flags.m_isBulltrickerButtonSelected, m_flags.m_isBulltrickerButtonHovered, m_flags.m_wasBulltrickerButtonHovered);
-    UpdateButtonState(m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered);
+    struct ButtonState
+    {
+        sf::Text& m_button;
+        bool& m_isSelected;
+        bool& m_isHovered;
+        bool& m_wasHovered;
+    };
+
+    std::array<ButtonState, 4> buttons = {
+        ButtonState{m_butinButton, m_flags.m_isButinButtonSelected, m_flags.m_isButinButtonHovered, m_flags.m_wasButinButtonHovered},
+        ButtonState{m_checkersButton, m_flags.m_isCheckersButtonSelected, m_flags.m_isCheckersButtonHovered, m_flags.m_wasCheckersButtonHovered},
+        ButtonState{m_bulltrickerButton, m_flags.m_isBulltrickerButtonSelected, m_flags.m_isBulltrickerButtonHovered, m_flags.m_wasBulltrickerButtonHovered},
+        ButtonState{m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered}
+    };
+
+    for (const auto& button : buttons)
+    {
+        UpdateButtonState(button.m_button, button.m_isSelected, button.m_isHovered, button.m_wasHovered);
+    }
 
     UpdateButtonPushed();
 }
@@ -71,73 +86,66 @@ void GameChoice::ProcessInput()
 
 void GameChoice::UpdateButtonHoverState(const sf::Event& event)
 {
-    bool isButinHovered = m_butinButton.getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
-    );
-    bool isCheckersHovered = m_checkersButton.getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
-    );
-    bool isBulltrickerHovered = m_bulltrickerButton.getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
-    );
-    bool isExitHovered = m_exitButton.getGlobalBounds().contains(
-        static_cast<float>(event.mouseButton.x), 
-        static_cast<float>(event.mouseButton.y)
-    );
-    
-    m_flags.m_isButinButtonHovered = isButinHovered;
-    m_flags.m_isCheckersButtonHovered = isCheckersHovered;
-    m_flags.m_isBulltrickerButtonHovered = isBulltrickerHovered;
-    m_flags.m_isExitButtonHovered = isExitHovered;
+    struct ButtonHoverState
+    {
+        sf::Text& m_button;
+        bool& m_isHovered;
+    };
+
+    std::array<ButtonHoverState, 4> buttons = {
+        ButtonHoverState{m_butinButton, m_flags.m_isButinButtonHovered},
+        ButtonHoverState{m_checkersButton, m_flags.m_isCheckersButtonHovered},
+        ButtonHoverState{m_bulltrickerButton, m_flags.m_isBulltrickerButtonHovered},
+        ButtonHoverState{m_exitButton, m_flags.m_isExitButtonHovered}
+    };
+
+    for (const auto& button : buttons)
+        button.m_isHovered = IsButtonHovered(button.m_button, event);
 }
 void GameChoice::UpdateButtonSelectionState()
 {
-    bool isButinSelected = m_butinButton.getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
-    bool isCheckersSelected = m_checkersButton.getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
-    bool isBulltrickerSelected = m_bulltrickerButton.getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
-    bool isExitSelected = m_exitButton.getGlobalBounds().contains(
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).x), 
-        static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
-    );
-    
-    m_flags.m_isButinButtonSelected = isButinSelected;
-    m_flags.m_isCheckersButtonSelected = isCheckersSelected;
-    m_flags.m_isBulltrickerButtonSelected = isBulltrickerSelected;
-    m_flags.m_isExitButtonSelected = isExitSelected;
+    struct ButtonSelectionState
+    {
+        sf::Text& m_button;
+        bool& m_isSelected;
+    };
+
+    std::array<ButtonSelectionState, 4> buttons = {
+        ButtonSelectionState{m_butinButton, m_flags.m_isButinButtonSelected},
+        ButtonSelectionState{m_checkersButton, m_flags.m_isCheckersButtonSelected},
+        ButtonSelectionState{m_bulltrickerButton, m_flags.m_isBulltrickerButtonSelected},
+        ButtonSelectionState{m_exitButton, m_flags.m_isExitButtonSelected}
+    };
+
+    for (const auto& button : buttons)
+        button.m_isSelected = IsButtonSelected(button.m_button, *m_context->m_window);
 }
 void GameChoice::HandleMousePressed(const sf::Event& event)
 {
+    struct ButtonPressedState
+    {
+        bool& m_isSelected;
+        bool& m_isPressed;
+    };
+
     bool isMousePressed = event.mouseButton.button == sf::Mouse::Left;
 
     if (isMousePressed)
     {
-        if (m_flags.m_isButinButtonSelected)
+        std::array<ButtonPressedState, 4> buttons = {
+            ButtonPressedState{m_flags.m_isButinButtonSelected, m_flags.m_isButinButtonPressed},
+            ButtonPressedState{m_flags.m_isCheckersButtonSelected, m_flags.m_isCheckersButtonPressed},
+            ButtonPressedState{m_flags.m_isBulltrickerButtonSelected, m_flags.m_isBulltrickerButtonPressed},
+            ButtonPressedState{m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonPressed}
+        };
+
+        for (const auto& button: buttons)
         {
-            m_flags.m_isButinButtonPressed = true;
-        }
-        else if (m_flags.m_isCheckersButtonSelected)
-        {
-            m_flags.m_isCheckersButtonPressed = true;
-        }
-        else if (m_flags.m_isBulltrickerButtonSelected)
-        {
-            m_flags.m_isBulltrickerButtonPressed = true;
-        }
-        else if (m_flags.m_isExitButtonSelected)
-        {
-            m_flags.m_isExitButtonPressed = true;
+            if (button.m_isSelected)
+            {
+                button.m_isPressed = true;
+                break;
+            }
         }
     }
 }
@@ -167,11 +175,17 @@ void GameChoice::UpdateButtonPushed()
 void GameChoice::Draw()
 {
     m_context->m_window->clear();
-    m_context->m_window->draw(m_gameTitle);
-    m_context->m_window->draw(m_butinButton);
-    m_context->m_window->draw(m_checkersButton);
-    m_context->m_window->draw(m_bulltrickerButton);
-    m_context->m_window->draw(m_exitButton);
+
+    std::array buttons = {
+        m_gameTitle,
+        m_butinButton,
+        m_checkersButton,
+        m_bulltrickerButton,
+        m_exitButton
+    };
+    for (const auto& button : buttons)
+        m_context->m_window->draw(button);
+
     m_context->m_window->display();
 }
 
