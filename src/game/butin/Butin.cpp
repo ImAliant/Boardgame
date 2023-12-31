@@ -19,9 +19,7 @@ void Butin::Turn(const coord_t coord)
     else 
     {
         if (IsYellowPiece(coord) && !m_flags.IsReplay()) SelectPiece(coord);
-        else if (IsMovePossible(coord) && IsPieceSelected())
-            HandleMove(coord, m_flags);
-        else DeselectPieceIfNotReplaying(m_flags);
+        else MoveOrDeselect(coord, m_flags);
     }
 }
 
@@ -110,7 +108,7 @@ void Butin::UpdatePlayerScore(const char color) const
 void Butin::HandleFirstRoundSelection(const coord_t coord)
 {
     const auto piece = GetPiece(coord);
-    if (piece == nullptr) return;
+    if (!piece) return;
     
     if (IsYellowPiece(coord))
     {
@@ -141,7 +139,7 @@ void Butin::EndGameIfNoMoves()
         {
             const auto coord = std::make_pair(i, j);
             const auto piece = GetPiece(coord);
-            if (piece == nullptr) continue;
+            if (!piece) continue;
 
             if (IsYellowPiece(coord) && HasCapturingMoves(coord))
             {
@@ -175,7 +173,7 @@ void Butin::SwitchPlayer()
 bool Butin::IsYellowPiece(const coord_t coord) const
 {
     const auto piece = GetPiece(coord);
-    if (piece == nullptr) return false;
+    if (!piece) return false;
 
     return piece->GetSymbol() == GameConstants::ButinConstants::BUTIN_YELLOW;
 }

@@ -44,6 +44,12 @@ void Model::DeselectPieceIfNotReplaying(const ModelFlags& flags)
     if (flags.IsPieceSelected() && !flags.IsReplay()) DeselectPiece();
 }
 
+void Model::MoveOrDeselect(const coord_t coord, ModelFlags& flags)
+{
+    if (IsMovePossible(coord)) HandleMove(coord, flags);
+    else DeselectPieceIfNotReplaying(flags);
+}
+
 bool Model::IsMovePossibleBase(const coord_t coord, const GameStatus& status, const ModelFlags& flags) const
 {
     if (!AreCoordinatesValid(coord)) return false;

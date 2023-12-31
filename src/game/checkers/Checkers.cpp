@@ -13,7 +13,7 @@ void Checkers::Turn(const coord_t coord) {
         if (HasCapturingMoves(coord)) m_flags.CapturingMoveRequired();
         else m_flags.ResetCapturingMoveRequiredFlag();
 
-        if (m_flags.IsCapturingMoveRequired() || !HavePieceWithCapturingMoves())
+        if (m_flags.IsCapturingMoveRequired() || !HavePieceWithCapturingMoves(true))
             SelectPiece(coord);
         else 
         {
@@ -21,15 +21,13 @@ void Checkers::Turn(const coord_t coord) {
             m_flags.CapturingMoveRequired();
         }
     }
-    else if (IsMovePossible(coord) && IsPieceSelected())
-        HandleMove(coord, m_flags);
-    else DeselectPieceIfNotReplaying(m_flags);
+    else MoveOrDeselect(coord, m_flags);
 }
 
 bool Checkers::IsPieceOfCurrentPlayer(coord_t coord) const
 {
     auto piece = GetPiece(coord);
-    if (piece == nullptr) return false;
+    if (!piece) return false;
     
     auto pieceOwner = piece->GetOwner();
     auto idPieceOwner = pieceOwner->GetId();
@@ -63,7 +61,7 @@ void Checkers::CountPieces(int& whitePieces, int& blackPieces) const
     {
         for (int j = 0; j < cols; j++) {
             auto piece = GetPiece(std::make_pair(i, j));
-            if (piece == nullptr) continue;
+            if (!piece) continue;
             if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) whitePieces++;
             else if (piece->GetSymbol() == GameConstants::CheckersConstants::BLACK) blackPieces++;
         }
@@ -79,11 +77,11 @@ void Checkers::EndGameIfNoPieces(int whitePieces, int blackPieces)
 }
 void Checkers::EndGameIfNoMoves()
 {
-    bool canMove = HavePieceWithCapturingMoves() || HavePieceWithNonCapturingMoves();
-    if (!canMove)
+    bool otherPlayerCanMove = HavePieceWithCapturingMoves(false) || HavePieceWithNonCapturingMoves(false);
+    if (!otherPlayerCanMove)
     {
         m_status.SetWinner((GetCurrentPlayer()->GetId()%2 == GameConstants::PLAYER_ONEID) ?
-            m_players[GameConstants::PLAYER_TWOID].get() : m_players[GameConstants::PLAYER_ONEID].get());
+            m_players[GameConstants::PLAYER_ONEID].get() : m_players[GameConstants::PLAYER_TWOID].get());
         m_flags.GameFinished();
     }
 }
@@ -138,7 +136,7 @@ void Checkers::ApplyCapture(const coord_t coord)
             throw InvalidCoordinatesException("Checkers::PerformCapturingMove() : captureCoord are invalid");
 
         const auto pieceCapture = GetPiece(captureCoord);
-        if (pieceCapture == nullptr)
+        if (!pieceCapture)
         {
             x -= captx;
             y -= capty;
@@ -172,7 +170,7 @@ void Checkers::HandlePieceCaptureAndReplay(const coord_t coord)
 bool Checkers::IsCapturingMove(const coord_t coord) const
 {
     auto piece = GetPiece(GetSelectedPiece());
-    if (piece == nullptr) return false;
+    if (!piece) return false;
 
     auto possibleMoves = piece->GetPossibleMoves();
 
@@ -200,7 +198,7 @@ void Checkers::PerformNonCapturingMove(coord_t coord)
     HandlePieceDeselectionAndUpdate(m_flags);
 }
 
-bool Checkers::HavePieceWithMoves(bool capturing) const
+bool Checkers::HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const
 {
     auto rows = m_board->GetRows();
     auto cols = m_board->GetCols();
@@ -211,8 +209,9 @@ bool Checkers::HavePieceWithMoves(bool capturing) const
         {
             auto coord = std::make_pair(i, j);
             auto piece = GetPiece(coord);
-            if (piece == nullptr) continue;
-            if (piece->GetOwner() != GetCurrentPlayer()) continue;
+            if (!piece) continue;
+            //if (piece->GetOwner() != GetCurrentPlayer()) continue;
+            if ((piece->GetOwner() == GetCurrentPlayer()) != checkCurrentPlayer) continue;
 
             auto possibleMoves = capturing ? piece->GetPossibleCaptures() : piece->GetPossibleMoves();
             if (!possibleMoves.empty()) return true;
@@ -221,15 +220,13 @@ bool Checkers::HavePieceWithMoves(bool capturing) const
 
     return false;
 }
-
-bool Checkers::HavePieceWithCapturingMoves() const
+bool Checkers::HavePieceWithCapturingMoves(bool checkCurrentPlayer) const
 {
-    return HavePieceWithMoves(true);
+    return HavePieceWithMoves(true, checkCurrentPlayer);
 }
-
-bool Checkers::HavePieceWithNonCapturingMoves() const
+bool Checkers::HavePieceWithNonCapturingMoves(bool checkCurrentPlayer) const
 {
-    return HavePieceWithMoves(false);
+    return HavePieceWithMoves(false, checkCurrentPlayer);
 }
 
 bool Checkers::CanPromotePiece(coord_t coord) const
@@ -239,7 +236,7 @@ bool Checkers::CanPromotePiece(coord_t coord) const
         throw InvalidCoordinatesException("Checkers::CanPromotePiece() : coord are invalid");
 
     const auto piece = GetPiece(coord);
-    if (piece == nullptr) return false;
+    if (!piece) return false;
 
     const auto checkersPiece = dynamic_cast<CheckersPiece*>(piece);
     if (checkersPiece->IsPromoted()) return false;
@@ -256,7 +253,7 @@ void Checkers::PromotePiece(coord_t coord)
         throw InvalidCoordinatesException("Checkers::PromotePiece() : coord are invalid");
 
     auto piece = GetPiece(coord);
-    if (piece == nullptr) return;
+    if (!piece) return;
 
     auto checkersPiece = dynamic_cast<CheckersPiece*>(piece);
     checkersPiece->Promote();

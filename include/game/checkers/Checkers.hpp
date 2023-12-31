@@ -37,9 +37,9 @@ class Checkers: public Model
         
         void InitPlayers() override;
 
-        bool HavePieceWithMoves(bool capturing) const;
-        bool HavePieceWithCapturingMoves() const;
-        bool HavePieceWithNonCapturingMoves() const;
+        bool HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const;
+        bool HavePieceWithCapturingMoves(bool checkCurrentPlayer) const;
+        bool HavePieceWithNonCapturingMoves(bool checkCurrentPlayer) const;
 
         bool CanPromotePiece(coord_t coord) const;
         void PromotePiece(coord_t coord);

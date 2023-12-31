@@ -18,6 +18,7 @@ class Model
 
         void HandleMove(const coord_t coord, ModelFlags& flags);
         void DeselectPieceIfNotReplaying(const ModelFlags& flags);
+        void MoveOrDeselect(const coord_t coord, ModelFlags& flags);
 
         virtual bool IsMovePossible(const coord_t coord) const = 0;
         virtual void PerformMove(const coord_t coord) = 0;
