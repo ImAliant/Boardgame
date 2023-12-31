@@ -143,8 +143,8 @@ void View::DrawBoardCells(sf::RenderWindow& window)
     const auto rows = m_boardCell.size();
     const auto cols = m_boardCell[0].size();
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols ; j++) {
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols ; j++) {
             window.draw(m_boardCell[i][j]);
         }
     }
@@ -154,8 +154,8 @@ void View::DrawBoardPiece(sf::RenderWindow& window)
     const auto rows = m_boardPiece.size();
     const auto cols = m_boardPiece[0].size();
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols ; j++) {
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols ; j++) {
             window.draw(m_boardPiece[i][j]);
         }
     }
@@ -187,12 +187,12 @@ void View::RemoveHighlightCell(const coord_t coord)
 }
 void View::HighlightPossibleMoves(const std::vector<coord_t>& possibleMoves)
 {
-    for (const auto move: possibleMoves)
+    for (const auto& move: possibleMoves)
         HighlightCell(move, sf::Color::Green);
 }
 void View::RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMoves)
 {
-    for (const auto move: possibleMoves)
+    for (const auto& move: possibleMoves)
         RemoveHighlightCell(move);
 }
 

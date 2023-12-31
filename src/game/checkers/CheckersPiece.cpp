@@ -43,7 +43,7 @@ void CheckersPiece::SimpleMoves(const Board& board)
 
 void CheckersPiece::AddPossibleMoves(const std::vector<direction_t>& directions, const Board& board)
 {
-    for (const auto [dx, dy]: directions)
+    for (const auto& [dx, dy]: directions)
     {
         int x = GetX() + dx;
         int y = GetY() + dy;
