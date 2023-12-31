@@ -19,6 +19,14 @@ void GameChoice::Init()
         throw std::runtime_error("MainMenu::Init() : font is nullptr");
     }
 
+    InitRectangleShape(m_background, sf::Vector2f(static_cast<float>(WindowConstants::WINDOW_SIZE.x), static_cast<float>(WindowConstants::WINDOW_SIZE.y)), sf::Vector2f(0.f, 0.f));
+    sf::Texture const* background = &m_context->m_assets->GetTexture(MENUBACKGROUND);
+    if (!background)
+    {
+        throw std::runtime_error("MainMenu::Init() : background is nullptr");
+    }
+    m_background.setTexture(background);
+
     // Title
     InitText(m_gameTitle, "Boardgame", GAMETITLE_POSITION, *font);
 
@@ -175,6 +183,8 @@ void GameChoice::UpdateButtonPushed()
 void GameChoice::Draw()
 {
     m_context->m_window->clear();
+
+    m_context->m_window->draw(m_background);
 
     std::array buttons = {
         m_gameTitle,

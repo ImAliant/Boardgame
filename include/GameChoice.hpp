@@ -13,6 +13,9 @@ class GameChoice: public Engine::State, public UI::UIHandler, public EventHandle
 {
     private:
         std::shared_ptr<Context> m_context;
+
+        sf::RectangleShape m_background;
+
         sf::Text m_gameTitle;
         sf::Text m_butinButton;
         sf::Text m_checkersButton;

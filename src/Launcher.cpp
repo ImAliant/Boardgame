@@ -32,6 +32,7 @@ void Launcher::Run() const
 void Launcher::InitAssets() const
 {
     m_context->m_assets->AddFont(MAIN_FONT, AssetsConstants::MAIN_FONT);
+    m_context->m_assets->AddTexture(MENUBACKGROUND, AssetsConstants::MENUBACKGROUND);
     m_context->m_assets->AddTexture(CHECKERS_BLACK_PAWN, AssetsConstants::CHECKERS_BLACK_PAWN);
     m_context->m_assets->AddTexture(CHECKERS_WHITE_PAWN, AssetsConstants::CHECKERS_WHITE_PAWN);
     m_context->m_assets->AddTexture(CHECKERS_BLACK_QUEEN, AssetsConstants::CHECKERS_BLACK_QUEEN);
