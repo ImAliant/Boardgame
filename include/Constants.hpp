@@ -21,6 +21,21 @@ namespace WindowConstants
 
 namespace AssetsConstants
 {
+    //const std::string MAIN_FONT = "assets/fonts/DejaVuSansMono.ttf";
+
+    //const std::string MENUBACKGROUND = "assets/images/menu/background.png";
+    
+    //const std::string CHECKERS_BLACK_PAWN = "assets/images/checkers/black_pawn.png";
+    //const std::string CHECKERS_WHITE_PAWN = "assets/images/checkers/white_pawn.png";
+    //const std::string CHECKERS_BLACK_QUEEN = "assets/images/checkers/black_queen.png";
+    //const std::string CHECKERS_WHITE_QUEEN = "assets/images/checkers/white_queen.png";
+    
+    //const std::string BUTIN_YELLOW_PIECE = "assets/images/butin/yellow_piece.png";
+    //const std::string BUTIN_RED_PIECE = "assets/images/butin/red_piece.png";
+    //const std::string BUTIN_BLACK_PIECE = "assets/images/butin/black_piece.png";
+
+    //const std::string EMPTY_ASSET = "assets/images/empty.png";
+
     const std::string MAIN_FONT = "../assets/fonts/DejaVuSansMono.ttf";
 
     const std::string MENUBACKGROUND = "../assets/images/menu/background.png";
