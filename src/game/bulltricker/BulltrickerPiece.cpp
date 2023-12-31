@@ -1,0 +1,1 @@
+#include "../../../include/game/bulltricker/BulltrickerPiece.hpp"

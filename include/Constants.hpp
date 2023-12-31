@@ -15,8 +15,9 @@ namespace WindowConstants
         static_cast<int>(sf::VideoMode::getDesktopMode().height / 2 - WINDOW_SIZE.y / 2)
     };
     const std::string WINDOW_TITLE = "Boardgame - Diamant/Hamdi";
-    const std::string CHECKERS_TITLE = "Les Dames - Diamant/Hamdi";
     const std::string BUTIN_TITLE = "Butin - Diamant/Hamdi";
+    const std::string CHECKERS_TITLE = "Les Dames - Diamant/Hamdi";
+    const std::string BULLTRICKER_TITLE = "Bulltricker - Diamant/Hamdi";
 };
 
 namespace AssetsConstants
