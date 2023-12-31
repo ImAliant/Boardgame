@@ -20,7 +20,7 @@ void Butin::Turn(const coord_t coord)
     {
         if (IsYellowPiece(coord) && !m_flags.IsReplay()) SelectPiece(coord);
         else if (IsMovePossible(coord) && IsPieceSelected())
-            HandleMove(coord, m_status, m_flags);
+            HandleMove(coord, m_flags);
         else DeselectPieceIfNotReplaying(m_flags);
     }
 }

@@ -27,7 +27,7 @@ void Model::DeselectPieceBase(GameStatus& status, ModelFlags& flags) const
     flags.PieceIsNotSelected();
 }
 
-void Model::HandleMove(const coord_t coord, GameStatus& status, ModelFlags& flags)
+void Model::HandleMove(const coord_t coord, ModelFlags& flags)
 {
     PerformMove(coord);
 

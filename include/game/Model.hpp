@@ -16,7 +16,7 @@ class Model
         void SelectPieceBase(const coord_t coord, GameStatus& status, ModelFlags& flags);
         void DeselectPieceBase(GameStatus& status, ModelFlags& flags) const;
 
-        void HandleMove(const coord_t coord, GameStatus& status, ModelFlags& flags);
+        void HandleMove(const coord_t coord, ModelFlags& flags);
         void DeselectPieceIfNotReplaying(const ModelFlags& flags);
 
         virtual bool IsMovePossible(const coord_t coord) const = 0;
