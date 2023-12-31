@@ -1,16 +1,7 @@
 # diamant-hamdi-cpp-boardgames
 
 ## Compilation
-Dans la racine du projet créer un dossier build:
-```mkdir build```
-
-Puis se placer dans le dossier build:
-```cd build```
-
-Puis exécuter la commande suivante:
-```cmake ..```
-
-Et enfin:
+Dans la racine du projet exécuter la commande suivante:
 ```make```
 
 ## Execution
