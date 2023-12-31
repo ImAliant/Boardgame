@@ -7,8 +7,9 @@
 #include "Launcher.hpp"
 #include "UIHandler.hpp"
 #include "EventHandler.hpp"
+#include "GameChoiceFlags.hpp"
 
-class GameChoice: public Engine::State, public UI::UIHandler//, public EventHandler
+class GameChoice: public Engine::State, public UI::UIHandler, public EventHandler
 {
     private:
         std::shared_ptr<Context> m_context;
@@ -18,25 +19,7 @@ class GameChoice: public Engine::State, public UI::UIHandler//, public EventHand
         sf::Text m_bulltrickerButton;
         sf::Text m_exitButton;
 
-        bool m_isButinButtonHovered = false;
-        bool m_wasButinButtonHovered = false;
-        bool m_isButinButtonSelected = false;
-        bool m_isButinButtonPressed = false;
-
-        bool m_isCheckersButtonHovered = false;
-        bool m_wasCheckersButtonHovered = false;
-        bool m_isCheckersButtonSelected = false;
-        bool m_isCheckersButtonPressed = false;
-
-        bool m_isBulltrickerButtonHovered = false;
-        bool m_wasBulltrickerButtonHovered = false;
-        bool m_isBulltrickerButtonSelected = false;
-        bool m_isBulltrickerButtonPressed = false;
-
-        bool m_isExitButtonHovered = false;
-        bool m_wasExitButtonHovered = false;
-        bool m_isExitButtonSelected = false;
-        bool m_isExitButtonPressed = false;
+        GameChoiceFlags m_flags;
     public:
         explicit GameChoice(const std::shared_ptr<Context> &context);
         ~GameChoice() override = default;
@@ -46,10 +29,10 @@ class GameChoice: public Engine::State, public UI::UIHandler//, public EventHand
         void Update() override;
         void Draw() override;
 
-        void UpdateButtonHoverState(const sf::Event& event);
-        void UpdateButtonSelectionState();
-        void HandleMousePressed(const sf::Event& event);
-        void UpdateButtonPushed();
+        void UpdateButtonHoverState(const sf::Event& event) override;
+        void UpdateButtonSelectionState() override;
+        void HandleMousePressed(const sf::Event& event) override;
+        void UpdateButtonPushed() override;
 
         void CloseWindow() const;
 };

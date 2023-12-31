@@ -7,8 +7,8 @@ class EventHandler
     public:
         virtual ~EventHandler() = default;
 
-        virtual void InputUp();
-        virtual void InputDown();
-        virtual void InputReturn();
-        virtual void InputEscape();
+        virtual void UpdateButtonHoverState(const sf::Event& event) = 0;
+        virtual void UpdateButtonSelectionState() = 0;
+        virtual void HandleMousePressed(const sf::Event& event) = 0;
+        virtual void UpdateButtonPushed() = 0;
 };

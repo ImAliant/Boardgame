@@ -11,8 +11,8 @@
 
 #include <memory>
 #include <vector>
-
-class Controller: public Engine::State
+ 
+class Controller: public Engine::State, public EventHandler
 {
     private:
         bool HavePieceChanged() const;
@@ -25,10 +25,10 @@ class Controller: public Engine::State
         virtual void End();
 
         // Event handling
-        void UpdateButtonHoverState(const sf::Event& event);
-        void UpdateButtonSelectionState();
-        void HandleMousePressed(const sf::Event& event);
-        void UpdateButtonPushed();
+        void UpdateButtonHoverState(const sf::Event& event) override;
+        void UpdateButtonSelectionState() override;
+        void HandleMousePressed(const sf::Event& event) override;
+        void UpdateButtonPushed() override;
 
         // Update methods
         void UpdateHighlight() const;

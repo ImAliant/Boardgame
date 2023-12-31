@@ -37,10 +37,10 @@ void GameChoice::Init()
 
 void GameChoice::Update()
 {
-    UpdateButtonState(m_butinButton, m_isButinButtonSelected, m_isButinButtonHovered, m_wasButinButtonHovered);
-    UpdateButtonState(m_checkersButton, m_isCheckersButtonSelected, m_isCheckersButtonHovered, m_wasCheckersButtonHovered);
-    UpdateButtonState(m_bulltrickerButton, m_isBulltrickerButtonSelected, m_isBulltrickerButtonHovered, m_wasBulltrickerButtonHovered);
-    UpdateButtonState(m_exitButton, m_isExitButtonSelected, m_isExitButtonHovered, m_wasExitButtonHovered);
+    UpdateButtonState(m_butinButton, m_flags.m_isButinButtonSelected, m_flags.m_isButinButtonHovered, m_flags.m_wasButinButtonHovered);
+    UpdateButtonState(m_checkersButton, m_flags.m_isCheckersButtonSelected, m_flags.m_isCheckersButtonHovered, m_flags.m_wasCheckersButtonHovered);
+    UpdateButtonState(m_bulltrickerButton, m_flags.m_isBulltrickerButtonSelected, m_flags.m_isBulltrickerButtonHovered, m_flags.m_wasBulltrickerButtonHovered);
+    UpdateButtonState(m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered);
 
     UpdateButtonPushed();
 }
@@ -88,10 +88,10 @@ void GameChoice::UpdateButtonHoverState(const sf::Event& event)
         static_cast<float>(event.mouseButton.y)
     );
     
-    m_isButinButtonHovered = isButinHovered;
-    m_isCheckersButtonHovered = isCheckersHovered;
-    m_isBulltrickerButtonHovered = isBulltrickerHovered;
-    m_isExitButtonHovered = isExitHovered;
+    m_flags.m_isButinButtonHovered = isButinHovered;
+    m_flags.m_isCheckersButtonHovered = isCheckersHovered;
+    m_flags.m_isBulltrickerButtonHovered = isBulltrickerHovered;
+    m_flags.m_isExitButtonHovered = isExitHovered;
 }
 void GameChoice::UpdateButtonSelectionState()
 {
@@ -112,10 +112,10 @@ void GameChoice::UpdateButtonSelectionState()
         static_cast<float>(sf::Mouse::getPosition(*m_context->m_window).y)
     );
     
-    m_isButinButtonSelected = isButinSelected;
-    m_isCheckersButtonSelected = isCheckersSelected;
-    m_isBulltrickerButtonSelected = isBulltrickerSelected;
-    m_isExitButtonSelected = isExitSelected;
+    m_flags.m_isButinButtonSelected = isButinSelected;
+    m_flags.m_isCheckersButtonSelected = isCheckersSelected;
+    m_flags.m_isBulltrickerButtonSelected = isBulltrickerSelected;
+    m_flags.m_isExitButtonSelected = isExitSelected;
 }
 void GameChoice::HandleMousePressed(const sf::Event& event)
 {
@@ -123,42 +123,42 @@ void GameChoice::HandleMousePressed(const sf::Event& event)
 
     if (isMousePressed)
     {
-        if (m_isButinButtonSelected)
+        if (m_flags.m_isButinButtonSelected)
         {
-            m_isButinButtonPressed = true;
+            m_flags.m_isButinButtonPressed = true;
         }
-        else if (m_isCheckersButtonSelected)
+        else if (m_flags.m_isCheckersButtonSelected)
         {
-            m_isCheckersButtonPressed = true;
+            m_flags.m_isCheckersButtonPressed = true;
         }
-        else if (m_isBulltrickerButtonSelected)
+        else if (m_flags.m_isBulltrickerButtonSelected)
         {
-            m_isBulltrickerButtonPressed = true;
+            m_flags.m_isBulltrickerButtonPressed = true;
         }
-        else if (m_isExitButtonSelected)
+        else if (m_flags.m_isExitButtonSelected)
         {
-            m_isExitButtonPressed = true;
+            m_flags.m_isExitButtonPressed = true;
         }
     }
 }
 void GameChoice::UpdateButtonPushed()
 {
-    if (m_isButinButtonPressed)
+    if (m_flags.m_isButinButtonPressed)
     {
         m_context->m_states->Add(std::make_unique<ButinController>(m_context), true);
-        m_isButinButtonPressed = false;
+        m_flags.m_isButinButtonPressed = false;
     }
-    else if (m_isCheckersButtonPressed)
+    else if (m_flags.m_isCheckersButtonPressed)
     {
         m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true);
-        m_isCheckersButtonPressed = false;
+        m_flags.m_isCheckersButtonPressed = false;
     }
-    else if (m_isBulltrickerButtonPressed)
+    else if (m_flags.m_isBulltrickerButtonPressed)
     {
         std::cout << "Bulltricker" << std::endl;
-        m_isBulltrickerButtonPressed = false;
+        m_flags.m_isBulltrickerButtonPressed = false;
     }
-    else if (m_isExitButtonPressed)
+    else if (m_flags.m_isExitButtonPressed)
     {
         CloseWindow();
     }
