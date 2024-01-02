@@ -17,7 +17,7 @@ class ButinView: public View
         ~ButinView() override;
 
         void Init(std::shared_ptr<Context> context, const Board& board) override;
-
+        void InitBoardCell(const Board& board) override;
         void UpdateBoard(const Board& board) override;
 
         void PrintTurn(const std::shared_ptr<Player> currentPlayer, const std::vector<std::shared_ptr<Player>>& players) const;

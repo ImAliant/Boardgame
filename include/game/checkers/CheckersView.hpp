@@ -14,6 +14,8 @@ class CheckersView: public View
 
         void Init(std::shared_ptr<Context> context, const Board& board) override;
 
+        void InitBoardCell(const Board& board) override;
+
         void UpdateBoard(const Board& board) override;
 
         void PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const override;

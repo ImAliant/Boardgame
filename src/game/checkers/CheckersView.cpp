@@ -22,6 +22,15 @@ void CheckersView::Init(std::shared_ptr<Context> context, const Board& board)
     InitBase(context, board, textureIDs, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
+void CheckersView::InitBoardCell(const Board& board)
+    {
+        View::InitBoardCell(board);
+
+        InitForSameCellSize(board, board.GetRows(), board.GetCols(), BOARDCELL_SIZE);
+    }
+
+
+
 void CheckersView::UpdateBoard(const Board& board)
 {
     UpdateBoardBase(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);

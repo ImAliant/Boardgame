@@ -32,7 +32,8 @@ class View: public UI::UIHandler
         void InitPieceTexture(const std::shared_ptr<Context> context, const std::vector<int>& textureIDs);
         void LoadTexture(const int textureID, const std::shared_ptr<Context> context);
         void InitBoardBackground();
-        void InitBoardCell(const Board& board, const sf::Vector2f cellsize);
+        virtual void InitBoardCell(const Board& board);
+        void InitForSameCellSize(const Board& board, const int rows, const int cols, const sf::Vector2f cellsize);
         void InitBoardPiece(const Board& board, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
         virtual void SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
         sf::Vector2f CalculatePosition(const float offset, const coord_t coord, const sf::Vector2f cellsize) const;

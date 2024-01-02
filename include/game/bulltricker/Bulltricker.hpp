@@ -31,6 +31,9 @@ class Bulltricker: public Model
         ~Bulltricker() override = default;
 
         void Turn(const coord_t coord) override;
+        void EndGameIfNoMoves() override {
+            // Implementation specific to Bulltricker
+        }
 
         void GameStart() override;
         

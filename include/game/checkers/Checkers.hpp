@@ -15,7 +15,8 @@ class Checkers: public Model
     private:
         GameStatus m_status;
         CheckersFlags m_flags;
-    
+
+
         void SelectPiece(const coord_t coord) override;
         void DeselectPiece() override;
 

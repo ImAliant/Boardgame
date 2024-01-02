@@ -13,7 +13,8 @@ void View::InitBase(
 {
     InitPieceTexture(context, textureIDs);
     InitBoardBackground();
-    InitBoardCell(board, cellsize);
+    InitBoardCell(board);
+    //InitForSameCellSize(board, board.GetRows(), board.GetCols(), cellsize);
     InitBoardPiece(board, piecesize, cellsize);
 
     sf::Font const* font = &context->m_assets->GetFont(MAIN_FONT);
@@ -59,32 +60,36 @@ void View::InitBoardBackground()
     m_boardBackground.setFillColor(GameConstants::BOARDBACKGROUND_COLOR);
 }
 
-void View::InitBoardCell(const Board& board, const sf::Vector2f cellsize)
-{
-    const auto rows = board.GetRows();
-    const auto cols = board.GetCols();
+//virtual pas pure 
+void View::InitBoardCell(const Board& board)
+    {
+        const auto rows = board.GetRows();
+        const auto cols = board.GetCols();
 
-    m_boardCell.resize(rows);
-    for (int i = 0; i < rows; i++) {
-        m_boardCell[i].resize(cols);
+        m_boardCell.resize(rows);
+        for (int i = 0; i < rows; i++) {
+            m_boardCell[i].resize(cols);
+        }
     }
 
-    for (int i = 0; i < rows; i++)
+void View::InitForSameCellSize(const Board& board, const int rows, const int cols, const sf::Vector2f cellsize)
     {
-        for (int j = 0; j < cols; j++)
+        for (int i = 0; i < rows; i++)
         {
-            const auto coord = std::make_pair(i, j);
-            InitRectangleShape(
-                m_boardCell[i][j],
-                cellsize,
-                CalculatePosition(10.f, coord, cellsize)
-            );
+            for (int j = 0; j < cols; j++)
+            {
+                const auto coord = std::make_pair(i, j);
+                InitRectangleShape(
+                    m_boardCell[i][j],
+                    cellsize,
+                    CalculatePosition(10.f, coord, cellsize)
+                );
 
-            if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(GameConstants::WHITECELL_COLOR);
-            else m_boardCell[i][j].setFillColor(GameConstants::BLACKCELL_COLOR);
+                if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(GameConstants::WHITECELL_COLOR);
+                else m_boardCell[i][j].setFillColor(GameConstants::BLACKCELL_COLOR);
+            }
         }
-    } 
-}
+    }
 
 void View::InitBoardPiece(const Board& board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
 {

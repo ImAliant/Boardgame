@@ -26,6 +26,7 @@ class Piece
         std::vector<direction_t> m_possibleCaptures;
     public:
         Piece(const coord_t coord, const std::shared_ptr<Player> owner, const char symbol);
+         Piece(coord_t coord, const std::shared_ptr<Player> owner,char color, bool king, bool queen) ;
         virtual ~Piece() = default;
 
         virtual void FindPossibleMoves(const Board& board);

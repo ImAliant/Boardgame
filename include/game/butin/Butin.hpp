@@ -15,7 +15,7 @@ class Butin: public Model
     private:
         ButinStatus m_status;
         ButinFlags m_flags;
-
+        
         void SelectPiece(const coord_t coord) override;
         void DeselectPiece() override;
 

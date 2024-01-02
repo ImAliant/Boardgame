@@ -1,6 +1,7 @@
 #include "../include/GameChoice.hpp"
 #include "../include/game/checkers/CheckersController.hpp"
 #include "../include/game/butin/ButinController.hpp"
+#include "../include/game/bulltricker/BulltrickerController.hpp"
 #include "../include/Constants.hpp"
 
 #include <iostream>
@@ -166,6 +167,7 @@ void GameChoice::UpdateButtonPushed()
     else if (m_flags.m_isBulltrickerButtonPressed)
     {
         std::cout << "Bulltricker" << std::endl;
+        m_context->m_states->Add(std::make_unique<BulltrickerController>(m_context), true);
         m_flags.m_isBulltrickerButtonPressed = false;
     }
     else if (m_flags.m_isExitButtonPressed)

@@ -7,6 +7,11 @@ Piece::Piece(const coord_t coord, const std::shared_ptr<Player> owner, const cha
     m_state{0, owner, symbol}
 {}
 
+Piece::Piece(coord_t coord,const std::shared_ptr<Player> owner ,char color, bool king, bool queen) :
+    m_coord{coord},
+    m_state{0, owner, color}
+{}
+
 void Piece::FindPossibleMoves(const Board& board)
 {
     m_possibleMoves.clear();

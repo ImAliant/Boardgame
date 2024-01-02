@@ -103,6 +103,15 @@ namespace GameConstants
     const sf::Vector2f BOARDBACKGROUND_POSITION = sf::Vector2f{5.f, 5.f};
     const sf::Vector2f BOARDOFFSET = sf::Vector2f{10.f, 10.f};
 
+
+    inline sf::Vector2f calculateBoardCellSize(const sf::Vector2f& boardBackgroundSize, float rows, float cols, float padding) {
+    // Implementation of the function
+        return sf::Vector2f{
+            (boardBackgroundSize.x - padding) / cols,
+            (boardBackgroundSize.y - padding) / rows
+        };
+    };
+
     namespace CheckersConstants
     {
         const int CHECKERSROWS = 10;
@@ -149,6 +158,7 @@ namespace GameConstants
         const std::vector<direction_t> ALL_DIRECTION = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},    // Linear
                                                         {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; // Diagonal
     
+     // ajouter les differents boaard celll pour bulltricker
         const sf::Vector2f BOARDCELL_SIZE = sf::Vector2f{
             (BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(BUTINROWS),
             (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(BUTINCOLS)
@@ -158,4 +168,55 @@ namespace GameConstants
             BOARDCELL_SIZE.y - 10.f
         };
     };
-};
+
+
+    namespace BulltrickerConstants{
+        const int BULLTRICKERROWS = 15; // Assuming an 8x8 board for Butin
+        const int BULLTRICKERCOLS = 15;
+        
+        const int BLACK_PAWN_ID = 0; // Define IDs for Butin pieces
+        const int WHITE_PAWN_ID = 1;
+        const int BLACK_QUEEN_ID = 2;
+        const int WHITE_QUEEN_ID = 3;
+        const int BLACK_KING_ID = 4;
+        const int WHITE_KING_ID = 5;
+        const int EMPTY_ID = 6;
+
+
+        const char BLACK = 'B';
+        const char WHITE = 'W';
+
+
+        const std::vector<direction_t> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
+        const std::vector<direction_t> BLACK_DIRECTION = {{1, -1}, {1, 1}};
+        const std::vector<direction_t> ALL_DIRECTION = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+
+    
+     // ajouter les differents boaard celll pour bulltricker
+     
+        const sf::Vector2f BUTEE_CELL_SIZE(16.25f, 16.25f);
+        const sf::Vector2f HORIZONTAL_RECT_CELL_SIZE(50.0f, 16.25f);
+        const sf::Vector2f VERTICAL_RECT_CELL_SIZE(16.25f, 50.0f);
+        const sf::Vector2f ROYAL_CELL_SIZE(50.0f, 50.0f);
+
+
+        // Calculating the sizes for the pieces with padding
+        const sf::Vector2f ROYAL_BOARDPIECE_SIZE = sf::Vector2f{
+            ROYAL_CELL_SIZE.x - 10.f,  
+            ROYAL_CELL_SIZE.y - 10.f
+        };
+        const sf::Vector2f HORIZONTAL_RECT_BOARDPIECE_SIZE = sf::Vector2f{
+            HORIZONTAL_RECT_CELL_SIZE.x - 10.f,
+            HORIZONTAL_RECT_CELL_SIZE.y - 10.f
+        };
+        const sf::Vector2f VERTICAL_RECT_BOARDPIECE_SIZE = sf::Vector2f{
+            VERTICAL_RECT_CELL_SIZE.x - 10.f,
+            VERTICAL_RECT_CELL_SIZE.y - 10.f
+        };
+        const sf::Vector2f BUTEE_BOARDPIECE_SIZE = sf::Vector2f{
+            BUTEE_CELL_SIZE.x - 10.f,  
+            BUTEE_CELL_SIZE.y - 10.f
+        };
+    };
+
+    };
