@@ -19,10 +19,10 @@ void GameChoice::Init()
 {
     sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT);
     CheckAssets(font, "GameChoice::Init() : font is nullptr");
-
-    InitRectangleShape(m_background, BACKGROUND_SIZE, BACKGROUND_POSITION);
     sf::Texture const* background = &m_context->m_assets->GetTexture(MENUBACKGROUND);
     CheckAssets(background, "GameChoice::Init() : background is nullptr");
+
+    InitRectangleShape(m_background, BACKGROUND_SIZE, BACKGROUND_POSITION);
     m_background.setTexture(background);
 
     InitRectangleShape(m_titleBackground, TITLEBACKGROUND_SIZE, TITLEBACKGROUND_POSITION, TITLEBACKGROUND_COLOR);

@@ -57,34 +57,25 @@ class View: public UIHandler
         void RemoveHighlightCell(const coord_t coord);
         void HighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
         void RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
-        void Render();
+        void Render() const;
 
-        void UpdateMenuSelectedFlag(const bool newValue);
-        void UpdateLaunchSelectedFlag(const bool newValue);
-        void UpdateMenuHoveredFlag(const bool newValue);
-        void UpdateLaunchHoveredFlag(const bool newValue);
-
-        void HideLaunchgameButton();
         void NeedHighlight();
         void RemoveHighlight();
-        void LauchButtonPressed();
-        void MenuButtonPressed();
-
-        void ResetLaunchPressedFlag();
-
+        
         virtual coord_t GetBoardCoord(const int x, const int y) const = 0;
 
         virtual void PrintWinner(const Player* winner) const = 0;
         virtual void PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const = 0;
 
-        // getters
-        sf::Text& GetLaunchgameButton();
-        sf::Text& GetMenuButton();
-
-        // getters for boolean flags
-        bool IsLaunchgameButtonSelected() const;
-        bool IsLaunchgameButtonPressed() const;
-        bool IsMenuButtonSelected() const;
-        bool IsMenuButtonPressed() const;
+        void UpdateButtonSelectedFlag(const int buttonID, const bool newValue);
+        void UpdateButtonHoveredFlag(const int buttonID, const bool newValue);
+        void SetButtonVisibility(const int buttonID, const bool isVisible);
+        void SetButtonPressed(const int buttonID, const bool isPressed);
+        
+        bool IsButtonSelected(const int buttonID) const;
+        bool IsButtonPressed(const int buttonID) const;
+        bool IsButtonVisible(const int buttonID) const;
         bool HasHighLightedCell() const;
+
+        std::unique_ptr<Button>& GetButton(const int buttonID);
 };
