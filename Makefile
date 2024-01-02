@@ -4,18 +4,18 @@ CC := g++
 CFLAGS := -Wall -std=c++17
 #SFML flags
 SFMLFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
-#Directory
+#Directories
 SRC_DIR := src
 GAME_DIR := game
-BUTIN_DIR := butin
-CHECKERS_DIR := checkers
 EXCEPT_DIR := exception
+BUTIN_DIR := $(GAME_DIR)/butin
+CHECKERS_DIR := $(GAME_DIR)/checkers
 #Source files
-SRC_EXCEPT_DIR := $(SRC_DIR)/$(EXCEPT_DIR)
-SRC_GAME_DIR := $(SRC_DIR)/$(GAME_DIR)
-SRC_BUTIN_DIR := $(SRC_DIR)/$(GAME_DIR)/$(BUTIN_DIR)
-SRC_CHECKERS_DIR := $(SRC_DIR)/$(GAME_DIR)/$(CHECKERS_DIR)
-SRC := $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_EXCEPT_DIR)/*.cpp) $(wildcard $(SRC_GAME_DIR)/*.cpp) $(wildcard $(SRC_BUTIN_DIR)/*.cpp) $(wildcard $(SRC_CHECKERS_DIR)/*.cpp)
+SRC := $(wildcard $(SRC_DIR)/*.cpp) \
+	   $(wildcard $(SRC_DIR)/$(EXCEPT_DIR)/*.cpp) \
+	   $(wildcard $(SRC_DIR)/$(GAME_DIR)/*.cpp) \
+	   $(wildcard $(SRC_DIR)/$(BUTIN_DIR)/*.cpp) \
+	   $(wildcard $(SRC_DIR)/$(CHECKERS_DIR)/*.cpp)
 #Object directory
 OBJ_DIR := obj
 #Object files
@@ -33,6 +33,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean:
-	rm -f $(EXE) $(OBJ_DIR)
+	rm -rf $(OBJ_DIR) $(EXE)
 
 .PHONY: all clean
