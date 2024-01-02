@@ -2,69 +2,67 @@
 #include "../include/game/checkers/CheckersController.hpp"
 #include "../include/game/butin/ButinController.hpp"
 #include "../include/Constants.hpp"
+#include "../include/exception/AssetNotFoundException.hpp"
 
 #include <iostream>
 #include <algorithm>
 #include <SFML/Window/Event.hpp>
 
+using namespace UIConstants;
+using namespace UIConstants::GameChoiceContext;
+using namespace WindowConstants;
+using namespace GameChoiceConstants;
+
 GameChoice::GameChoice(const std::shared_ptr<Context> &context): m_context(context) {}
 
 void GameChoice::Init() 
 {
-    using namespace UIConstants;
-    using namespace UIConstants::GameChoiceContext;
-
     sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT);
-    if (!font)
-    {
-        throw std::runtime_error("MainMenu::Init() : font is nullptr");
-    }
+    CheckAssets(font, "GameChoice::Init() : font is nullptr");
 
-    InitRectangleShape(m_background, sf::Vector2f(static_cast<float>(WindowConstants::WINDOW_SIZE.x), static_cast<float>(WindowConstants::WINDOW_SIZE.y)), sf::Vector2f(0.f, 0.f));
+    InitRectangleShape(m_background, sf::Vector2f(static_cast<float>(WINDOW_SIZE.x), static_cast<float>(WINDOW_SIZE.y)), sf::Vector2f(0.f, 0.f));
     sf::Texture const* background = &m_context->m_assets->GetTexture(MENUBACKGROUND);
-    if (!background)
-    {
-        throw std::runtime_error("MainMenu::Init() : background is nullptr");
-    }
+    CheckAssets(background, "GameChoice::Init() : background is nullptr");
     m_background.setTexture(background);
 
-    // Title
-    InitText(m_gameTitle, "Boardgame", GAMETITLE_POSITION, *font);
+    std::array<std::function<void()>, GameChoiceConstants::NUMBER_OF_BUTTONS> functions = 
+    {
+        [this]() { m_context->m_states->Add(std::make_unique<ButinController>(m_context), true); },
+        [this]() { m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true); },
+        []() { std::cout << "Bulltricker" << std::endl; },
+        [this]() { m_context->CloseWindow(); }
+    };
 
-    // Game 1 button
-    InitText(m_butinButton, "Butin", BUTINBUTTON_POSITION, *font, CHARACTER_SIZE);
+    InitText(m_texts[GameChoiceTextID::TITLEID], BOARDGAMETITLE, GAMETITLE_POSITION, *font);
+    InitButton(GameChoiceTextID::BUTINBUTTONID, BUTINSTRING, BUTINBUTTON_POSITION, *font, functions[GameChoiceButtonID::BUTINBUTTONID]);
+    InitButton(GameChoiceTextID::CHECKERSBUTTONID, CHECKERSSTRING, CHECKERSBUTTON_POSITION, *font, functions[GameChoiceButtonID::CHECKERSBUTTONID]);
+    InitButton(GameChoiceTextID::BULLTRICKERBUTTONID, BULLTRICKERSTRING, BULLTRICKERBUTTON_POSITION, *font, functions[GameChoiceButtonID::BULLTRICKERBUTTONID]);
+    InitButton(GameChoiceTextID::EXITBUTTONID, EXITSTRING, EXITBUTTON_POSITION, *font, functions[GameChoiceButtonID::EXITBUTTONID]);
+}
 
-    // Checkers game button
-    InitText(m_checkersButton, "Les Dames", CHECKERSBUTTON_POSITION, *font, CHARACTER_SIZE);
+void GameChoice::InitButton(size_t buttonID, const std::string& text, 
+                            const sf::Vector2f& position, const sf::Font& font, 
+                            const std::function<void()>& action)
+{
+    InitText(m_texts[buttonID], text, position, font, CHARACTER_SIZE);
 
-    // Game 3 button
-    InitText(m_bulltrickerButton, "Bulltricker", BULLTRICKERBUTTON_POSITION, *font, CHARACTER_SIZE);
+    m_buttons[buttonID-1] = std::make_unique<Button>(m_texts[buttonID]);
+    m_buttons[buttonID-1]->m_action = action;
+}
 
-    // Exit button
-    InitText(m_exitButton, "Quitter", EXITBUTTON_POSITION, *font, CHARACTER_SIZE);
+template <typename T>
+void GameChoice::CheckAssets(T const* ptr, const std::string& errorMessage) const
+{
+    if (!ptr)
+    {
+        throw AssetNotFoundException(errorMessage);
+    }
 }
 
 void GameChoice::Update()
 {
-    struct ButtonState
-    {
-        sf::Text& m_button;
-        bool& m_isSelected;
-        bool& m_isHovered;
-        bool& m_wasHovered;
-    };
-
-    std::array<ButtonState, 4> buttons = {
-        ButtonState{m_butinButton, m_flags.m_isButinButtonSelected, m_flags.m_isButinButtonHovered, m_flags.m_wasButinButtonHovered},
-        ButtonState{m_checkersButton, m_flags.m_isCheckersButtonSelected, m_flags.m_isCheckersButtonHovered, m_flags.m_wasCheckersButtonHovered},
-        ButtonState{m_bulltrickerButton, m_flags.m_isBulltrickerButtonSelected, m_flags.m_isBulltrickerButtonHovered, m_flags.m_wasBulltrickerButtonHovered},
-        ButtonState{m_exitButton, m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonHovered, m_flags.m_wasExitButtonHovered}
-    };
-
-    for (const auto& button : buttons)
-    {
-        UpdateButtonState(button.m_button, button.m_isSelected, button.m_isHovered, button.m_wasHovered);
-    }
+    for (const auto& state : m_buttons)
+        UpdateButtonState(state->m_button, state->m_isSelected, state->m_isHovered, state->m_wasHovered);
 
     UpdateButtonPushed();
 }
@@ -77,7 +75,7 @@ void GameChoice::ProcessInput()
     {
         if (event.type == sf::Event::Closed)
         {
-            CloseWindow();
+            m_context->CloseWindow();
         }
 
         UpdateButtonHoverState(event);
@@ -95,82 +93,42 @@ void GameChoice::ProcessInput()
 
 void GameChoice::UpdateButtonHoverState(const sf::Event& event)
 {
-    struct ButtonHoverState
-    {
-        sf::Text& m_button;
-        bool& m_isHovered;
-    };
-
-    std::array<ButtonHoverState, 4> buttons = {
-        ButtonHoverState{m_butinButton, m_flags.m_isButinButtonHovered},
-        ButtonHoverState{m_checkersButton, m_flags.m_isCheckersButtonHovered},
-        ButtonHoverState{m_bulltrickerButton, m_flags.m_isBulltrickerButtonHovered},
-        ButtonHoverState{m_exitButton, m_flags.m_isExitButtonHovered}
-    };
-
-    for (const auto& button : buttons)
-        button.m_isHovered = IsButtonHovered(button.m_button, event);
+    for (const auto& state : m_buttons)
+        state->m_isHovered = IsButtonHovered(state->m_button, event);
 }
+
 void GameChoice::UpdateButtonSelectionState()
 {
-    struct ButtonSelectionState
-    {
-        sf::Text& m_button;
-        bool& m_isSelected;
-    };
-
-    std::array<ButtonSelectionState, 4> buttons = {
-        ButtonSelectionState{m_butinButton, m_flags.m_isButinButtonSelected},
-        ButtonSelectionState{m_checkersButton, m_flags.m_isCheckersButtonSelected},
-        ButtonSelectionState{m_bulltrickerButton, m_flags.m_isBulltrickerButtonSelected},
-        ButtonSelectionState{m_exitButton, m_flags.m_isExitButtonSelected}
-    };
-
-    for (const auto& button : buttons)
-        button.m_isSelected = IsButtonSelected(button.m_button, *m_context->m_window);
+    for (const auto& state : m_buttons)
+        state->m_isSelected = IsButtonSelected(state->m_button, *m_context->m_window);
 }
+
 void GameChoice::HandleMousePressed(const sf::Event& event)
 {
-    struct ButtonPressedState
-    {
-        bool& m_isSelected;
-        bool& m_isPressed;
-    };
-
     bool isMousePressed = event.mouseButton.button == sf::Mouse::Left;
-
     if (isMousePressed)
     {
-        std::array<ButtonPressedState, 4> buttons = {
-            ButtonPressedState{m_flags.m_isButinButtonSelected, m_flags.m_isButinButtonPressed},
-            ButtonPressedState{m_flags.m_isCheckersButtonSelected, m_flags.m_isCheckersButtonPressed},
-            ButtonPressedState{m_flags.m_isBulltrickerButtonSelected, m_flags.m_isBulltrickerButtonPressed},
-            ButtonPressedState{m_flags.m_isExitButtonSelected, m_flags.m_isExitButtonPressed}
-        };
-
-        std::find_if(buttons.begin(), buttons.end(), [](const auto& button) { return button.m_isSelected; })->m_isPressed = true;
+        for (const auto& state : m_buttons)
+        {
+            if (state->m_isSelected)
+            {
+                state->m_isPressed = true;
+                break;
+            }
+        }
     }
 }
+
 void GameChoice::UpdateButtonPushed()
 {
-    if (m_flags.m_isButinButtonPressed)
+    for (const auto& state : m_buttons)
     {
-        m_context->m_states->Add(std::make_unique<ButinController>(m_context), true);
-        m_flags.m_isButinButtonPressed = false;
-    }
-    else if (m_flags.m_isCheckersButtonPressed)
-    {
-        m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true);
-        m_flags.m_isCheckersButtonPressed = false;
-    }
-    else if (m_flags.m_isBulltrickerButtonPressed)
-    {
-        std::cout << "Bulltricker" << std::endl;
-        m_flags.m_isBulltrickerButtonPressed = false;
-    }
-    else if (m_flags.m_isExitButtonPressed)
-    {
-        CloseWindow();
+        if (state->m_isPressed)
+        {
+            state->m_action();
+            state->m_isPressed = false;
+            break;
+        }
     }
 }
 
@@ -179,22 +137,8 @@ void GameChoice::Draw()
     m_context->m_window->clear();
 
     m_context->m_window->draw(m_background);
-
-    std::array buttons = {
-        m_gameTitle,
-        m_butinButton,
-        m_checkersButton,
-        m_bulltrickerButton,
-        m_exitButton
-    };
-    for (const auto& button : buttons)
-        m_context->m_window->draw(button);
+    for (const auto& text : m_texts)
+        m_context->m_window->draw(text);
 
     m_context->m_window->display();
-}
-
-void GameChoice::CloseWindow() const
-{
-    m_context->m_states->PopAll();
-    m_context->m_window->close();
 }

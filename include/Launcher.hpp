@@ -17,6 +17,12 @@ struct Context
         m_assets{std::make_unique<Engine::AssetManager>()}, 
         m_states{std::make_unique<Engine::StateManager>()}
     {}
+
+    void CloseWindow() const
+    {
+        m_states->PopAll();
+        m_window->close();
+    }
 };
 
 class Launcher

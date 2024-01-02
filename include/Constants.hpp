@@ -19,6 +19,34 @@ namespace WindowConstants
     const std::string CHECKERS_TITLE = "Les Dames - Diamant/Hamdi";
     const std::string BULLTRICKER_TITLE = "Bulltricker - Diamant/Hamdi";
 };
+namespace GameChoiceConstants
+{
+    const int NUMBER_OF_TEXTS = 5;
+    const int NUMBER_OF_BUTTONS = 4;
+
+    const std::string BOARDGAMETITLE = "Boardgame";
+    const std::string BUTINSTRING = "Butin";
+    const std::string CHECKERSSTRING = "Les Dames";
+    const std::string BULLTRICKERSTRING = "Bulltricker";
+    const std::string EXITSTRING = "Quitter";
+
+    namespace GameChoiceTextID
+    {
+        const int TITLEID = 0;
+        const int BUTINBUTTONID = 1;
+        const int CHECKERSBUTTONID = 2;
+        const int BULLTRICKERBUTTONID = 3;
+        const int EXITBUTTONID = 4;
+    };
+
+    namespace GameChoiceButtonID
+    {
+        const int BUTINBUTTONID = 0;
+        const int CHECKERSBUTTONID = 1;
+        const int BULLTRICKERBUTTONID = 2;
+        const int EXITBUTTONID = 3;
+    };
+}
 
 namespace AssetsConstants
 {

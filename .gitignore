@@ -3,5 +3,7 @@ build/
 
 boardgame
 
+*.o
+
 # Ignore Visual Studio Code directory
 .vscode/
