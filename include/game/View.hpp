@@ -10,7 +10,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-class View: public UI::UIHandler
+class View: public UIHandler
 {
     protected:
         sf::RectangleShape m_boardBackground;

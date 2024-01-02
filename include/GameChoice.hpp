@@ -9,7 +9,7 @@
 #include "EventHandler.hpp"
 #include "Button.hpp"
 
-class GameChoice: public Engine::State, public UI::UIHandler, public EventHandler
+class GameChoice: public Engine::State, public UIHandler, public EventHandler
 {
     private:
         std::shared_ptr<Context> m_context;
