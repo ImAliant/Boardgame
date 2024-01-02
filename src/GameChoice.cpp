@@ -20,10 +20,12 @@ void GameChoice::Init()
     sf::Font const* font = &m_context->m_assets->GetFont(MAIN_FONT);
     CheckAssets(font, "GameChoice::Init() : font is nullptr");
 
-    InitRectangleShape(m_background, sf::Vector2f(static_cast<float>(WINDOW_SIZE.x), static_cast<float>(WINDOW_SIZE.y)), sf::Vector2f(0.f, 0.f));
+    InitRectangleShape(m_background, BACKGROUND_SIZE, BACKGROUND_POSITION);
     sf::Texture const* background = &m_context->m_assets->GetTexture(MENUBACKGROUND);
     CheckAssets(background, "GameChoice::Init() : background is nullptr");
     m_background.setTexture(background);
+
+    InitRectangleShape(m_titleBackground, TITLEBACKGROUND_SIZE, TITLEBACKGROUND_POSITION, TITLEBACKGROUND_COLOR);
 
     std::array<std::function<void()>, GameChoiceConstants::NUMBER_OF_BUTTONS> functions = 
     {
@@ -33,7 +35,7 @@ void GameChoice::Init()
         [this]() { m_context->CloseWindow(); }
     };
 
-    InitText(m_texts[GameChoiceTextID::TITLEID], BOARDGAMETITLE, GAMETITLE_POSITION, *font);
+    InitText(m_texts[GameChoiceTextID::TITLEID], BOARDGAMETITLE, GAMETITLE_POSITION, *font, TITLE_CHARACTER_SIZE, TITLE_COLOR);
     InitButton(GameChoiceTextID::BUTINBUTTONID, BUTINSTRING, BUTINBUTTON_POSITION, *font, functions[GameChoiceButtonID::BUTINBUTTONID]);
     InitButton(GameChoiceTextID::CHECKERSBUTTONID, CHECKERSSTRING, CHECKERSBUTTON_POSITION, *font, functions[GameChoiceButtonID::CHECKERSBUTTONID]);
     InitButton(GameChoiceTextID::BULLTRICKERBUTTONID, BULLTRICKERSTRING, BULLTRICKERBUTTON_POSITION, *font, functions[GameChoiceButtonID::BULLTRICKERBUTTONID]);
@@ -128,6 +130,8 @@ void GameChoice::Draw()
     m_context->m_window->clear();
 
     m_context->m_window->draw(m_background);
+    m_context->m_window->draw(m_titleBackground);
+
     for (const auto& text : m_texts)
         m_context->m_window->draw(text);
 

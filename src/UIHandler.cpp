@@ -1,10 +1,11 @@
 #include "../include/UIHandler.hpp"
 
-void UIHandler::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const sf::Font& font, const int &characterSize) 
+void UIHandler::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const sf::Font& font, const int &characterSize, const sf::Color& color) const
 {
     object.setFont(font);
     object.setString(text);
     object.setCharacterSize(characterSize);
+    object.setFillColor(color);
     object.setOrigin(
         object.getGlobalBounds().width / 2,
         object.getGlobalBounds().height / 2
@@ -12,10 +13,11 @@ void UIHandler::InitText(sf::Text &object, const std::string &text, const sf::Ve
     object.setPosition(position);
 }
 
-void UIHandler::InitRectangleShape(sf::RectangleShape &object, const sf::Vector2f &size, const sf::Vector2f &position) const
+void UIHandler::InitRectangleShape(sf::RectangleShape &object, const sf::Vector2f &size, const sf::Vector2f &position, const sf::Color &color) const
 {
     object.setSize(size);
     object.setPosition(position);
+    object.setFillColor(color);
 }
 
 void UIHandler::UpdateButtonState(sf::Text &button, bool isSelected, bool isHovered, bool &wasHovered, bool isVisible) const 

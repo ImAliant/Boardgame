@@ -15,6 +15,9 @@ class GameChoice: public Engine::State, public UIHandler, public EventHandler
         std::shared_ptr<Context> m_context;
 
         sf::RectangleShape m_background;
+        sf::RectangleShape m_titleBackground;
+
+        std::array<sf::RectangleShape, 4> m_lines;
 
         std::array<sf::Text, GameChoiceConstants::NUMBER_OF_TEXTS> m_texts;
         std::array<std::unique_ptr<Button>, 

@@ -96,6 +96,22 @@ namespace UIConstants {
             static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
             static_cast<float>(WindowConstants::WINDOW_SIZE.y) / 2 + 25.f
         );
+        
+        const sf::Vector2f BACKGROUND_SIZE = sf::Vector2f(
+            static_cast<float>(WindowConstants::WINDOW_SIZE.x), 
+            static_cast<float>(WindowConstants::WINDOW_SIZE.y)
+        );
+        const sf::Vector2f BACKGROUND_POSITION = sf::Vector2f(0.f, 0.f);
+
+        const sf::Vector2f TITLEBACKGROUND_SIZE = sf::Vector2f(
+            300.f, 80.f
+        );
+        const sf::Vector2f TITLEBACKGROUND_POSITION = sf::Vector2f(
+            100.f, 120.f
+        );
+
+        const sf::Color TITLE_COLOR = sf::Color{30, 30, 30};
+        const sf::Color TITLEBACKGROUND_COLOR = sf::Color{30, 30, 30, 50};
     };
     const sf::Vector2f GAMETITLE_POSITION = sf::Vector2f(
         static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
@@ -105,6 +121,7 @@ namespace UIConstants {
         static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
         static_cast<float>(WindowConstants::WINDOW_SIZE.y) / 2 + 250.f
     );
+    const int TITLE_CHARACTER_SIZE = 40;
     const int CHARACTER_SIZE = 20;
 };
 
