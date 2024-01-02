@@ -50,7 +50,7 @@ namespace GameChoiceConstants
 
 namespace AssetsConstants
 {
-    const std::string MAIN_FONT = "assets/fonts/DejaVuSansMono.ttf";
+    const std::string MAIN_FONT = "assets/fonts/Nepoboy-K7Y4Z.ttf";
 
     const std::string MENUBACKGROUND = "assets/images/menu/background.png";
     
