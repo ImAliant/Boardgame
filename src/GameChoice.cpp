@@ -108,27 +108,18 @@ void GameChoice::HandleMousePressed(const sf::Event& event)
     bool isMousePressed = event.mouseButton.button == sf::Mouse::Left;
     if (isMousePressed)
     {
-        for (const auto& state : m_buttons)
-        {
-            if (state->m_isSelected)
-            {
-                state->m_isPressed = true;
-                break;
-            }
-        }
+        auto it = std::find_if(m_buttons.begin(), m_buttons.end(), [](const auto& state) { return state->m_isSelected; });
+        if (it != m_buttons.end()) (*it)->m_isPressed = true;
     }
 }
 
 void GameChoice::UpdateButtonPushed()
 {
-    for (const auto& state : m_buttons)
+    auto it = std::find_if(m_buttons.begin(), m_buttons.end(), [](const auto& state) { return state->m_isPressed; });
+    if (it != m_buttons.end())
     {
-        if (state->m_isPressed)
-        {
-            state->m_action();
-            state->m_isPressed = false;
-            break;
-        }
+        (*it)->m_action();
+        (*it)->m_isPressed = false;
     }
 }
 
