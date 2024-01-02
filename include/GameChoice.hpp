@@ -17,20 +17,10 @@ class GameChoice: public Engine::State, public UIHandler, public EventHandler
         sf::RectangleShape m_background;
         sf::RectangleShape m_titleBackground;
 
-        std::array<sf::RectangleShape, 4> m_lines;
-
-        std::array<sf::Text, GameChoiceConstants::NUMBER_OF_TEXTS> m_texts;
-        std::array<std::unique_ptr<Button>, 
-                   GameChoiceConstants::NUMBER_OF_BUTTONS> m_buttons;
-
         void UpdateButtonHoverState(const sf::Event& event) override;
         void UpdateButtonSelectionState() override;
         void HandleMousePressed(const sf::Event& event) override;
         void UpdateButtonPushed() override;
-
-        void InitButton(size_t buttonID, const std::string& text, 
-                        const sf::Vector2f& position, const sf::Font& font, 
-                        const std::function<void()>& action);
 
         template <typename T>
         void CheckAssets(T const* ptr, const std::string& errorMessage) const;

@@ -50,20 +50,35 @@ namespace GameChoiceConstants
 
 namespace AssetsConstants
 {
-    const std::string MAIN_FONT = "assets/fonts/Nepoboy-K7Y4Z.ttf";
+    //const std::string MAIN_FONT = "assets/fonts/Nepoboy-K7Y4Z.ttf";
+//
+    //const std::string MENUBACKGROUND = "assets/images/menu/background.png";
+    //
+    //const std::string CHECKERS_BLACK_PAWN = "assets/images/checkers/black_pawn.png";
+    //const std::string CHECKERS_WHITE_PAWN = "assets/images/checkers/white_pawn.png";
+    //const std::string CHECKERS_BLACK_QUEEN = "assets/images/checkers/black_queen.png";
+    //const std::string CHECKERS_WHITE_QUEEN = "assets/images/checkers/white_queen.png";
+    //
+    //const std::string BUTIN_YELLOW_PIECE = "assets/images/butin/yellow_piece.png";
+    //const std::string BUTIN_RED_PIECE = "assets/images/butin/red_piece.png";
+    //const std::string BUTIN_BLACK_PIECE = "assets/images/butin/black_piece.png";
+//
+    //const std::string EMPTY_ASSET = "assets/images/empty.png";
 
-    const std::string MENUBACKGROUND = "assets/images/menu/background.png";
-    
-    const std::string CHECKERS_BLACK_PAWN = "assets/images/checkers/black_pawn.png";
-    const std::string CHECKERS_WHITE_PAWN = "assets/images/checkers/white_pawn.png";
-    const std::string CHECKERS_BLACK_QUEEN = "assets/images/checkers/black_queen.png";
-    const std::string CHECKERS_WHITE_QUEEN = "assets/images/checkers/white_queen.png";
-    
-    const std::string BUTIN_YELLOW_PIECE = "assets/images/butin/yellow_piece.png";
-    const std::string BUTIN_RED_PIECE = "assets/images/butin/red_piece.png";
-    const std::string BUTIN_BLACK_PIECE = "assets/images/butin/black_piece.png";
+    const std::string MAIN_FONT = "../assets/fonts/Nepoboy-K7Y4Z.ttf";
 
-    const std::string EMPTY_ASSET = "assets/images/empty.png";
+    const std::string MENUBACKGROUND = "../assets/images/menu/background.png";
+    
+    const std::string CHECKERS_BLACK_PAWN = "../assets/images/checkers/black_pawn.png";
+    const std::string CHECKERS_WHITE_PAWN = "../assets/images/checkers/white_pawn.png";
+    const std::string CHECKERS_BLACK_QUEEN = "../assets/images/checkers/black_queen.png";
+    const std::string CHECKERS_WHITE_QUEEN = "../assets/images/checkers/white_queen.png";
+    
+    const std::string BUTIN_YELLOW_PIECE = "../assets/images/butin/yellow_piece.png";
+    const std::string BUTIN_RED_PIECE = "../assets/images/butin/red_piece.png";
+    const std::string BUTIN_BLACK_PIECE = "../assets/images/butin/black_piece.png";
+
+    const std::string EMPTY_ASSET = "../assets/images/empty.png";
 };
 
 namespace UIConstants {
@@ -82,6 +97,12 @@ namespace UIConstants {
             static_cast<float>(WindowConstants::WINDOW_SIZE.x) / 2, 
             static_cast<float>(WindowConstants::WINDOW_SIZE.y) - 30.f
         );
+
+        const int NUMBER_OF_BUTTONS = 2;
+        const int NUMBER_OF_TEXTS = 2;
+
+        const int LAUNCHBUTTONID = 0;
+        const int MENUBUTTONID = 1;
     };
     namespace GameChoiceContext {
         const sf::Vector2f BUTINBUTTON_POSITION = sf::Vector2f(

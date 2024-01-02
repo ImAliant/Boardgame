@@ -12,6 +12,7 @@ class Button
         bool m_isHovered = false;
         bool m_wasHovered = false;
         bool m_isPressed = false;
+        bool m_isVisible = true;
         
         explicit Button(sf::Text& button): 
             m_button{button}

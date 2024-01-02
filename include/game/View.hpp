@@ -6,6 +6,7 @@
 #include "../Constants.hpp"
 #include "../Launcher.hpp"
 #include "../Types.hpp"
+#include "../Button.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -21,9 +22,6 @@ class View: public UIHandler
         std::vector<std::vector<sf::RectangleShape>> m_boardPiece;
 
         sf::RectangleShape m_lineSeparator;
-
-        sf::Text m_lauchgameButton;
-        sf::Text m_menuButton;
 
         ViewFlags m_flags;
 

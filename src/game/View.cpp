@@ -22,8 +22,19 @@ void View::InitBase(
 
     InitRectangleShape(m_lineSeparator, GameContext::LINESEPARATOR_SIZE, GameContext::LINESEPARATOR_POSITION);
 
-    InitText(m_lauchgameButton, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
-    InitText(m_menuButton, "Menu", GameContext::MENUBUTTON_POSITION, *font, CHARACTER_SIZE);
+    std::array<std::function<void()>, GameContext::NUMBER_OF_BUTTONS> functions =
+    {
+        [this]() { LauchButtonPressed(); },
+        [this]() { MenuButtonPressed(); }
+    };
+
+    for (int i = 0; i < GameContext::NUMBER_OF_TEXTS; i++)
+    {
+        m_texts.emplace_back();
+    }
+
+    InitButton(GameContext::LAUNCHBUTTONID, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, functions[GameContext::LAUNCHBUTTONID]);
+    InitButton(GameContext::MENUBUTTONID, "Menu", GameContext::MENUBUTTON_POSITION, *font, functions[GameContext::MENUBUTTONID]);
 }
 
 void View::InitPieceTexture(const std::shared_ptr<Context> context, const std::vector<int>& textureIDs)
@@ -133,9 +144,13 @@ void View::Draw(sf::RenderWindow& window)
     DrawBoardCells(window);
     DrawBoardPiece(window);
     window.draw(m_lineSeparator);
-    window.draw(m_menuButton);
-    if (IsLaunchgameButtonVisible())
-        window.draw(m_lauchgameButton);
+
+    for (const auto& button : m_buttons)
+    {
+        if (button->m_isVisible)
+            window.draw(button->m_button);
+    }
+
     window.display();
 }
 void View::DrawBoardCells(sf::RenderWindow& window)
@@ -198,32 +213,33 @@ void View::RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMove
 
 void View::Render()
 {
-    UpdateButtonState(m_menuButton, m_flags.m_isMenuButtonSelected, m_flags.m_isMenuButtonHovered, m_flags.m_wasMenuButtonHovered);
-
-    if (IsLaunchgameButtonVisible())
-        UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered);
+    for (const auto& button : m_buttons)
+    {
+        if (button->m_isVisible)
+            UpdateButtonState(button->m_button, button->m_isSelected, button->m_isHovered, button->m_wasHovered);
+    }
 }
 
 void View::UpdateMenuSelectedFlag(const bool newValue)
 {
-    m_flags.m_isMenuButtonSelected = newValue;
+    m_buttons[1]->m_isSelected = newValue;
 }
 void View::UpdateLaunchSelectedFlag(const bool newValue)
 {
-    m_flags.m_isLaunchgameButtonSelected = newValue;
+    m_buttons[0]->m_isSelected = newValue;
 }
 void View::UpdateMenuHoveredFlag(const bool newValue)
 {
-    m_flags.m_isMenuButtonHovered = newValue;
+    m_buttons[1]->m_isHovered = newValue;
 }
 void View::UpdateLaunchHoveredFlag(const bool newValue)
 {
-    m_flags.m_isLaunchgameButtonHovered = newValue;
+    m_buttons[0]->m_isHovered = newValue;
 }
 
 void View::HideLaunchgameButton()
 {
-    m_flags.m_isLaunchgameButtonVisible = false;
+    m_buttons[0]->m_isVisible = false;
 }
 void View::NeedHighlight()
 {
@@ -235,16 +251,16 @@ void View::RemoveHighlight()
 }
 void View::LauchButtonPressed()
 {
-    m_flags.m_isLaunchgameButtonPressed = true;
+    m_buttons[0]->m_isPressed = true;
 }
 void View::MenuButtonPressed()
 {
-    m_flags.m_isMenuButtonPressed = true;
+    m_buttons[1]->m_isPressed = true;
 }
 
 void View::ResetLaunchPressedFlag()
 {
-    m_flags.m_isLaunchgameButtonPressed = false;
+    m_buttons[0]->m_isPressed = false;
 }
 
 coord_t View::GetBoardCoordBase(const int x, const int y, const sf::Vector2f cellsize) const
@@ -256,32 +272,32 @@ coord_t View::GetBoardCoordBase(const int x, const int y, const sf::Vector2f cel
 }
 sf::Text& View::GetLaunchgameButton()
 {
-    return m_lauchgameButton;
+    return m_buttons[0]->m_button;
 }
 sf::Text& View::GetMenuButton()
 {
-    return m_menuButton;
+    return m_buttons[1]->m_button;
 }
 
 bool View::IsLaunchgameButtonVisible() const
 {
-    return m_flags.m_isLaunchgameButtonVisible;
+    return m_buttons[0]->m_isVisible;
 }
 bool View::IsLaunchgameButtonSelected() const
 {
-    return m_flags.m_isLaunchgameButtonSelected;
+    return m_buttons[0]->m_isSelected;
 }
 bool View::IsLaunchgameButtonPressed() const
 {
-    return m_flags.m_isLaunchgameButtonPressed;
+    return m_buttons[0]->m_isPressed;
 }
 bool View::IsMenuButtonSelected() const
 {
-    return m_flags.m_isMenuButtonSelected;
+    return m_buttons[1]->m_isSelected;
 }
 bool View::IsMenuButtonPressed() const
 {
-    return m_flags.m_isMenuButtonPressed;
+    return m_buttons[1]->m_isPressed;
 }
 bool View::HasHighLightedCell() const
 {

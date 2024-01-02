@@ -17,6 +17,7 @@ set(SOURCES
     src/Board.cpp
     src/Player.cpp
     src/EventHandler.cpp
+    src/UIHandler.cpp
 
     src/game/checkers/Checkers.cpp
     src/game/checkers/CheckersController.cpp

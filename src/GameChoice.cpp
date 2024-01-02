@@ -35,21 +35,16 @@ void GameChoice::Init()
         [this]() { m_context->CloseWindow(); }
     };
 
+    for (int i = 0; i < GameChoiceConstants::NUMBER_OF_TEXTS; i++)
+    {
+        m_texts.emplace_back();
+    }
+
     InitText(m_texts[GameChoiceTextID::TITLEID], BOARDGAMETITLE, GAMETITLE_POSITION, *font, TITLE_CHARACTER_SIZE, TITLE_COLOR);
-    InitButton(GameChoiceTextID::BUTINBUTTONID, BUTINSTRING, BUTINBUTTON_POSITION, *font, functions[GameChoiceButtonID::BUTINBUTTONID]);
-    InitButton(GameChoiceTextID::CHECKERSBUTTONID, CHECKERSSTRING, CHECKERSBUTTON_POSITION, *font, functions[GameChoiceButtonID::CHECKERSBUTTONID]);
-    InitButton(GameChoiceTextID::BULLTRICKERBUTTONID, BULLTRICKERSTRING, BULLTRICKERBUTTON_POSITION, *font, functions[GameChoiceButtonID::BULLTRICKERBUTTONID]);
-    InitButton(GameChoiceTextID::EXITBUTTONID, EXITSTRING, EXITBUTTON_POSITION, *font, functions[GameChoiceButtonID::EXITBUTTONID]);
-}
-
-void GameChoice::InitButton(size_t buttonID, const std::string& text, 
-                            const sf::Vector2f& position, const sf::Font& font, 
-                            const std::function<void()>& action)
-{
-    InitText(m_texts[buttonID], text, position, font, CHARACTER_SIZE);
-
-    m_buttons[buttonID-1] = std::make_unique<Button>(m_texts[buttonID]);
-    m_buttons[buttonID-1]->m_action = action;
+    InitButton(GameChoiceTextID::BUTINBUTTONID, BUTINSTRING, BUTINBUTTON_POSITION, *font, functions[GameChoiceButtonID::BUTINBUTTONID], 1);
+    InitButton(GameChoiceTextID::CHECKERSBUTTONID, CHECKERSSTRING, CHECKERSBUTTON_POSITION, *font, functions[GameChoiceButtonID::CHECKERSBUTTONID], 1);
+    InitButton(GameChoiceTextID::BULLTRICKERBUTTONID, BULLTRICKERSTRING, BULLTRICKERBUTTON_POSITION, *font, functions[GameChoiceButtonID::BULLTRICKERBUTTONID], 1);
+    InitButton(GameChoiceTextID::EXITBUTTONID, EXITSTRING, EXITBUTTON_POSITION, *font, functions[GameChoiceButtonID::EXITBUTTONID], 1);
 }
 
 template <typename T>

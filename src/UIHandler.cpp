@@ -1,7 +1,7 @@
 #include "../include/UIHandler.hpp"
 
-void UIHandler::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const sf::Font& font, const int &characterSize, const sf::Color& color) const
-{
+void UIHandler::InitText(sf::Text &object, const std::string &text, const sf::Vector2f &position, const sf::Font& font, const int &characterSize, const sf::Color& color)
+{   
     object.setFont(font);
     object.setString(text);
     object.setCharacterSize(characterSize);
@@ -11,6 +11,21 @@ void UIHandler::InitText(sf::Text &object, const std::string &text, const sf::Ve
         object.getGlobalBounds().height / 2
     );
     object.setPosition(position);
+}
+
+void UIHandler::InitButton(size_t buttonID, const std::string& text, const sf::Vector2f& position, const sf::Font& font, const std::function<void()>& action, size_t idOffset)
+{
+    const auto ajustedID = buttonID - idOffset;
+
+    if (ajustedID >= m_texts.size()) 
+    {
+        throw std::out_of_range("Button ID out of range");
+    }
+
+    InitText(m_texts[buttonID], text, position, font, UIConstants::CHARACTER_SIZE);
+
+    m_buttons.push_back(std::make_unique<Button>(m_texts[buttonID]));
+    m_buttons[ajustedID]->m_action = action;
 }
 
 void UIHandler::InitRectangleShape(sf::RectangleShape &object, const sf::Vector2f &size, const sf::Vector2f &position, const sf::Color &color) const
