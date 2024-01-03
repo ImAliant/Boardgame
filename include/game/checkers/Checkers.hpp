@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CheckersBoard.hpp"
-#include "../GameStatus.hpp"
+//#include "../GameStatus.hpp"
+#include "CheckersStatus.hpp"
 #include "CheckersFlags.hpp"
 
 #include "../Model.hpp"
@@ -13,7 +14,7 @@
 class Checkers: public Model
 {
     private:
-        GameStatus m_status;
+        CheckersStatus m_status;
         CheckersFlags m_flags;
     
         void SelectPiece(const coord_t coord) override;
@@ -66,6 +67,11 @@ class Checkers: public Model
         void ResetCurrentPlayerChangedFlag() override;
         void ResetSelectedPieceFlag() override;
         void ResetBoardNeedUpdateFlag() override;
+
+        void SetWhiteWantsDraw(bool whiteWantsDraw);
+        void SetBlackWantsDraw(bool blackWantsDraw);
+        bool IsWhiteWantsDraw() const;
+        bool IsBlackWantsDraw() const;
 
         Player* GetWinner() const override;
 

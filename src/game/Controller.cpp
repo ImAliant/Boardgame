@@ -54,6 +54,8 @@ void Controller::Update()
 {
     m_view->Render();
 
+    UpdateSpecific();
+
     UpdateHighlight();
     UpdateBoard();
     UpdateCurrentPlayer();

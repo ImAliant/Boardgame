@@ -298,6 +298,25 @@ void Checkers::ResetBoardNeedUpdateFlag()
     m_flags.ResetBoardNeedUpdateFlag();
 }
 
+void Checkers::SetWhiteWantsDraw(bool whiteWantsDraw)
+{
+    m_status.SetWhiteWantsDraw(whiteWantsDraw);
+}
+void Checkers::SetBlackWantsDraw(bool blackWantsDraw)
+{
+    m_status.SetBlackWantsDraw(blackWantsDraw);
+}
+
+bool Checkers::IsWhiteWantsDraw() const
+{
+    return m_status.IsWhiteWantsDraw();
+}
+
+bool Checkers::IsBlackWantsDraw() const
+{
+    return m_status.IsBlackWantsDraw();
+}
+
 std::shared_ptr<Player> Checkers::GetCurrentPlayer() const
 {
     return m_status.GetCurrentPlayer();

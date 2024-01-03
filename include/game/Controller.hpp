@@ -35,6 +35,8 @@ class Controller: public Engine::State, public EventHandler
         void UpdateBoard() const;
         void UpdateCurrentPlayer() const;
 
+        virtual void UpdateSpecific() = 0;
+
         void HighlightSelectedPiece() const;
         void RemoveHighlightSelectedPiece() const;
 
