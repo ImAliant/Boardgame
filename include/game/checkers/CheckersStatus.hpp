@@ -5,8 +5,8 @@
 class CheckersStatus: public GameStatus
 {
     private:
-        bool m_whiteWantsDraw = false;
-        bool m_blackWantsDraw = false;
+        flag_t m_whiteWantsDraw = false;
+        flag_t m_blackWantsDraw = false;
     public:
         void SetWhiteWantsDraw(bool whiteWantsDraw)
         {
