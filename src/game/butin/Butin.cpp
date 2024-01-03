@@ -228,6 +228,10 @@ void Butin::ResetCurrentPlayerChangedFlag()
 {
     return m_flags.ResetCurrentPlayerChangedFlag();
 }
+void Butin::ResetReplayFlag()
+{
+    return m_flags.ResetReplayFlag();
+}
 
 std::shared_ptr<Player> Butin::GetCurrentPlayer() const
 {

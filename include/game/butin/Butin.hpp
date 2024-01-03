@@ -17,7 +17,6 @@ class Butin: public Model
         ButinFlags m_flags;
 
         void SelectPiece(const coord_t coord) override;
-        void DeselectPiece() override;
 
         bool IsYellowPiece(const coord_t coord) const;
 
@@ -48,6 +47,7 @@ class Butin: public Model
         void GameStart() override;
 
         void SwitchPlayer() override;
+        void DeselectPiece() override;
 
         bool IsFirstRound() const;
         bool IsGameStarted() const override;
@@ -60,6 +60,7 @@ class Butin: public Model
         void ResetSelectedPieceFlag() override;
         void ResetBoardNeedUpdateFlag() override;
         void ResetCurrentPlayerChangedFlag() override;
+        void ResetReplayFlag();
 
         Player* GetWinner() const override;
         int GetWinnerScore() const;

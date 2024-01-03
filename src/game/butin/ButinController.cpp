@@ -20,6 +20,8 @@ void ButinController::HandleEvent(const sf::Event& event)
         if (!firstRound && event.key.code == sf::Keyboard::Space)
         {
             dynamic_cast<Butin*>(m_model.get())->SwitchPlayer();
+            dynamic_cast<Butin*>(m_model.get())->DeselectPiece();
+            dynamic_cast<Butin*>(m_model.get())->ResetReplayFlag();
         }
     }
 }
