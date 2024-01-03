@@ -160,7 +160,6 @@ void Checkers::HandlePieceCaptureAndReplay(const coord_t coord)
     {
         SelectPiece(coord);
         m_flags.NeedReplay();
-        //m_flags.CapturingMoveRequired();
     }
     else m_flags.ResetReplayFlag();
 
@@ -210,7 +209,6 @@ bool Checkers::HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const
             auto coord = std::make_pair(i, j);
             auto piece = GetPiece(coord);
             if (!piece) continue;
-            //if (piece->GetOwner() != GetCurrentPlayer()) continue;
             if ((piece->GetOwner() == GetCurrentPlayer()) != checkCurrentPlayer) continue;
 
             auto possibleMoves = capturing ? piece->GetPossibleCaptures() : piece->GetPossibleMoves();
