@@ -23,5 +23,5 @@ class CheckersController: public Controller
         explicit CheckersController(std::shared_ptr<Context> context);
         ~CheckersController() override = default;
 
-        void UpdateSpecific() override;
+        void Update() override;
 };

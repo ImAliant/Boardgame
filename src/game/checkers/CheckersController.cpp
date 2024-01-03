@@ -24,8 +24,10 @@ void CheckersController::HandleEvent(const sf::Event& event)
     }
 }
 
-void CheckersController::UpdateSpecific()
+void CheckersController::Update()
 {
+    Controller::Update();
+
     if (dynamic_cast<Checkers*>(m_model.get())->IsWhiteWantsDraw() 
     && dynamic_cast<Checkers*>(m_model.get())->IsBlackWantsDraw())
     {
