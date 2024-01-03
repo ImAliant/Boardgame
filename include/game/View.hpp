@@ -43,8 +43,6 @@ class View: public UIHandler
         virtual void SetPieceTexture(sf::RectangleShape &piece, const char color, const bool promoted) = 0;
 
         coord_t GetBoardCoordBase(const int x, const int y, const sf::Vector2f cellsize) const;
-
-        bool IsLaunchgameButtonVisible() const;
     public:
         View();
         ~View() override;
@@ -58,6 +56,8 @@ class View: public UIHandler
         void HighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
         void RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMoves);
         void Render() const;
+
+        void Launch();
 
         void NeedHighlight();
         void RemoveHighlight();

@@ -24,7 +24,7 @@ void View::InitBase(
 
     std::array<std::function<void()>, GameContext::NUMBER_OF_BUTTONS> functions =
     {
-        [this]() { SetButtonPressed(GameContext::LAUNCHBUTTONID, true); },
+        [this]() { Launch(); },
         [this]() { SetButtonPressed(GameContext::MENUBUTTONID, true); }
     };
 
@@ -150,7 +150,6 @@ void View::Draw(sf::RenderWindow& window)
         if (button->m_isVisible)
             window.draw(button->m_button);
     }
-
     window.display();
 }
 void View::DrawBoardCells(sf::RenderWindow& window)
@@ -218,6 +217,13 @@ void View::Render() const
         if (button->m_isVisible)
             UpdateButtonState(button->m_button, button->m_isSelected, button->m_isHovered, button->m_wasHovered);
     }
+}
+
+void View::Launch()
+{
+    SetButtonPressed(GameContext::LAUNCHBUTTONID, true);
+
+    m_buttons[GameContext::MENUBUTTONID]->m_button.setPosition(GameContext::MENUBUTTON_POSITION_LAUNCHED);
 }
 
 coord_t View::GetBoardCoordBase(const int x, const int y, const sf::Vector2f cellsize) const
