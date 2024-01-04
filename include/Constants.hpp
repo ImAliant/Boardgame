@@ -35,6 +35,17 @@ namespace AssetsConstants
     const std::string BUTIN_RED_PIECE = "assets/images/butin/red_piece.png";
     const std::string BUTIN_BLACK_PIECE = "assets/images/butin/black_piece.png";
 
+    const std::string BULLTRICKER_BLACK_HORIZ_PAWN = "assets/images/bulltricker/black_horiz_pawn.png";
+    const std::string BULLTRICKER_WHITE_HORIZ_PAWN = "assets/images/bulltricker/white_horiz_pawn.png";
+    const std::string BULLTRICKER_BLACK_VERT_PAWN = "assets/images/bulltricker/black_vert_pawn.png";
+    const std::string BULLTRICKER_WHITE_VERT_PAWN = "assets/images/bulltricker/white_vert_pawn.png";
+    const std::string BULLTRICKER_BLACK_HORIZ_QUEEN = "assets/images/bulltricker/black_horiz_queen.png";
+    const std::string BULLTRICKER_WHITE_HORIZ_QUEEN = "assets/images/bulltricker/white_horiz_queen.png";
+    const std::string BULLTRICKER_BLACK_VERT_QUEEN = "assets/images/bulltricker/black_vert_queen.png";
+    const std::string BULLTRICKER_WHITE_VERT_QUEEN = "assets/images/bulltricker/white_vert_queen.png";
+    const std::string BULLTRICKER_BLACK_KING = "assets/images/bulltricker/black_king.png";
+    const std::string BULLTRICKER_WHITE_KING = "assets/images/bulltricker/white_king.png";
+
     const std::string EMPTY_ASSET = "assets/images/empty.png";
 };
 
@@ -171,16 +182,20 @@ namespace GameConstants
 
 
     namespace BulltrickerConstants{
-        const int BULLTRICKERROWS = 15; // Assuming an 8x8 board for Butin
+        const int BULLTRICKERROWS = 15; 
         const int BULLTRICKERCOLS = 15;
         
-        const int BLACK_PAWN_ID = 0; // Define IDs for Butin pieces
-        const int WHITE_PAWN_ID = 1;
-        const int BLACK_QUEEN_ID = 2;
-        const int WHITE_QUEEN_ID = 3;
-        const int BLACK_KING_ID = 4;
-        const int WHITE_KING_ID = 5;
-        const int EMPTY_ID = 6;
+        const int BLACK_HORIZ_PAWN_ID = 0; 
+        const int WHITE_HORIZ_PAWN_ID = 1;
+        const int BLACK_VERT_PAWN_ID = 2;
+        const int WHITE_VERT_PAWN_ID = 3;
+        const int BLACK_HORIZ_QUEEN_ID = 4;
+        const int WHITE_HORIZ_QUEEN_ID = 5;
+        const int BLACK_VERT_QUEEN_ID = 6;
+        const int WHITE_VERT_QUEEN_ID = 7;
+        const int BLACK_KING_ID = 8;
+        const int WHITE_KING_ID = 9;
+        const int EMPTY_ID = 10;
 
 
         const char BLACK = 'B';

@@ -7,3 +7,6 @@ Bulltricker:
 - Colonnes impaires: allée frontale
 - Une case sur deux est une butée
   - > Ce qui veut dire que les cases où x+y est pair sont des butées
+
+
+  1) Creer un fichier PieceType.hpp commun entre checkers et bulltricker

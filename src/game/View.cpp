@@ -48,6 +48,7 @@ void View::LoadTexture(const int textureID, const std::shared_ptr<Context> conte
     }
 
     m_pieceTexture.push_back(context->m_assets->GetTexture(textureID));
+    
 }
 
 void View::InitBoardBackground()

@@ -1,4 +1,5 @@
 #include "../../../include/game/bulltricker/BulltrickerView.hpp"
+#include "../../../include/game/bulltricker/BulltrickerBoard.hpp"
 
 BulltrickerView::BulltrickerView() {}
 BulltrickerView::~BulltrickerView() {}
@@ -11,16 +12,19 @@ void BulltrickerView::Init(std::shared_ptr<Context> context, const Board& board)
 {
     
     const std::vector<int> textureIDs = {
-        BULLTRICKER_BLACK_PAWN,
-        BULLTRICKER_WHITE_PAWN,
-        BULLTRICKER_BLACK_QUEEN,
-        BULLTRICKER_WHITE_QUEEN,
+        BULLTRICKER_BLACK_HORIZ_PAWN,
+        BULLTRICKER_WHITE_HORIZ_PAWN,
+        BULLTRICKER_BLACK_VERT_PAWN,
+        BULLTRICKER_WHITE_VERT_PAWN,
+        BULLTRICKER_BLACK_HORIZ_QUEEN,
+        BULLTRICKER_WHITE_HORIZ_QUEEN,
+        BULLTRICKER_BLACK_VERT_QUEEN,
+        BULLTRICKER_WHITE_VERT_QUEEN,
         BULLTRICKER_BLACK_KING,
         BULLTRICKER_WHITE_KING,
         EMPTY_ASSET
     };
-//const sf::Vector2f DEFAULT_CELL_SIZE = sf::Vector2f(40.f, 40.f);  // Example size
-//const sf::Vector2f DEFAULT_PIECE_SIZE = sf::Vector2f(36.f, 36.f); // Example size, slightly smaller than cell
+
    
     InitBase(context, board, textureIDs, ROYAL_BOARDPIECE_SIZE, ROYAL_CELL_SIZE);
 }
@@ -35,52 +39,37 @@ void BulltrickerView::InitBoardCell(const Board& board)
 
 void BulltrickerView::InitDiffCellSize(const Board& board, const int rows, const int cols)
 {
-    const float offset = 10.f; // This offset is the padding around the entire board
-
+    const float offset = 10.f; 
     // Starting position for the first cell
     float currentX = offset;
     float currentY = offset;
 
     for (int i = 0; i < rows; i++) {
-        currentX = offset; // Reset currentX to the starting X position for each new row
-
+        currentX = offset; 
         for (int j = 0; j < cols; j++) {
             sf::Vector2f cellSize;
-
-            // For even rows: butée cell, horizontal alley, butée cell, horizontal alley, ...
-            // For odd rows: vertical alley, royal cell, vertical alley, royal cell, ...
-            if (i % 2 == 0) {
-                // Even row: Alternate between butée and horizontal alley cells
+            if (i % 2 == 0) { 
                 cellSize = (j % 2 == 0) ? GameConstants::BulltrickerConstants::BUTEE_CELL_SIZE
                                         : GameConstants::BulltrickerConstants::HORIZONTAL_RECT_CELL_SIZE;
-            } else {
-                // Odd row: Alternate between vertical alley and royal cells
+            }else {                
                 cellSize = (j % 2 == 0) ? GameConstants::BulltrickerConstants::VERTICAL_RECT_CELL_SIZE
                                         : GameConstants::BulltrickerConstants::ROYAL_CELL_SIZE;
-            }
-
-            // Calculate the position of the current cell
+                }
             sf::Vector2f position(currentX, currentY);
 
-            // Initialize the cell shape with the determined size and calculated position
             InitRectangleShape(
                 m_boardCell[i][j],
                 cellSize,
                 position
             );
 
-            // Set the color of the cell
             if ((i + j) % 2 == 0) {
                 m_boardCell[i][j].setFillColor(GameConstants::BLACKCELL_COLOR);
             } else {
                 m_boardCell[i][j].setFillColor(GameConstants::WHITECELL_COLOR);
             }
-
-            // Increment currentX by the width of the current cell for the next cell in the same row
             currentX += cellSize.x;
         }
-
-        // Increment currentY by the height of the first cell type in the row for the next row
         currentY += (i % 2 == 0) ? GameConstants::BulltrickerConstants::BUTEE_CELL_SIZE.y
                                  : GameConstants::BulltrickerConstants::VERTICAL_RECT_CELL_SIZE.y;
     }
@@ -89,17 +78,67 @@ void BulltrickerView::InitDiffCellSize(const Board& board, const int rows, const
 
 void BulltrickerView::UpdateBoard(const Board& board)
 {
-    // TODO
+    UpdateBoardBase(board, ROYAL_BOARDPIECE_SIZE, ROYAL_CELL_SIZE);
 }
 
 void BulltrickerView::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
 {
-    // TODO
+    sf::Vector2f Real_piecesize = GetPieceSize(coord, board);
+    sf::Vector2f Real_cellsize = GetCellSize(coord, board);
+    View::SetupBoardPiece(coord, board, Real_piecesize, Real_cellsize);
+
+    const auto piece = dynamic_cast<const BulltrickerBoard&>(board).GetPiece(coord);
+    const auto bulltrickerPiece = dynamic_cast<const BulltrickerPiece*>(piece); 
+
+    if (bulltrickerPiece != nullptr) {
+        SetPieceTexture(m_boardPiece[coord.first][coord.second], *bulltrickerPiece, bulltrickerPiece->IsPromoted());
+    } else {
+        SetPieceTexture(m_boardPiece[coord.first][coord.second], EMPTY_ID, false);
+    }
 }
 
-void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted)
-{
-    // TODO
+
+void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted) {
+   
+}
+void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, const BulltrickerPiece &bulltrickerPiece,bool promoted)
+{   
+    switch (bulltrickerPiece.GetType()) {
+       
+        case BullT_PieceType::BT_PAWN:
+            if (bulltrickerPiece.GetSymbol() == GameConstants::BulltrickerConstants::BLACK) {
+               
+                if(!promoted)
+                    piece.setTexture(bulltrickerPiece.IsHorizontal() ? &m_pieceTexture[GameConstants::BulltrickerConstants::BLACK_HORIZ_PAWN_ID]
+                                                                 : &m_pieceTexture[GameConstants::BulltrickerConstants::BLACK_VERT_PAWN_ID]);
+                else 
+                piece.setTexture(bulltrickerPiece.IsHorizontal() ? &m_pieceTexture[GameConstants::BulltrickerConstants::BLACK_HORIZ_QUEEN_ID]
+                                                                 : &m_pieceTexture[GameConstants::BulltrickerConstants::BLACK_VERT_QUEEN_ID]);
+            } else if (bulltrickerPiece.GetSymbol() == GameConstants::BulltrickerConstants::WHITE) 
+                piece.setTexture(bulltrickerPiece.IsHorizontal() ? &m_pieceTexture[GameConstants::BulltrickerConstants::WHITE_HORIZ_PAWN_ID]
+                                                                 : &m_pieceTexture[GameConstants::BulltrickerConstants::WHITE_VERT_PAWN_ID]);
+            
+            break;
+        case BullT_PieceType::BT_QUEEN:
+            if (bulltrickerPiece.GetSymbol() == GameConstants::BulltrickerConstants::BLACK) {
+                piece.setTexture(bulltrickerPiece.IsHorizontal() ? &m_pieceTexture[GameConstants::BulltrickerConstants::BLACK_HORIZ_QUEEN_ID]
+                                                                 : &m_pieceTexture[GameConstants::BulltrickerConstants::BLACK_VERT_QUEEN_ID]);
+            } else if (bulltrickerPiece.GetSymbol() == GameConstants::BulltrickerConstants::WHITE) {
+                piece.setTexture(bulltrickerPiece.IsHorizontal() ? &m_pieceTexture[GameConstants::BulltrickerConstants::WHITE_HORIZ_QUEEN_ID]
+                                                                 : &m_pieceTexture[GameConstants::BulltrickerConstants::WHITE_VERT_QUEEN_ID]);
+            }
+            break;
+        case BullT_PieceType::KING:
+            if (bulltrickerPiece.GetSymbol() == GameConstants::BulltrickerConstants::BLACK) {
+                piece.setTexture(&m_pieceTexture[GameConstants::BulltrickerConstants::BLACK_KING_ID]);
+            } else if (bulltrickerPiece.GetSymbol() == GameConstants::BulltrickerConstants::WHITE) {
+                piece.setTexture(&m_pieceTexture[GameConstants::BulltrickerConstants::WHITE_KING_ID]);
+            }
+            break;
+        default:
+            piece.setTexture(&m_pieceTexture[GameConstants::BulltrickerConstants::EMPTY_ID]);
+            break;
+    }
 }
 
 void BulltrickerView::PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const
@@ -124,6 +163,52 @@ void BulltrickerView::PrintWinner(const Player* winner) const
 
 coord_t BulltrickerView::GetBoardCoord(const int x, const int y) const
 {
-    // TODO
-    return std::make_pair(0, 0);
+    return GetBoardCoordBase(x, y, ROYAL_CELL_SIZE);
+}
+
+
+sf::Vector2f BulltrickerView::GetPieceSize(const coord_t& coord, const Board& board) const {
+   
+    if (IsRoyalCell(coord)) {
+        return GameConstants::BulltrickerConstants::ROYAL_BOARDPIECE_SIZE;
+    } else if (IsHorizontalRectCell(coord)) {
+        return GameConstants::BulltrickerConstants::HORIZONTAL_RECT_BOARDPIECE_SIZE;
+    } else if (IsVerticalRectCell(coord)) {
+        return GameConstants::BulltrickerConstants::VERTICAL_RECT_BOARDPIECE_SIZE;
+    } 
+    return sf::Vector2f(-1, -1);
+}
+
+sf::Vector2f BulltrickerView::GetCellSize(const coord_t& coord, const Board& board) const {
+ 
+    if (IsButéeCell(coord)) {
+        return GameConstants::BulltrickerConstants::BUTEE_CELL_SIZE;
+    } else if (IsRoyalCell(coord)) {
+        return GameConstants::BulltrickerConstants::ROYAL_CELL_SIZE;
+    } else if (IsHorizontalRectCell(coord)) {
+        return GameConstants::BulltrickerConstants::HORIZONTAL_RECT_CELL_SIZE;
+    } else if (IsVerticalRectCell(coord)) {
+        return GameConstants::BulltrickerConstants::VERTICAL_RECT_CELL_SIZE;
+    } 
+    return sf::Vector2f(-1, -1);
+}
+
+bool BulltrickerView::IsButéeCell(const coord_t& coord) const {
+    
+    return (coord.first % 2 == 0) && (coord.second % 2 == 0);
+}
+
+bool BulltrickerView::IsRoyalCell(const coord_t& coord) const {
+    
+    return (coord.first % 2 != 0) && (coord.second % 2 != 0);
+}
+
+bool BulltrickerView::IsHorizontalRectCell(const coord_t& coord) const {
+    
+    return (coord.first % 2 == 0) && (coord.second % 2 != 0);
+}
+
+bool BulltrickerView::IsVerticalRectCell(const coord_t& coord) const {
+   
+    return (coord.first % 2 != 0) && (coord.second % 2 == 0);
 }
