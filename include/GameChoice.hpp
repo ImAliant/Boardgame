@@ -22,6 +22,8 @@ class GameChoice: public Engine::State, public UIHandler, public EventHandler
         void HandleMousePressed(const sf::Event& event) override;
         void UpdateButtonPushed() override;
 
+        std::array<std::function<void()>, GameChoiceConstants::NUMBER_OF_BUTTONS> InitFunctions();
+
         template <typename T>
         void CheckAssets(T const* ptr, const std::string& errorMessage) const;
     public:

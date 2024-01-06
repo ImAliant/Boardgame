@@ -27,21 +27,6 @@ void CheckersBoard::FillBoard()
     }
 }
 
-bool CheckersBoard::IsOpponentPiece(coord_t srcCoord, coord_t dstCoord) const
-{
-    CheckBounds(srcCoord);
-    CheckBounds(dstCoord);
-
-    if (IsEmptyCell(srcCoord) || IsEmptyCell(dstCoord))
-        return false;
-    const auto srcPiece = GetPiece(srcCoord);
-    const auto dstPiece = GetPiece(dstCoord);
-    if (srcPiece->GetSymbol() == dstPiece->GetSymbol())
-        return false;
-    
-    return true;
-}
-
 std::unique_ptr<Piece> CheckersBoard::CreatePiece(coord_t coord, char color) const
 {
     if (color == BLACK)

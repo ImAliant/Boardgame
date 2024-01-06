@@ -2,6 +2,7 @@
 
 #include "../GameStatus.hpp"
 #include "BulltrickerFlags.hpp"
+#include "BulltrickerBoard.hpp"
 #include "../Model.hpp"
 
 class Bulltricker: public Model
@@ -24,6 +25,7 @@ class Bulltricker: public Model
         void SwitchPlayer() override;
 
         void CheckForWin() override;
+        void EndGameIfNoMoves() override;
 
         void CreateGameBoard() override;
         void CheckBoardDimensions(const int row, const int col) const override;

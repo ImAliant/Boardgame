@@ -63,22 +63,18 @@ namespace AssetsConstants
     const std::string BUTIN_RED_PIECE = "assets/images/butin/red_piece.png";
     const std::string BUTIN_BLACK_PIECE = "assets/images/butin/black_piece.png";
 
-    const std::string EMPTY_ASSET = "assets/images/empty.png";
+    const std::string BULLTRICKER_BLACK_HORIZ_PIECE = "assets/images/bulltricker/allee_horz_black_pawn.png";
+    const std::string BULLTRICKER_BLACK_VERT_PIECE = "assets/images/bulltricker/allee_vert_black_pawn.png";
+    const std::string BULLTRICKER_WHITE_HORIZ_PIECE = "assets/images/bulltricker/allee_horz_white_pawn.png";
+    const std::string BULLTRICKER_WHITE_VERT_PIECE = "assets/images/bulltricker/allee_vert_white_pawn.png";
+    const std::string BULLTRICKER_BLACK_HORIZ_QUEEN = "assets/images/bulltricker/allee_horz_black_queen.png";
+    const std::string BULLTRICKER_BLACK_VERT_QUEEN = "assets/images/bulltricker/allee_vert_black_queen.png";
+    const std::string BULLTRICKER_WHITE_HORIZ_QUEEN = "assets/images/bulltricker/allee_horz_white_queen.png";
+    const std::string BULLTRICKER_WHITE_VERT_QUEEN = "assets/images/bulltricker/allee_vert_white_queen.png";
+    const std::string BULLTRICKER_BLACK_KING = "assets/images/bulltricker/black_king.png";
+    const std::string BULLTRICKER_WHITE_KING = "assets/images/bulltricker/white_king.png";
 
-    //const std::string MAIN_FONT = "../assets/fonts/Nepoboy-K7Y4Z.ttf";
-//
-    //const std::string MENUBACKGROUND = "../assets/images/menu/background.png";
-    //
-    //const std::string CHECKERS_BLACK_PAWN = "../assets/images/checkers/black_pawn.png";
-    //const std::string CHECKERS_WHITE_PAWN = "../assets/images/checkers/white_pawn.png";
-    //const std::string CHECKERS_BLACK_QUEEN = "../assets/images/checkers/black_queen.png";
-    //const std::string CHECKERS_WHITE_QUEEN = "../assets/images/checkers/white_queen.png";
-    //
-    //const std::string BUTIN_YELLOW_PIECE = "../assets/images/butin/yellow_piece.png";
-    //const std::string BUTIN_RED_PIECE = "../assets/images/butin/red_piece.png";
-    //const std::string BUTIN_BLACK_PIECE = "../assets/images/butin/black_piece.png";
-//
-    //const std::string EMPTY_ASSET = "../assets/images/empty.png";
+    const std::string EMPTY_ASSET = "assets/images/empty.png";
 };
 
 namespace UIConstants {
@@ -222,6 +218,49 @@ namespace GameConstants
         const sf::Vector2f BOARDPIECE_SIZE = sf::Vector2f{
             BOARDCELL_SIZE.x - 10.f, 
             BOARDCELL_SIZE.y - 10.f
+        };
+    };
+
+    namespace BulltrickerConstants
+    {
+        const int BULLTRICKERROWS = 15;
+        const int BULLTRICKERCOLS = 15;
+
+        const char BLACK = 'B';
+        const char WHITE = 'W';
+
+        const int BLACKHORIZPAWN_ID = 0;
+        const int BLACKVERTPAWN_ID = 1;
+        const int WHITEHORIZPAWN_ID = 2;
+        const int WHITEVERTPAWN_ID = 3;
+        const int BLACKHORIZQUEEN_ID = 4;
+        const int BLACKVERTQUEEN_ID = 5;
+        const int WHITEHORIZQUEEN_ID = 6;
+        const int WHITEVERTQUEEN_ID = 7;
+        const int BLACKKING_ID = 8;
+        const int WHITEKING_ID = 9;
+        const int EMPTY_ID = 10;
+
+        const sf::Vector2f BUTEE_SIZE = sf::Vector2f{20.625f, 20.625f};
+        const sf::Vector2f ROYAL_SIZE = sf::Vector2f{45.f, 45.f};
+        const sf::Vector2f ALLEE_HORIZONTAL_SIZE = sf::Vector2f{45.f, 20.625f};
+        const sf::Vector2f ALLEE_VERTICAL_SIZE = sf::Vector2f{20.625, 45.f};
+
+        const sf::Vector2f BUTEE_PIECE_SIZE = sf::Vector2f{
+            BUTEE_SIZE.x - 10.f, 
+            BUTEE_SIZE.y - 10.f
+        };
+        const sf::Vector2f ROYAL_PIECE_SIZE = sf::Vector2f{
+            ROYAL_SIZE.x - 10.f, 
+            ROYAL_SIZE.y - 10.f
+        };
+        const sf::Vector2f ALLEE_HORIZONTAL_PIECE_SIZE = sf::Vector2f{
+            ALLEE_HORIZONTAL_SIZE.x - 10.f, 
+            ALLEE_HORIZONTAL_SIZE.y - 10.f
+        };
+        const sf::Vector2f ALLEE_VERTICAL_PIECE_SIZE = sf::Vector2f{
+            ALLEE_VERTICAL_SIZE.x - 10.f, 
+            ALLEE_VERTICAL_SIZE.y - 10.f
         };
     };
 };

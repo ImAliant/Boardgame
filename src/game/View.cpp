@@ -7,34 +7,15 @@ View::View() {}
 View::~View() {}
 
 void View::InitBase(
-    std::shared_ptr<Context> context, const Board& board, 
-    const std::vector<int>& textureIDs, 
-    const sf::Vector2f piecesize, const sf::Vector2f cellsize)
+    std::shared_ptr<Context> context, 
+    const std::vector<int>& textureIDs)
 {
     InitPieceTexture(context, textureIDs);
     InitBoardBackground();
-    InitBoardCell(board, cellsize);
-    InitBoardPiece(board, piecesize, cellsize);
-
-    sf::Font const* font = &context->m_assets->GetFont(MAIN_FONT);
-    if (font == nullptr)
-        throw std::runtime_error("View::InitBase() : font is nullptr");
 
     InitRectangleShape(m_lineSeparator, GameContext::LINESEPARATOR_SIZE, GameContext::LINESEPARATOR_POSITION);
 
-    std::array<std::function<void()>, GameContext::NUMBER_OF_BUTTONS> functions =
-    {
-        [this]() { Launch(); },
-        [this]() { SetButtonPressed(GameContext::MENUBUTTONID, true); }
-    };
-
-    for (int i = 0; i < GameContext::NUMBER_OF_TEXTS; i++)
-    {
-        m_texts.emplace_back();
-    }
-
-    InitButton(GameContext::LAUNCHBUTTONID, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, functions[GameContext::LAUNCHBUTTONID]);
-    InitButton(GameContext::MENUBUTTONID, "Menu", GameContext::MENUBUTTON_POSITION, *font, functions[GameContext::MENUBUTTONID]);
+    InitButtons(context);
 }
 
 void View::InitPieceTexture(const std::shared_ptr<Context> context, const std::vector<int>& textureIDs)
@@ -75,24 +56,15 @@ void View::InitBoardCell(const Board& board, const sf::Vector2f cellsize)
     const auto rows = board.GetRows();
     const auto cols = board.GetCols();
 
-    m_boardCell.resize(rows);
-    for (int i = 0; i < rows; i++) {
-        m_boardCell[i].resize(cols);
-    }
+    ResizeVector(m_boardCell, rows, cols);
 
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++)
         {
-            const auto coord = std::make_pair(i, j);
-            InitRectangleShape(
-                m_boardCell[i][j],
-                cellsize,
-                CalculatePosition(10.f, coord, cellsize)
-            );
+            const auto& coord = std::make_pair(i, j);
 
-            if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(GameConstants::WHITECELL_COLOR);
-            else m_boardCell[i][j].setFillColor(GameConstants::BLACKCELL_COLOR);
+            InitCell(i, j, cellsize, CalculatePosition(10.f, coord, cellsize));
         }
     } 
 }
@@ -102,10 +74,7 @@ void View::InitBoardPiece(const Board& board, const sf::Vector2f piecesize, cons
     const auto rows = board.GetRows();
     const auto cols = board.GetCols();
 
-    m_boardPiece.resize(rows);
-    for (int i = 0; i < rows; i++) {
-        m_boardPiece[i].resize(cols);
-    }
+    ResizeVector(m_boardPiece, rows, cols);
 
     for (int i = 0; i < rows; i++)
     {
@@ -115,6 +84,38 @@ void View::InitBoardPiece(const Board& board, const sf::Vector2f piecesize, cons
             SetupBoardPiece(coord, board, piecesize, cellsize);
         }
     }
+}
+
+void View::InitCell(const int row, const int col, const sf::Vector2f cellsize, const sf::Vector2f position)
+{
+    InitRectangleShape(
+        m_boardCell[row][col],
+        cellsize,
+        position
+    );
+
+    m_boardCell[row][col].setFillColor((row + col) % 2 == 0 ? GameConstants::WHITECELL_COLOR : GameConstants::BLACKCELL_COLOR);
+}
+
+void View::InitButtons(std::shared_ptr<Context> context)
+{
+    sf::Font const* font = &context->m_assets->GetFont(MAIN_FONT);
+    if (font == nullptr)
+        throw std::runtime_error("View::InitBase() : font is nullptr");
+
+    std::array<std::function<void()>, GameContext::NUMBER_OF_BUTTONS> functions =
+    {
+        [this]() { Launch(); },
+        [this]() { SetButtonPressed(GameContext::MENUBUTTONID, true); }
+    };
+
+    for (int i = 0; i < GameContext::NUMBER_OF_TEXTS; i++)
+    {
+        m_texts.emplace_back();
+    }
+
+    InitButton(GameContext::LAUNCHBUTTONID, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, functions[GameContext::LAUNCHBUTTONID]);
+    InitButton(GameContext::MENUBUTTONID, "Menu", GameContext::MENUBUTTON_POSITION, *font, functions[GameContext::MENUBUTTONID]);
 }
 
 void View::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
@@ -134,6 +135,14 @@ sf::Vector2f View::CalculatePosition(const float offset, const coord_t coord, co
         offset + (cellsize.x * static_cast<float>(j)),
         offset + (cellsize.y * static_cast<float>(i))
     );
+}
+
+template <typename T>
+void View::ResizeVector(std::vector<std::vector<T>>& vector, const int rows, const int cols) const
+{
+    vector.resize(rows);
+    for (auto& row : vector)
+        row.resize(cols);
 }
 
 void View::Draw(sf::RenderWindow& window)

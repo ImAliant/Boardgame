@@ -7,4 +7,6 @@ class BulltrickerFlags: public ModelFlags
     public:
         BulltrickerFlags() = default;
         ~BulltrickerFlags() override = default;
+
+        void ResetFlags() override {};
 };

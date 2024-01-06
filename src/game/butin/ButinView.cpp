@@ -17,7 +17,9 @@ void ButinView::Init(std::shared_ptr<Context> context, const Board& board)
         EMPTY_ASSET
     };
 
-    InitBase(context, board, textureIDs, BOARDPIECE_SIZE, BOARDCELL_SIZE);
+    InitBase(context, textureIDs);
+    InitBoardCell(board, BOARDCELL_SIZE);
+    InitBoardPiece(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
 void ButinView::UpdateBoard(const Board& board)

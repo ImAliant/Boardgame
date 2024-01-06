@@ -11,7 +11,7 @@
 class Board;
 
 struct state_t {
-    int type = 0;
+    int m_type = 0;
     const std::shared_ptr<Player> m_owner;
     const char m_symbol;
 };
@@ -43,4 +43,5 @@ class Piece
         int GetY() const;
         std::shared_ptr<Player> GetOwner() const;
         char GetSymbol() const;
+        state_t GetState() const;
 };

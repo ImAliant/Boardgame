@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../../Piece.hpp"
 #include "CheckersPiece.hpp"
 #include "../../Constants.hpp"
+#include "../../CommonGameType.hpp"
 
 #include <vector>
 
 class CheckersPiece;
 
-class CheckersBoard: public Board
+class CheckersBoard: public Board, public CommonGameType
 {
     private:
         std::unique_ptr<Piece> CreatePiece(coord_t coord, char color) const override;
@@ -21,6 +21,4 @@ class CheckersBoard: public Board
         friend std::ostream& operator<<(std::ostream& os, const CheckersBoard& board);
 
         void FillBoard() override;
-
-        bool IsOpponentPiece(coord_t srcCoord, coord_t dstCoord) const;
 };

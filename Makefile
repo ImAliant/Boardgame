@@ -10,12 +10,14 @@ GAME_DIR := game
 EXCEPT_DIR := exception
 BUTIN_DIR := $(GAME_DIR)/butin
 CHECKERS_DIR := $(GAME_DIR)/checkers
+BULLTRICKER_DIR := $(GAME_DIR)/bulltricker
 #Source files
 SRC := $(wildcard $(SRC_DIR)/*.cpp) \
 	   $(wildcard $(SRC_DIR)/$(EXCEPT_DIR)/*.cpp) \
 	   $(wildcard $(SRC_DIR)/$(GAME_DIR)/*.cpp) \
 	   $(wildcard $(SRC_DIR)/$(BUTIN_DIR)/*.cpp) \
-	   $(wildcard $(SRC_DIR)/$(CHECKERS_DIR)/*.cpp)
+	   $(wildcard $(SRC_DIR)/$(CHECKERS_DIR)/*.cpp) \
+	   $(wildcard $(SRC_DIR)/$(BULLTRICKER_DIR)/*.cpp)
 #Object directory
 OBJ_DIR := obj
 #Object files

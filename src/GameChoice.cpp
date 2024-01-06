@@ -1,6 +1,7 @@
 #include "../include/GameChoice.hpp"
 #include "../include/game/checkers/CheckersController.hpp"
 #include "../include/game/butin/ButinController.hpp"
+#include "../include/game/bulltricker/BulltrickerController.hpp"
 #include "../include/Constants.hpp"
 #include "../include/exception/AssetNotFoundException.hpp"
 
@@ -27,13 +28,7 @@ void GameChoice::Init()
 
     InitRectangleShape(m_titleBackground, TITLEBACKGROUND_SIZE, TITLEBACKGROUND_POSITION, TITLEBACKGROUND_COLOR);
 
-    std::array<std::function<void()>, GameChoiceConstants::NUMBER_OF_BUTTONS> functions = 
-    {
-        [this]() { m_context->m_states->Add(std::make_unique<ButinController>(m_context), true); },
-        [this]() { m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true); },
-        []() { std::cout << "Bulltricker" << std::endl; },
-        [this]() { m_context->CloseWindow(); }
-    };
+    const auto functions = InitFunctions();
 
     for (int i = 0; i < GameChoiceConstants::NUMBER_OF_TEXTS; i++)
     {
@@ -131,4 +126,17 @@ void GameChoice::Draw()
         m_context->m_window->draw(text);
 
     m_context->m_window->display();
+}
+
+std::array<std::function<void()>, GameChoiceConstants::NUMBER_OF_BUTTONS> GameChoice::InitFunctions()
+{
+    std::array<std::function<void()>, GameChoiceConstants::NUMBER_OF_BUTTONS> functions = 
+    {
+        [this]() { m_context->m_states->Add(std::make_unique<ButinController>(m_context), true); },
+        [this]() { m_context->m_states->Add(std::make_unique<CheckersController>(m_context), true); },
+        [this]() { m_context->m_states->Add(std::make_unique<BulltrickerController>(m_context), true); },
+        [this]() { m_context->CloseWindow(); }
+    };
+
+    return functions;
 }

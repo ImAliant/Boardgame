@@ -64,3 +64,8 @@ char Piece::GetSymbol() const
 {
     return m_state.m_symbol;
 }
+
+state_t Piece::GetState() const
+{
+    return m_state;
+}

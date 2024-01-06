@@ -3,7 +3,7 @@
 CheckersPiece::CheckersPiece(const coord_t coord, const std::shared_ptr<Player> owner, const char symbol): 
     Piece{coord, owner, symbol}
 {
-    m_state.type = PieceType::PAWN;
+    m_state.m_type = PieceType::PAWN;
 }
 
 CheckersPiece::~CheckersPiece() {}
@@ -24,7 +24,7 @@ void CheckersPiece::SimpleMoves(const Board& board)
     const auto& bdir = GameConstants::CheckersConstants::BLACK_DIRECTION;
 
     std::vector<direction_t> const* directions;
-    if (m_state.type == PieceType::PAWN)
+    if (m_state.m_type == PieceType::PAWN)
     {
         if (m_state.m_symbol == white)
             directions = &wdir;
@@ -68,7 +68,7 @@ void CheckersPiece::CaptureMoves(const Board& board)
 {
     std::vector<direction_t> const* directions = &GameConstants::CheckersConstants::ALL_DIRECTION;
 
-    if (m_state.type == PieceType::PAWN)
+    if (m_state.m_type == PieceType::PAWN)
     {
         for (const auto& [dx, dy]: *directions)
         {
@@ -143,12 +143,12 @@ bool CheckersPiece::IsOpponentPiece(const coord_t coord, const Board& board) con
 
 void CheckersPiece::Promote()
 {
-    m_state.type = PieceType::QUEEN;
+    m_state.m_type = PieceType::QUEEN;
 }
 
 bool CheckersPiece::IsPromoted() const
 {
-    return m_state.type == PieceType::QUEEN;
+    return m_state.m_type == PieceType::QUEEN;
 }
 
 std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece)

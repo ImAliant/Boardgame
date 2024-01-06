@@ -33,12 +33,12 @@ set(SOURCES
     src/game/butin/ButinPiece.cpp
     src/game/butin/ButinFlags.cpp
 
-    #src/game/bulltricker/Bulltricker.cpp
-    #src/game/bulltricker/BulltrickerController.cpp
-    #src/game/bulltricker/BulltrickerView.cpp
-    #src/game/bulltricker/BulltrickerBoard.cpp
-    #src/game/bulltricker/BulltrickerPiece.cpp
-    #src/game/bulltricker/BulltrickerFlags.cpp
+    src/game/bulltricker/Bulltricker.cpp
+    src/game/bulltricker/BulltrickerController.cpp
+    src/game/bulltricker/BulltrickerView.cpp
+    src/game/bulltricker/BulltrickerBoard.cpp
+    src/game/bulltricker/BulltrickerPiece.cpp
+    src/game/bulltricker/BulltrickerFlags.cpp
 
     src/game/Model.cpp
     src/game/View.cpp

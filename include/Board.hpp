@@ -21,7 +21,6 @@ class Board
         std::vector<std::shared_ptr<Player>> m_players;
         std::vector<std::vector<std::unique_ptr<Piece>>> m_board;
 
-        void CheckBounds(const coord_t coord) const;
         virtual std::unique_ptr<Piece> CreatePiece(const coord_t coord, const char color) const = 0;
     public:
         explicit Board(std::vector<std::shared_ptr<Player>> players, const int rows, const int cols);
@@ -33,6 +32,7 @@ class Board
         void RemovePiece(const coord_t coord);
 
         bool IsEmptyCell(const coord_t coord) const;
+        void CheckBounds(const coord_t coord) const;
 
         int GetRows() const { return m_rows; };
         int GetCols() const { return m_cols; };

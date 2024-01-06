@@ -2,7 +2,7 @@
 
 #include "ButinPiece.hpp"
 #include "../../Constants.hpp"
-#include "../../Board.hpp"
+
 #include <vector>
 
 class ButinPiece;

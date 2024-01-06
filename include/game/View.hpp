@@ -13,6 +13,11 @@
 
 class View: public UIHandler
 {
+    private:
+        void InitButtons(std::shared_ptr<Context> context);
+        void InitBoardBackground();
+        void InitPieceTexture(const std::shared_ptr<Context> context, const std::vector<int>& textureIDs);
+        void LoadTexture(const int textureID, const std::shared_ptr<Context> context);
     protected:
         sf::RectangleShape m_boardBackground;
 
@@ -25,15 +30,15 @@ class View: public UIHandler
 
         ViewFlags m_flags;
 
-        void InitBase(std::shared_ptr<Context> context, const Board& board, const std::vector<int>& textureIDs, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
-        
-        void InitPieceTexture(const std::shared_ptr<Context> context, const std::vector<int>& textureIDs);
-        void LoadTexture(const int textureID, const std::shared_ptr<Context> context);
-        void InitBoardBackground();
+        void InitBase(std::shared_ptr<Context> context, const std::vector<int>& textureIDs);
         void InitBoardCell(const Board& board, const sf::Vector2f cellsize);
         void InitBoardPiece(const Board& board, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
+        void InitCell(const int row, const int col, const sf::Vector2f cellsize, const sf::Vector2f position);
         virtual void SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
         sf::Vector2f CalculatePosition(const float offset, const coord_t coord, const sf::Vector2f cellsize) const;
+        
+        template <typename T>
+        void ResizeVector(std::vector<std::vector<T>>& vector, const int rows, const int cols) const;
 
         void DrawBoardCells(sf::RenderWindow& window);
         void DrawBoardPiece(sf::RenderWindow& window);

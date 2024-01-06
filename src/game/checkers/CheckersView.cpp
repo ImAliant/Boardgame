@@ -18,8 +18,10 @@ void CheckersView::Init(std::shared_ptr<Context> context, const Board& board)
         CHECKERS_WHITE_QUEEN,
         EMPTY_ASSET
     };
-
-    InitBase(context, board, textureIDs, BOARDPIECE_SIZE, BOARDCELL_SIZE);
+    
+    InitBase(context, textureIDs);
+    InitBoardCell(board, BOARDCELL_SIZE);
+    InitBoardPiece(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
 void CheckersView::UpdateBoard(const Board& board)
@@ -40,11 +42,14 @@ void CheckersView::SetupBoardPiece(const coord_t coord, const Board &board, cons
 
 void CheckersView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted)
 {
+    int textureID;
     if (color == BLACK)
-        piece.setTexture(promoted ? &m_pieceTexture[BLACKQUEEN_ID] : &m_pieceTexture[BLACKPAWN_ID]);
+        textureID = promoted ? BLACKQUEEN_ID : BLACKPAWN_ID;
     else if (color == WHITE)
-        piece.setTexture(promoted ? &m_pieceTexture[WHITEQUEEN_ID] : &m_pieceTexture[WHITEPAWN_ID]);
-    else piece.setTexture(&m_pieceTexture[EMPTY_ID]);
+        textureID = promoted ? WHITEQUEEN_ID : WHITEPAWN_ID;
+    else textureID = EMPTY_ID;
+
+    piece.setTexture(&m_pieceTexture[textureID]);
 }
 
 void CheckersView::PrintCurrentPlayer(const std::shared_ptr<Player> currentPlayer) const
