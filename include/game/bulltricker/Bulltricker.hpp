@@ -4,7 +4,7 @@
 #include "BulltrickerFlags.hpp"
 #include "BulltrickerBoard.hpp"
 #include "../Model.hpp"
-
+#include "BulltrickerFlags.hpp"
 class Bulltricker: public Model
 {
     private:
@@ -14,13 +14,27 @@ class Bulltricker: public Model
         void SelectPiece(const coord_t coord) override;
         void DeselectPiece() override;
 
+        bool IsPieceOfCurrentPlayer(coord_t coord) const;
+
         bool IsMovePossible(const coord_t coord) const override;
         void PerformMove(const coord_t coord) override;
         void ProcessConditionalMove(const coord_t coord) override;
         void ApplyCapture(const coord_t coord) override;
         void HandlePieceCaptureAndReplay(const coord_t coord) override;
 
+        bool IsCapturingMove(const coord_t coord) const;
+        void PerformCapturingMove(coord_t coord);
+        void PerformNonCapturingMove(coord_t coord);
+
+
+        bool CanPromotePiece(coord_t coord) const;
+        void PromotePiece(coord_t coord);
+
         void InitPlayers() override;
+
+        bool HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const;
+        bool HavePieceWithCapturingMoves(bool checkCurrentPlayer) const;
+        bool HavePieceWithNonCapturingMoves(bool checkCurrentPlayer) const;
 
         void SwitchPlayer() override;
 

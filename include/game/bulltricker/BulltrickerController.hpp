@@ -10,6 +10,8 @@
 class BulltrickerController : public Controller
 {
     private:
+        //void HandleEvent(const sf::Event& event) override;
+
         void End() override;
 
         void PrintAndResetPlayer() const override;
@@ -18,4 +20,6 @@ class BulltrickerController : public Controller
     public:
         explicit BulltrickerController(std::shared_ptr<Context> context);
         ~BulltrickerController() override = default;
+
+         void Update() override;    
 };

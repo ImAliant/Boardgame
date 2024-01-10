@@ -4,6 +4,18 @@ BulltrickerController::BulltrickerController(std::shared_ptr<Context> context):
     Controller{context, std::make_unique<Bulltricker>(), std::make_unique<BulltrickerView>()}
 {}
 
+
+
+void BulltrickerController::Update()
+{
+    Controller::Update();
+    
+    
+}
+
+
+
+
 void BulltrickerController::SetWindowTitle() const
 {
     m_context->m_window->setTitle(WindowConstants::BULLTRICKER_TITLE);

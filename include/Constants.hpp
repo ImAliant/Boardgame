@@ -241,6 +241,30 @@ namespace GameConstants
         const int WHITEKING_ID = 9;
         const int EMPTY_ID = 10;
 
+        const std::vector<direction_t> WHITE_PAWN_DIR = {
+            {-1, -1}, // Move up and left
+            {-1, 1},  // Move up and right
+            {-2, 0}   // Move straight up by two cells
+        };
+
+        const std::vector<direction_t> BLACK_PAWN_DIR = {
+            {1, -1}, // Move down and left
+            {1, 1},  // Move down and right
+            {2, 0}   // Move straight down by two cells
+        };
+
+        const std::vector<direction_t> QUEEN_DIR = {
+            {2, 0},   // Move down (y,x)
+            {-2, 0},  // Move up
+            {0, 2},   // Move right
+            {0, -2},  // Move left
+            {1, 1},   // Move down and right
+            {1, -1},  // Move down and left
+            {-1, 1},  // Move up and right
+            {-1, -1}, // Move up and left
+        };
+
+
         const sf::Vector2f BUTEE_SIZE = sf::Vector2f{20.625f, 20.625f};
         const sf::Vector2f ROYAL_SIZE = sf::Vector2f{45.f, 45.f};
         const sf::Vector2f ALLEE_HORIZONTAL_SIZE = sf::Vector2f{45.f, 20.625f};

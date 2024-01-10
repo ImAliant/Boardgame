@@ -1,45 +1,226 @@
 #include "../../../include/game/bulltricker/Bulltricker.hpp"
 #include "../../../include/exception/InvalidUsageException.hpp"
+#include "../../../include/exception/InvalidCoordinatesException.hpp"
+
 
 void Bulltricker::Turn(const coord_t coord)
 {
+    Model::Turn(coord);
+if (IsPieceOfCurrentPlayer(coord))
+    {
+        if (HasCapturingMoves(coord)) m_flags.CapturingMoveRequired();
+        else m_flags.ResetCapturingMoveRequiredFlag();
 
+        if (m_flags.IsCapturingMoveRequired() || !HavePieceWithCapturingMoves(true))
+            SelectPiece(coord);
+        else 
+        {
+            std::cout << "You must select a piece that can capture an opponent's piece" << std::endl;
+            m_flags.CapturingMoveRequired();
+        }
+    }
+    else MoveOrDeselect(coord, m_flags);
 }
+
+
+bool Bulltricker::IsPieceOfCurrentPlayer(coord_t coord) const
+{
+    auto piece = GetPiece(coord);
+    if (!piece) return false;
+    
+    auto pieceOwner = piece->GetOwner();
+    auto idPieceOwner = pieceOwner->GetId();
+    auto idCurrentPlayer = GetCurrentPlayer()->GetId();
+
+    return idCurrentPlayer == idPieceOwner;
+}
+
+bool Bulltricker::IsMovePossible(const coord_t coord) const
+{
+    return IsMovePossibleBase(coord, m_status, m_flags);
+}
+
 
 void Bulltricker::SelectPiece(const coord_t coord)
 {
+    SelectPieceBase(coord, m_status, m_flags);
 
 }
 
 void Bulltricker::DeselectPiece()
 {
-
+    DeselectPieceBase(m_status, m_flags);
 }
 
-bool Bulltricker::IsMovePossible(const coord_t coord) const
-{
-    return false;
-}
 
 void Bulltricker::PerformMove(const coord_t coord)
 {
-
+    PerformMoveBase(coord, m_flags);
 }
 
 void Bulltricker::ProcessConditionalMove(const coord_t coord)
 {
+     if (m_flags.IsCapturingMoveRequired() || m_flags.IsReplay())
+    {
+        if (IsCapturingMove(coord))
+        {
+            PerformCapturingMove(coord);
 
+            m_flags.ResetCapturingMoveRequiredFlag();
+        }
+        else
+        {
+            std::cout << "You must capture an opponent's piece" << std::endl;
+        }
+    }
+    else
+    {
+        PerformNonCapturingMove(coord);
+        
+    }
 }
+
 
 void Bulltricker::ApplyCapture(const coord_t coord)
 {
+     const auto piece = GetPiece(GetSelectedPiece());
+    auto [x, y, captx, capty] = GetCoordAndDirFromPossibleCapture(coord, piece);
 
+    m_board->MovePiece(GetSelectedPiece(), coord);
+
+    bool capt = false;
+    while (!capt)
+    {
+        const auto& captureCoord = std::make_pair(x, y);
+        if (!AreCoordinatesValid(captureCoord)) 
+            throw InvalidCoordinatesException("Checkers::PerformCapturingMove() : captureCoord are invalid");
+
+        const auto pieceCapture = GetPiece(captureCoord);
+        if (!pieceCapture)
+        {
+            x -= captx;
+            y -= capty;
+            continue;
+        }
+        
+        if (piece->GetSymbol() != pieceCapture->GetSymbol())
+        {
+            m_board->RemovePiece(captureCoord);
+            capt = true;
+        }
+        else break;
+    }
+
+    if (CanPromotePiece(coord)) PromotePiece(coord);
 }
 
 void Bulltricker::HandlePieceCaptureAndReplay(const coord_t coord)
 {
+    if (m_flags.IsPieceCaptured() && HasCapturingMoves(coord))
+        {
+            SelectPiece(coord);
+            m_flags.NeedReplay();
+        }
+        else m_flags.ResetReplayFlag();
 
+        m_flags.BoardNeedUpdate();
 }
+
+bool Bulltricker::CanPromotePiece(coord_t coord) const
+{  
+    
+    if (!AreCoordinatesValid(coord))
+        throw InvalidCoordinatesException("Bulltricker::CanPromotePiece() : coord are invalid");
+
+    const auto piece = GetPiece(coord);
+    if (!piece) return false;
+
+    const auto bulltrickerPiece = dynamic_cast<BulltrickerPiece*>(piece);
+    if (bulltrickerPiece->IsPromoted()) return false;
+    
+    const auto x = piece->GetX();
+
+    if (piece->GetSymbol() == GameConstants::BulltrickerConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
+    else return (x == GameConstants::BOARD_LOWER_LIMIT);
+}
+
+void Bulltricker::PromotePiece(coord_t coord)
+{
+    if (!AreCoordinatesValid(coord))
+        throw InvalidCoordinatesException("Bulltricker::PromotePiece() : coord are invalid");
+
+    auto piece = GetPiece(coord);
+    if (!piece) return;
+
+    auto checkersPiece = dynamic_cast<BulltrickerPiece*>(piece);
+    checkersPiece->Promote();
+
+    m_flags.BoardNeedUpdate();
+}
+
+bool Bulltricker::IsCapturingMove(const coord_t coord) const
+{
+    auto piece = GetPiece(GetSelectedPiece());
+    if (!piece) return false;
+
+    auto possibleMoves = piece->GetPossibleMoves();
+
+    return std::find(possibleMoves.begin(), possibleMoves.end(), coord) != possibleMoves.end();
+}
+
+void Bulltricker::PerformCapturingMove(coord_t coord)
+{
+    ApplyCapture(coord);
+
+    HandlePieceDeselectionAndUpdate(m_flags);
+
+    HandlePieceCaptureAndReplay(coord);
+}
+
+void Bulltricker::PerformNonCapturingMove(coord_t coord)
+{
+    const auto piece = m_board->GetPiece(m_status.GetSelectedPiece());
+    ValidatePieceAndMoves(coord, piece);
+
+    m_board->MovePiece(GetSelectedPiece(), coord);
+
+    if (CanPromotePiece(coord)) PromotePiece(coord);
+
+    HandlePieceDeselectionAndUpdate(m_flags);
+}
+
+
+bool Bulltricker::HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const
+{
+    auto rows = m_board->GetRows();
+    auto cols = m_board->GetCols();
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            auto coord = std::make_pair(i, j);
+            auto piece = GetPiece(coord);
+            if (!piece) continue;
+            if ((piece->GetOwner() == GetCurrentPlayer()) != checkCurrentPlayer) continue;
+
+            auto possibleMoves = capturing ? piece->GetPossibleCaptures() : piece->GetPossibleMoves();
+            if (!possibleMoves.empty()) return true;
+        }
+    }
+
+    return false;
+}
+bool Bulltricker::HavePieceWithCapturingMoves(bool checkCurrentPlayer) const
+{
+    return HavePieceWithMoves(true, checkCurrentPlayer);
+}
+
+bool Bulltricker::HavePieceWithNonCapturingMoves(bool checkCurrentPlayer) const
+{
+    return HavePieceWithMoves(false, checkCurrentPlayer);
+}
+
 
 void Bulltricker::InitPlayers()
 {
@@ -59,7 +240,7 @@ void Bulltricker::CheckBoardDimensions(const int row, const int col) const
 
 void Bulltricker::SwitchPlayer()
 {
-    // TODO
+    SwitchPlayerBase(m_status, m_flags);
 }
 
 void Bulltricker::CheckForWin()
@@ -74,58 +255,48 @@ void Bulltricker::EndGameIfNoMoves()
 
 void Bulltricker::GameStart()
 {
-    // TODO
+    m_flags.GameStarted();
 }
 
 bool Bulltricker::IsGameStarted() const
 {
-    // TODO
-    return false;
+     return m_flags.IsGameStarted();
 }
 
 bool Bulltricker::IsGameFinished() const
 {
-    // TODO
-    return false;
+    return m_flags.IsGameFinished();
 }
-
 bool Bulltricker::IsPieceSelected() const
 {
-    // TODO
-    return false;
+    return m_flags.IsPieceSelected();
 }
-
 bool Bulltricker::IsSelectedPieceChanged() const
 {
-    // TODO
-    return false;
+    return m_flags.IsSelectedPieceChanged();
 }
 
 bool Bulltricker::IsBoardNeedUpdate() const
 {
-    // TODO
-    return false;
+    return m_flags.IsBoardNeedUpdate();
 }
 
 bool Bulltricker::IsCurrentPlayerChanged() const
 {
-    // TODO
-    return false;
+   return m_flags.IsCurrentPlayerChanged();
 }
 
 void Bulltricker::ResetCurrentPlayerChangedFlag()
 {
-    // TODO
+    m_flags.ResetCurrentPlayerChangedFlag();
 }
-
 void Bulltricker::ResetSelectedPieceFlag()
 {
-    // TODO
+    m_flags.ResetSelectedPieceFlag();
 }
-
 void Bulltricker::ResetBoardNeedUpdateFlag()
 {
-    // TODO
+    m_flags.ResetBoardNeedUpdateFlag();
 }
 
 Player* Bulltricker::GetWinner() const
@@ -136,24 +307,20 @@ Player* Bulltricker::GetWinner() const
 
 std::shared_ptr<Player> Bulltricker::GetCurrentPlayer() const
 {
-    // TODO
-    return nullptr;
+    return m_status.GetCurrentPlayer();
 }
 
 coord_t Bulltricker::GetSelectedPiece() const
 {
-    // TODO
-    return coord_t();
+   return m_status.GetSelectedPiece();
 }
 
 coord_t Bulltricker::GetLastSelectedPiece() const
 {
-    // TODO
-    return coord_t();
+   return m_status.GetLastSelectedPiece();
 }
 
 std::vector<coord_t> Bulltricker::GetLastPossibleMoves() const
 {
-    // TODO
-    return std::vector<coord_t>();
+    return m_status.GetLastPossibleMoves();
 }

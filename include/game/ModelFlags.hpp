@@ -10,6 +10,7 @@ class ModelFlags
 {
     friend class Butin;
     friend class Checkers;
+    friend class Bulltricker;
     friend class Model;
 
     protected:

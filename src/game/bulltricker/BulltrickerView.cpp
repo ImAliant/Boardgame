@@ -26,6 +26,7 @@ void BulltrickerView::Init(std::shared_ptr<Context> context, const Board& board)
     InitBase(context, textureIDs);
     InitBoardDiffCellSize(board);
     InitBoardDiffPieceSize(board);
+    
 }
 
 void BulltrickerView::InitBoardDiffCellSize(const Board& board)
@@ -144,17 +145,7 @@ sf::Vector2f BulltrickerView::CalculatePieceSize(const coord_t coord) const
 
 void BulltrickerView::UpdateBoard(const Board& board)
 {
-    const auto& rows = board.GetRows();
-    const auto& cols = board.GetCols();
-
-    for (int i = 0; i < rows; i++)
-    {
-        for(int j = 0; j < cols; j++)
-        {
-            const auto coord = std::make_pair(i, j);
-            SetupBoardPiece(coord, board, CalculatePieceSize(coord), CalculateCellSize(coord));
-        }
-    }
+    InitBoardDiffPieceSize(board);
 }
 
 void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted){}
