@@ -140,7 +140,7 @@ bool Bulltricker::CanPromotePiece(coord_t coord) const
     const auto x = piece->GetX();
 
     if (piece->GetSymbol() == GameConstants::BulltrickerConstants::WHITE) 
-        return (x == GameConstants::BulltrickerConstants::BOARD_UPPER_LIMIT);
+        return (x == GameConstants::BOARD_UPPER_LIMIT);
     else 
         return (x == GameConstants::BulltrickerConstants::BOARD_LOWER_LIMIT);
 }

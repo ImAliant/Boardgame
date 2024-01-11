@@ -2,7 +2,7 @@
 #include "../../../include/exception/AssetNotFoundException.hpp"
 
 using namespace GameConstants;
-using namespace SameBoardSize::CheckersConstants;
+using namespace CheckersConstants;
 using namespace UIConstants;
 
 CheckersView::CheckersView() {}

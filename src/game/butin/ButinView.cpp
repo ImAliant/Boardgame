@@ -1,7 +1,7 @@
 #include "../../../include/game/butin/ButinView.hpp"
 #include "../../../include/exception/AssetNotFoundException.hpp"
 
-using namespace GameConstants::SameBoardSize::ButinConstants;
+using namespace GameConstants::ButinConstants;
 using namespace UIConstants;
 
 ButinView::ButinView() {}

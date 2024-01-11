@@ -29,11 +29,9 @@ void BulltrickerPiece::SimpleMoves(const Board& board) {
             directions = &wPawnDir;
         else if (m_state.m_symbol == black)
             directions = &bPawnDir;
-    } else if (IsQueen()) {
-        directions = &queenDir;
-    } else {
-        return; 
     }
+    else if (IsQueen()) directions = &queenDir;
+    else return;
 
     AddPossibleMoves(*directions, board);
 }
@@ -51,6 +49,9 @@ void BulltrickerPiece::AddPossibleMoves(const std::vector<direction_t>& directio
         else if (IsQueen()) {
             while (IsWithinBoard(coord, board) && IsEmptyCell(coord, board)) {
                 m_possibleMoves.push_back(coord);
+
+                if (dx == 1 || dx == -1 || dy == 1 || dy == -1) break; // Queen can move only one cell in diagonal
+
                 x += dx;
                 y += dy;
                 coord = std::make_pair(x, y);

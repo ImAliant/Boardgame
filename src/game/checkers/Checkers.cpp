@@ -242,7 +242,7 @@ bool Checkers::CanPromotePiece(coord_t coord) const
     const auto x = piece->GetX();
 
     if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
-    else return (x == GameConstants::BOARD_LOWER_LIMIT);
+    else return (x == GameConstants::CheckersConstants::BOARD_LOWER_LIMIT);
 }
 
 void Checkers::PromotePiece(coord_t coord)

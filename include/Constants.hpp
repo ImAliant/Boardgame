@@ -50,31 +50,31 @@ namespace GameChoiceConstants
 
 namespace AssetsConstants
 {
-    const std::string MAIN_FONT = "assets/fonts/Nepoboy-K7Y4Z.ttf";
+    const std::string MAIN_FONT = "../assets/fonts/Nepoboy-K7Y4Z.ttf";
 
-    const std::string MENUBACKGROUND = "assets/images/menu/background.png";
+    const std::string MENUBACKGROUND = "../assets/images/menu/background.png";
     
-    const std::string CHECKERS_BLACK_PAWN = "assets/images/checkers/black_pawn.png";
-    const std::string CHECKERS_WHITE_PAWN = "assets/images/checkers/white_pawn.png";
-    const std::string CHECKERS_BLACK_QUEEN = "assets/images/checkers/black_queen.png";
-    const std::string CHECKERS_WHITE_QUEEN = "assets/images/checkers/white_queen.png";
+    const std::string CHECKERS_BLACK_PAWN = "../assets/images/checkers/black_pawn.png";
+    const std::string CHECKERS_WHITE_PAWN = "../assets/images/checkers/white_pawn.png";
+    const std::string CHECKERS_BLACK_QUEEN = "../assets/images/checkers/black_queen.png";
+    const std::string CHECKERS_WHITE_QUEEN = "../assets/images/checkers/white_queen.png";
     
-    const std::string BUTIN_YELLOW_PIECE = "assets/images/butin/yellow_piece.png";
-    const std::string BUTIN_RED_PIECE = "assets/images/butin/red_piece.png";
-    const std::string BUTIN_BLACK_PIECE = "assets/images/butin/black_piece.png";
+    const std::string BUTIN_YELLOW_PIECE = "../assets/images/butin/yellow_piece.png";
+    const std::string BUTIN_RED_PIECE = "../assets/images/butin/red_piece.png";
+    const std::string BUTIN_BLACK_PIECE = "../assets/images/butin/black_piece.png";
 
-    const std::string BULLTRICKER_BLACK_HORIZ_PIECE = "assets/images/bulltricker/allee_horz_black_pawn.png";
-    const std::string BULLTRICKER_BLACK_VERT_PIECE = "assets/images/bulltricker/allee_vert_black_pawn.png";
-    const std::string BULLTRICKER_WHITE_HORIZ_PIECE = "assets/images/bulltricker/allee_horz_white_pawn.png";
-    const std::string BULLTRICKER_WHITE_VERT_PIECE = "assets/images/bulltricker/allee_vert_white_pawn.png";
-    const std::string BULLTRICKER_BLACK_HORIZ_QUEEN = "assets/images/bulltricker/allee_horz_black_queen.png";
-    const std::string BULLTRICKER_BLACK_VERT_QUEEN = "assets/images/bulltricker/allee_vert_black_queen.png";
-    const std::string BULLTRICKER_WHITE_HORIZ_QUEEN = "assets/images/bulltricker/allee_horz_white_queen.png";
-    const std::string BULLTRICKER_WHITE_VERT_QUEEN = "assets/images/bulltricker/allee_vert_white_queen.png";
-    const std::string BULLTRICKER_BLACK_KING = "assets/images/bulltricker/black_king.png";
-    const std::string BULLTRICKER_WHITE_KING = "assets/images/bulltricker/white_king.png";
+    const std::string BULLTRICKER_BLACK_HORIZ_PIECE = "../assets/images/bulltricker/allee_horz_black_pawn.png";
+    const std::string BULLTRICKER_BLACK_VERT_PIECE = "../assets/images/bulltricker/allee_vert_black_pawn.png";
+    const std::string BULLTRICKER_WHITE_HORIZ_PIECE = "../assets/images/bulltricker/allee_horz_white_pawn.png";
+    const std::string BULLTRICKER_WHITE_VERT_PIECE = "../assets/images/bulltricker/allee_vert_white_pawn.png";
+    const std::string BULLTRICKER_BLACK_HORIZ_QUEEN = "../assets/images/bulltricker/allee_horz_black_queen.png";
+    const std::string BULLTRICKER_BLACK_VERT_QUEEN = "../assets/images/bulltricker/allee_vert_black_queen.png";
+    const std::string BULLTRICKER_WHITE_HORIZ_QUEEN = "../assets/images/bulltricker/allee_horz_white_queen.png";
+    const std::string BULLTRICKER_WHITE_VERT_QUEEN = "../assets/images/bulltricker/allee_vert_white_queen.png";
+    const std::string BULLTRICKER_BLACK_KING = "../assets/images/bulltricker/black_king.png";
+    const std::string BULLTRICKER_WHITE_KING = "../assets/images/bulltricker/white_king.png";
 
-    const std::string EMPTY_ASSET = "assets/images/empty.png";
+    const std::string EMPTY_ASSET = "../assets/images/empty.png";
 };
 
 namespace UIConstants {
@@ -147,6 +147,8 @@ namespace GameConstants
     const sf::Color BLACKCELL_COLOR = sf::Color{112, 74, 39};
     const sf::Color WHITECELL_COLOR = sf::Color{209, 183, 151};
 
+    const int BOARD_UPPER_LIMIT = 0;
+
     // Assuming the whole board is clickable
     const auto CLICKABLE_ZONE = std::make_pair(0, 480); 
 
@@ -162,63 +164,62 @@ namespace GameConstants
     const sf::Vector2f BOARDBACKGROUND_POSITION = sf::Vector2f{5.f, 5.f};
     const sf::Vector2f BOARDOFFSET = sf::Vector2f{10.f, 10.f};
 
-    namespace SameBoardSize{
-        const int BOARD_UPPER_LIMIT = 0;
+    namespace CheckersConstants
+    {
+        const int CHECKERSROWS = 10;
+        const int CHECKERSCOLS = 10;
+
+        const int BLACKPAWN_ID = 0;
+        const int WHITEPAWN_ID = 1;
+        const int BLACKQUEEN_ID = 2;
+        const int WHITEQUEEN_ID = 3;
+        const int EMPTY_ID = 4;
+
         const int BOARD_LOWER_LIMIT = 9;
-        namespace CheckersConstants
-        {
-            const int CHECKERSROWS = 10;
-            const int CHECKERSCOLS = 10;
-            const int BLACKPAWN_ID = 0;
-            const int WHITEPAWN_ID = 1;
-            const int BLACKQUEEN_ID = 2;
-            const int WHITEQUEEN_ID = 3;
-            const int EMPTY_ID = 4;
 
-            const char NOWINNER = -1;
+        const char NOWINNER = -1;
 
-            const char BLACK = 'B';
-            const char WHITE = 'W';
+        const char BLACK = 'B';
+        const char WHITE = 'W';
 
-            const std::vector<direction_t> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
-            const std::vector<direction_t> BLACK_DIRECTION = {{1, -1}, {1, 1}};
-            const std::vector<direction_t> ALL_DIRECTION = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-
-            const sf::Vector2f BOARDCELL_SIZE = sf::Vector2f{
-                (BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(CHECKERSROWS),
-                (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(CHECKERSCOLS)
-            };
-            const sf::Vector2f BOARDPIECE_SIZE = sf::Vector2f{
-                BOARDCELL_SIZE.x - 10.f, 
-                BOARDCELL_SIZE.y - 10.f
-            };
+        const std::vector<direction_t> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
+        const std::vector<direction_t> BLACK_DIRECTION = {{1, -1}, {1, 1}};
+        const std::vector<direction_t> ALL_DIRECTION = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        
+        const sf::Vector2f BOARDCELL_SIZE = sf::Vector2f{
+            (BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(CHECKERSROWS),
+            (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(CHECKERSCOLS)
         };
-    
-        namespace ButinConstants
-        {
-            const int BUTINROWS = 8; // Assuming an 8x8 board for Butin
-            const int BUTINCOLS = 8;
+        const sf::Vector2f BOARDPIECE_SIZE = sf::Vector2f{
+            BOARDCELL_SIZE.x - 10.f, 
+            BOARDCELL_SIZE.y - 10.f
+        };
+    };
 
-            const int YELLOW_PAWN_ID = 0; // Define IDs for Butin pieces
-            const int RED_PAWN_ID = 1;
-            const int BLACK_PAWN_ID = 2;
-            const int EMPTY_ID = 3;
+    namespace ButinConstants
+    {
+        const int BUTINROWS = 8; // Assuming an 8x8 board for Butin
+        const int BUTINCOLS = 8;
 
-            const char BUTIN_YELLOW = 'Y'; // Define character symbols for Butin pieces
-            const char BUTIN_RED = 'R';
-            const char BUTIN_BLACK = 'B';
+        const int YELLOW_PAWN_ID = 0; // Define IDs for Butin pieces
+        const int RED_PAWN_ID = 1;
+        const int BLACK_PAWN_ID = 2;
+        const int EMPTY_ID = 3;
 
-            const std::vector<direction_t> ALL_DIRECTION = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},    // Linear
-                                                            {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; // Diagonal
+        const char BUTIN_YELLOW = 'Y'; // Define character symbols for Butin pieces
+        const char BUTIN_RED = 'R';
+        const char BUTIN_BLACK = 'B';
 
-            const sf::Vector2f BOARDCELL_SIZE = sf::Vector2f{
-                (BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(BUTINROWS),
-                (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(BUTINCOLS)
-            };
-            const sf::Vector2f BOARDPIECE_SIZE = sf::Vector2f{
-                BOARDCELL_SIZE.x - 10.f, 
-                BOARDCELL_SIZE.y - 10.f
-            };
+        const std::vector<direction_t> ALL_DIRECTION = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},    // Linear
+                                                        {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; // Diagonal
+        
+        const sf::Vector2f BOARDCELL_SIZE = sf::Vector2f{
+            (BOARDBACKGROUND_SIZE.x - 10.f) / static_cast<float>(BUTINROWS),
+            (BOARDBACKGROUND_SIZE.y - 10.f) / static_cast<float>(BUTINCOLS)
+        };
+        const sf::Vector2f BOARDPIECE_SIZE = sf::Vector2f{
+            BOARDCELL_SIZE.x - 10.f, 
+            BOARDCELL_SIZE.y - 10.f
         };
     };
 
@@ -227,7 +228,6 @@ namespace GameConstants
         const int BULLTRICKERROWS = 15;
         const int BULLTRICKERCOLS = 15;
 
-        const int BOARD_UPPER_LIMIT = 0;
         const int BOARD_LOWER_LIMIT = 14;
 
         const char BLACK = 'B';
