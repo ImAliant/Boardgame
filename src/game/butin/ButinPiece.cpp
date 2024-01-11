@@ -13,17 +13,17 @@ void ButinPiece::CaptureMoves(const Board& board)
 
     for (const auto& [dx, dy]: *directions)
     {
-        const auto [posX, posY] = GetPosition();
-        const int x = posX + 2*dx;
-        const int y = posY + 2*dy;
-        const int jumpX = posX + dx;
-        const int jumpY = posY + dy;
+        const auto& [posX, posY]{GetPosition()};
+        const int x{posX + 2*dx};
+        const int y{posY + 2*dy};
+        const int jumpX{posX + dx};
+        const int jumpY{posY + dy};
 
-        const auto land = std::make_pair(x, y);
-        const auto jump = std::make_pair(jumpX, jumpY);
+        const auto& land{std::make_pair(x, y)};
+        const auto& jump{std::make_pair(jumpX, jumpY)};
         if (IsWithinBoard(land, board) && IsEmptyCell(land, board) && !IsEmptyCell(jump, board))
         {
-            const auto& direction = std::make_pair(dx, dy);
+            const auto& direction{std::make_pair(dx, dy)};
             m_possibleMoves.push_back(land);
             m_possibleCaptures.push_back(direction);
         }

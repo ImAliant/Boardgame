@@ -11,7 +11,7 @@ CheckersView::~CheckersView() {}
 
 void CheckersView::Init(std::shared_ptr<Context> context, const Board& board)
 {
-    const std::vector<int> textureIDs = {
+    const std::vector<int> textureIDs{
         CHECKERS_BLACK_PAWN,
         CHECKERS_WHITE_PAWN,
         CHECKERS_BLACK_QUEEN,
@@ -33,8 +33,8 @@ void CheckersView::SetupBoardPiece(const coord_t coord, const Board &board, cons
 {
     View::SetupBoardPiece(coord, board, piecesize, cellsize, position);
 
-    const auto piece = dynamic_cast<const CheckersBoard&>(board).GetPiece(coord);
-    const auto checkersPiece = dynamic_cast<const CheckersPiece*>(piece);
+    const auto piece{dynamic_cast<const CheckersBoard&>(board).GetPiece(coord)};
+    const auto checkersPiece{dynamic_cast<const CheckersPiece*>(piece)};
     if (checkersPiece != nullptr)
         SetPieceTexture(m_boardPiece[coord.first][coord.second], checkersPiece->GetSymbol(), checkersPiece->IsPromoted());
     else SetPieceTexture(m_boardPiece[coord.first][coord.second], EMPTY_ID);

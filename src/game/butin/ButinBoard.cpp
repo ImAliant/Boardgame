@@ -5,17 +5,17 @@
 using namespace GameConstants::ButinConstants;
 
 ButinBoard::ButinBoard(std::vector<std::shared_ptr<Player>> players): 
-    Board(std::move(players), BUTINROWS, BUTINCOLS)
+    Board{std::move(players), BUTINROWS, BUTINCOLS}
 {
     Init();
 }
 
 void ButinBoard::FillBoard() 
 {
-    const int numYellow = 34;
-    const int numRed = 20;
-    const int numBlack = 10;
-    const int totalPieces = numYellow + numRed + numBlack;
+    const int numYellow{34};
+    const int numRed{20};
+    const int numBlack{10};
+    const int totalPieces{numYellow + numRed + numBlack};
 
     std::vector<char> pieces(totalPieces);
     std::fill_n(pieces.begin(), numYellow, BUTIN_YELLOW); 
@@ -28,10 +28,10 @@ void ButinBoard::FillBoard()
     std::shuffle(pieces.begin(), pieces.end(), g);
 
     // Place the pieces 
-    int pieceIndex = 0;
-    for (int i = 0; i < m_rows; i++) {
-        for (int j = 0; j < m_cols; j++) {
-            const auto& coord = std::make_pair(i, j);
+    int pieceIndex{0};
+    for (int i{0}; i < m_rows; i++) {
+        for (int j{0}; j < m_cols; j++) {
+            const auto& coord{std::make_pair(i, j)};
             if (pieceIndex < totalPieces) {
                 m_board[i][j] = CreatePiece(coord, pieces[pieceIndex]);
                 pieceIndex++;

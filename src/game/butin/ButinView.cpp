@@ -10,7 +10,7 @@ ButinView::~ButinView() {}
 
 void ButinView::Init(std::shared_ptr<Context> context, const Board& board)
 {
-    const std::vector<int> textureIDs = {
+    const std::vector<int> textureIDs{
         BUTIN_YELLOW_PIECE,
         BUTIN_RED_PIECE,
         BUTIN_BLACK_PIECE,
@@ -32,7 +32,7 @@ void ButinView::SetupBoardPiece(const coord_t coord, const Board &board,
 {
     View::SetupBoardPiece(coord, board, piecesize, cellsize, position);
 
-    const auto piece = dynamic_cast<const ButinBoard&>(board).GetPiece(coord);
+    const auto& piece{dynamic_cast<const ButinBoard&>(board).GetPiece(coord)};
 
     if (piece != nullptr)
         SetPieceTexture(m_boardPiece[coord.first][coord.second], piece->GetSymbol());

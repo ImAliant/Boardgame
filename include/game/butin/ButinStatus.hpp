@@ -10,9 +10,9 @@ class ButinStatus: public GameStatus
 {
     private:
         /// @brief Score du gagnant.
-        int m_winnerScore = 0;
+        int m_winnerScore{0};
 
-        int m_currentPlayerIndex = 0;
+        int m_currentPlayerIndex{0};
     public:
         void IncrementCurrentPlayerIndex()
         {
