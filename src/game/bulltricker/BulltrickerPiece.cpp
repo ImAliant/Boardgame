@@ -24,7 +24,8 @@ void BulltrickerPiece::SimpleMoves(const Board& board) {
     const auto& queenDir = GameConstants::BulltrickerConstants::QUEEN_DIR;
 
     std::vector<direction_t> const* directions;
-    if (IsPawn()) {
+    if (IsPawn()) 
+    {
         if (m_state.m_symbol == white)
             directions = &wPawnDir;
         else if (m_state.m_symbol == black)
@@ -47,7 +48,7 @@ void BulltrickerPiece::AddPossibleMoves(const std::vector<direction_t>& directio
         }
         
         else if (IsQueen()) {
-            while (IsWithinBoard(coord, board) && IsEmptyCell(coord, board)) {
+            while (IsWithinBoard(coord, board) && IsEmptyCell(coord, board) && !IsLandingBehindKing(coord, dx, board)) {
                 m_possibleMoves.push_back(coord);
 
                 if (dx == 1 || dx == -1 || dy == 1 || dy == -1) break; // Queen can move only one cell in diagonal
@@ -60,7 +61,6 @@ void BulltrickerPiece::AddPossibleMoves(const std::vector<direction_t>& directio
     }
 }
 
-
 void BulltrickerPiece::CaptureMoves(const Board& board) {
     if (m_state.m_type == BT_PieceType::BT_PAWN && !IsPromoted()) {
         int dx = (m_state.m_symbol == GameConstants::BulltrickerConstants::WHITE) ? -2 : 2; // White pawns move up (-1), black pawns move down (+1)
@@ -70,15 +70,13 @@ void BulltrickerPiece::CaptureMoves(const Board& board) {
         const auto landingCoord = std::make_pair(x + dx, y);
 
         if (IsWithinBoard(opponentCoord, board) && IsOpponentPiece(opponentCoord, board) && 
-            IsWithinBoard(landingCoord, board) && IsEmptyCell(landingCoord, board)) {
+            IsWithinBoard(landingCoord, board) && IsEmptyCell(landingCoord, board) && IsHorizontal()) {
            
             m_possibleMoves.push_back(landingCoord);
             m_possibleCaptures.emplace_back(dx, 0); 
         }
     }
 }
-
-
 
 bool BulltrickerPiece::IsOpponentPiece(const coord_t coord, const Board& board) const
 {
@@ -93,6 +91,20 @@ bool BulltrickerPiece::IsOpponentPiece(const coord_t coord, const Board& board) 
     return false;
 }
 
+bool BulltrickerPiece::IsLandingBehindKing(const coord_t coord, const int dx, const Board& board) const
+{
+    if (IsWithinBoard(coord, board)) 
+    {
+        const coord_t kingCoord = {coord.first - dx, coord.second};
+
+        const auto piece = board.GetPiece(kingCoord);
+        if (piece == nullptr) return false;
+        const auto pieceType = piece->GetState().m_type;
+        return pieceType != BT_PieceType::BT_KING;
+    }
+
+    return false;
+}
 
 void BulltrickerPiece::Promote()
 {
