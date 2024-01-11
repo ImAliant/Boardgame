@@ -25,12 +25,12 @@ void Bulltricker::Turn(const coord_t coord)
 
 bool Bulltricker::IsPieceOfCurrentPlayer(coord_t coord) const
 {
-    auto piece = GetPiece(coord);
+    auto piece{GetPiece(coord)};
     if (!piece) return false;
     
-    auto pieceOwner = piece->GetOwner();
-    auto idPieceOwner = pieceOwner->GetId();
-    auto idCurrentPlayer = GetCurrentPlayer()->GetId();
+    auto pieceOwner{piece->GetOwner()};
+    auto idPieceOwner{pieceOwner->GetId()};
+    auto idCurrentPlayer{GetCurrentPlayer()->GetId()};
 
     return idCurrentPlayer == idPieceOwner;
 }
@@ -83,19 +83,19 @@ void Bulltricker::ProcessConditionalMove(const coord_t coord)
 
 void Bulltricker::ApplyCapture(const coord_t coord)
 {
-    const auto piece = GetPiece(GetSelectedPiece());
-    auto [x, y, captx, capty] = GetCoordAndDirFromPossibleCapture(coord, piece);
+    const auto piece{GetPiece(GetSelectedPiece())};
+    auto [x, y, captx, capty]{GetCoordAndDirFromPossibleCapture(coord, piece)};
 
     m_board->MovePiece(GetSelectedPiece(), coord);
 
-    bool capt = false;
+    bool capt{false};
     while (!capt)
     {
-        const auto& captureCoord = std::make_pair(x, y);
+        const auto& captureCoord{std::make_pair(x, y)};
         if (!AreCoordinatesValid(captureCoord)) 
             throw InvalidCoordinatesException("Checkers::PerformCapturingMove() : captureCoord are invalid");
 
-        const auto pieceCapture = GetPiece(captureCoord);
+        const auto pieceCapture{GetPiece(captureCoord)};
         if (!pieceCapture)
         {
             x -= captx;
@@ -131,13 +131,13 @@ bool Bulltricker::CanPromotePiece(coord_t coord) const
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Bulltricker::CanPromotePiece() : coord are invalid");
 
-    const auto piece = GetPiece(coord);
+    const auto piece{GetPiece(coord)};
     if (!piece) return false;
 
-    const auto bulltrickerPiece = dynamic_cast<BulltrickerPiece*>(piece);
+    const auto bulltrickerPiece{dynamic_cast<BulltrickerPiece*>(piece)};
     if (bulltrickerPiece->IsPromoted()) return false;
     
-    const auto x = piece->GetX();
+    const auto x{piece->GetX()};
 
     if (piece->GetSymbol() == GameConstants::BulltrickerConstants::WHITE) 
         return (x == GameConstants::BOARD_UPPER_LIMIT);
@@ -150,10 +150,10 @@ void Bulltricker::PromotePiece(coord_t coord)
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Bulltricker::PromotePiece() : coord are invalid");
 
-    auto piece = GetPiece(coord);
+    auto piece{GetPiece(coord)};
     if (!piece) return;
 
-    auto checkersPiece = dynamic_cast<BulltrickerPiece*>(piece);
+    auto checkersPiece{dynamic_cast<BulltrickerPiece*>(piece)};
     checkersPiece->Promote();
 
     m_flags.BoardNeedUpdate();
@@ -161,10 +161,10 @@ void Bulltricker::PromotePiece(coord_t coord)
 
 bool Bulltricker::IsCapturingMove(const coord_t coord) const
 {
-    const auto& piece = GetPiece(GetSelectedPiece());
+    const auto& piece{GetPiece(GetSelectedPiece())};
     if (!piece) return false;
 
-    auto possibleMoves = piece->GetPossibleMoves();
+    auto possibleMoves{piece->GetPossibleMoves()};
 
     return std::find(possibleMoves.begin(), possibleMoves.end(), coord) != possibleMoves.end();
 }
@@ -182,7 +182,7 @@ void Bulltricker::PerformCapturingMove(coord_t coord)
 
 void Bulltricker::PerformNonCapturingMove(coord_t coord)
 {
-    const auto& piece = m_board->GetPiece(m_status.GetSelectedPiece());
+    const auto& piece{m_board->GetPiece(m_status.GetSelectedPiece())};
     ValidatePieceAndMoves(coord, piece);
 
     m_board->MovePiece(GetSelectedPiece(), coord);
@@ -196,11 +196,11 @@ void Bulltricker::PerformNonCapturingMove(coord_t coord)
 
 void Bulltricker::HandlePieceOrientation(const coord_t coord) const
 {
-    auto piece = GetPiece(coord);
+    auto piece{GetPiece(coord)};
     if (!piece) return;
 
-    auto bulltrickerPiece = dynamic_cast<BulltrickerPiece*>(piece);
-    auto bulltrickerBoard = dynamic_cast<BulltrickerBoard*>(m_board.get());
+    auto bulltrickerPiece{dynamic_cast<BulltrickerPiece*>(piece)};
+    auto bulltrickerBoard{dynamic_cast<BulltrickerBoard*>(m_board.get())};
     if (bulltrickerBoard->DetermineOrientation(coord.first) && !bulltrickerPiece->IsHorizontal()) 
         bulltrickerPiece->OrientationHorizontal();
     else if (!bulltrickerBoard->DetermineOrientation(coord.first) && bulltrickerPiece->IsHorizontal()) 
@@ -209,19 +209,19 @@ void Bulltricker::HandlePieceOrientation(const coord_t coord) const
 
 bool Bulltricker::HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const
 {
-    auto rows = m_board->GetRows();
-    auto cols = m_board->GetCols();
+    auto rows{m_board->GetRows()};
+    auto cols{m_board->GetCols()};
 
-    for (int i = 0; i < rows; i++)
+    for (int i{0}; i < rows; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j{0}; j < cols; j++)
         {
-            auto coord = std::make_pair(i, j);
-            auto piece = GetPiece(coord);
+            auto coord{std::make_pair(i, j)};
+            auto piece{GetPiece(coord)};
             if (!piece) continue;
             if ((piece->GetOwner() == GetCurrentPlayer()) != checkCurrentPlayer) continue;
 
-            auto possibleMoves = capturing ? piece->GetPossibleCaptures() : piece->GetPossibleMoves();
+            auto possibleMoves{capturing ? piece->GetPossibleCaptures() : piece->GetPossibleMoves()};
             if (!possibleMoves.empty()) return true;
         }
     }

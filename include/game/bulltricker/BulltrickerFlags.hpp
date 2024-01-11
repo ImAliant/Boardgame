@@ -6,7 +6,7 @@ class BulltrickerFlags: public ModelFlags
 {   
 
     private:
-        bool m_capturingMoveRequired = false;
+        bool m_capturingMoveRequired{false};
 
     public:
         BulltrickerFlags() = default;

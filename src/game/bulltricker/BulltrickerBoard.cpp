@@ -10,11 +10,11 @@ BulltrickerBoard::BulltrickerBoard(std::vector<std::shared_ptr<Player>> players)
 
 void BulltrickerBoard::PlacePieces(const int startRow, const int endRow, const char color)
 {
-    for (int i = startRow; i <= endRow; i++)
+    for (int i{startRow}; i <= endRow; i++)
     {
-        for (int j = 0; j < m_cols; j++)
+        for (int j{0}; j < m_cols; j++)
         {
-            const auto& coord = std::make_pair(i, j);
+            const auto& coord{std::make_pair(i, j)};
             if (i%2 == 0 && j%2 == 0) continue;
 
             if ((i == startRow || i == startRow + 2) && j%2 == 0)
@@ -38,15 +38,15 @@ void BulltrickerBoard::FillBoard()
 
 std::unique_ptr<Piece> BulltrickerBoard::CreatePiece(const coord_t coord, const char color) const
 {
-    const auto& [x, y] = coord;
-    bool isHorizontal = DetermineOrientation(x);
+    const auto& [x, y]{coord};
+    bool isHorizontal{DetermineOrientation(x)};
     
     if (color != BLACK && color != WHITE)
         throw std::invalid_argument("Invalid color");
 
-    bool isKing = (color == BLACK && x == 1 && y == 7) || (color == WHITE && x == 13 && y == 7);
-    bool isQueen = ((x == 1 || x == 13) && y%2 == 0) && !isKing;
-    bool isPawn = !isKing && !isQueen;
+    bool isKing{(color == BLACK && x == 1 && y == 7) || (color == WHITE && x == 13 && y == 7)};
+    bool isQueen{((x == 1 || x == 13) && y%2 == 0) && !isKing};
+    bool isPawn{!isKing && !isQueen};
 
     int type;
     if (isKing)
@@ -86,9 +86,9 @@ bool BulltrickerBoard::DetermineOrientation(const int row) const
 
 std::ostream &operator<<(std::ostream &os, const BulltrickerBoard &board)
 {
-    for (int i = 0; i < board.m_rows; i++)
+    for (int i{0}; i < board.m_rows; i++)
     {
-        for (int j = 0; j < board.m_cols; j++)
+        for (int j{0}; j < board.m_cols; j++)
         {
             if (board.m_board[i][j] == nullptr)
                 os << ".";

@@ -9,7 +9,7 @@ using namespace UIConstants;
 
 void BulltrickerView::Init(std::shared_ptr<Context> context, const Board& board)
 {
-    const std::vector<int> textureIDs = {
+    const std::vector<int> textureIDs{
         BULLTRICKER_BLACK_HORIZ_PIECE,
         BULLTRICKER_BLACK_VERT_PIECE,
         BULLTRICKER_WHITE_HORIZ_PIECE,
@@ -30,24 +30,24 @@ void BulltrickerView::Init(std::shared_ptr<Context> context, const Board& board)
 
 void BulltrickerView::InitBoardDiffCellSize(const Board& board)
 {
-    const auto rows = board.GetRows();
-    const auto cols = board.GetCols();
+    const auto rows{board.GetRows()};
+    const auto cols{board.GetCols()};
 
     ResizeVector(m_boardCell, rows, cols);
 
     const float offset = 10.f; 
-    float currentX = offset;
-    float currentY = offset;
+    float currentX{offset};
+    float currentY{offset};
 
-    for (int i = 0; i < rows; i++)
+    for (int i{0}; i < rows; i++)
     {
         currentX = offset;
 
-        for (int j = 0; j < cols; j++)
+        for (int j{0}; j < cols; j++)
         {
-            const auto& coord = std::make_pair(i, j);
-            const auto& cellsize = CalculateCellSize(coord);
-            sf::Vector2f position(currentX, currentY);
+            const auto& coord{std::make_pair(i, j)};
+            const auto& cellsize{CalculateCellSize(coord)};
+            sf::Vector2f position{currentX, currentY};
 
             InitCell(i, j, cellsize, position);
 
@@ -59,8 +59,8 @@ void BulltrickerView::InitBoardDiffCellSize(const Board& board)
 
 void BulltrickerView::InitBoardDiffPieceSize(const Board& board)
 {
-    const auto rows = board.GetRows();
-    const auto cols = board.GetRows();
+    const auto& rows{board.GetRows()};
+    const auto& cols{board.GetRows()};
 
     ResizeVector(m_boardPiece, rows, cols);
 
@@ -72,9 +72,9 @@ void BulltrickerView::SetupBoardPiece(const coord_t coord, const Board &board,
 {
     View::SetupBoardPiece(coord, board, piecesize, cellsize, position);
 
-    const auto& [i, j] = coord;
-    const auto& piece = dynamic_cast<const BulltrickerBoard&>(board).GetPiece(coord);
-    const auto& bulltrickerPiece = dynamic_cast<BulltrickerPiece*>(piece);
+    const auto& [i, j]{coord};
+    const auto& piece{dynamic_cast<const BulltrickerBoard&>(board).GetPiece(coord)};
+    const auto& bulltrickerPiece{dynamic_cast<BulltrickerPiece*>(piece)};
 
     if (bulltrickerPiece)
         ChoosePieceTexture(m_boardPiece[i][j], *bulltrickerPiece);
@@ -84,9 +84,9 @@ void BulltrickerView::SetupBoardPiece(const coord_t coord, const Board &board,
 
 void BulltrickerView::ChoosePieceTexture(sf::RectangleShape &piece, const BulltrickerPiece& bulltrickerPiece)
 {
-    const auto& color = bulltrickerPiece.GetSymbol();
-    const auto& isHorizontal = bulltrickerPiece.IsHorizontal();
-    const auto& isPromoted = bulltrickerPiece.IsPromoted();
+    const auto& color{bulltrickerPiece.GetSymbol()};
+    const auto& isHorizontal{bulltrickerPiece.IsHorizontal()};
+    const auto& isPromoted{bulltrickerPiece.IsPromoted()};
 
     SetPieceTexture(piece, color, isPromoted, isHorizontal);
 }
@@ -103,7 +103,7 @@ float BulltrickerView::UpdateCurrentYPosition(const float currentY, const int i)
 
 sf::Vector2f BulltrickerView::CalculateCellSize(const coord_t coord) const
 {
-    const auto& [x, y] = coord;
+    const auto& [x, y]{coord};
 
     if (x%2 == 0 && y%2 == 0) return BUTEE_SIZE;
     else if (x%2 == 0 && y%2 != 0) return ALLEE_HORIZONTAL_SIZE;
@@ -123,28 +123,28 @@ sf::Vector2f BulltrickerView::CalculatePieceSize(const coord_t coord) const
 
 void BulltrickerView::UpdateBoard(const Board& board)
 {
-    const auto rows = board.GetRows();
-    const auto cols = board.GetRows();
+    const auto rows{board.GetRows()};
+    const auto cols{board.GetRows()};
 
     LoopUpdateBoard(board, rows, cols);
 }
 
 void BulltrickerView::LoopUpdateBoard(const Board& board, const int rows, const int cols)
 {
-    const float offset = 15.f;
-    float currentX = offset;
-    float currentY = offset;
+    const float offset{15.f};
+    float currentX{offset};
+    float currentY{offset};
 
-    for (int i = 0; i < rows; i++) 
+    for (int i{0}; i < rows; i++) 
     {
         currentX = offset;
 
-        for (int j = 0; j < cols; j++)
+        for (int j{0}; j < cols; j++)
         {
-            const auto& coord = std::make_pair(i, j);
-            const auto& piecesize = CalculatePieceSize(coord);
-            const auto& cellsize = CalculateCellSize(coord);
-            sf::Vector2f position(currentX, currentY);
+            const auto& coord{std::make_pair(i, j)};
+            const auto& piecesize{CalculatePieceSize(coord)};
+            const auto& cellsize{CalculateCellSize(coord)};
+            sf::Vector2f position{currentX, currentY};
 
             SetupBoardPiece(coord, board, piecesize, cellsize, position);
 
@@ -196,15 +196,15 @@ void BulltrickerView::PrintWinner(const Player* winner) const
 
 coord_t BulltrickerView::GetBoardCoord(const int x, const int y) const
 {
-    const auto& rows = m_boardCell.size();
-    const auto& cols = m_boardCell[0].size();
+    const auto& rows{m_boardCell.size()};
+    const auto& cols{m_boardCell[0].size()};
     coord_t coord;
 
-    for (size_t i = 0; i < rows; i++)
+    for (size_t i{0}; i < rows; i++)
     {
-        for(size_t j = 0; j < cols; j++)
+        for(size_t j{0}; j < cols; j++)
         {
-            const auto& cell = m_boardCell[i][j];
+            const auto& cell{m_boardCell[i][j]};
             if (cell.getGlobalBounds().contains(x, y)) 
             {
                 coord = std::make_pair(i, j);
