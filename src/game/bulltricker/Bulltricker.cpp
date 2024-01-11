@@ -6,7 +6,7 @@
 void Bulltricker::Turn(const coord_t coord)
 {
     Model::Turn(coord);
-if (IsPieceOfCurrentPlayer(coord))
+    if (IsPieceOfCurrentPlayer(coord))
     {
         if (HasCapturingMoves(coord)) m_flags.CapturingMoveRequired();
         else m_flags.ResetCapturingMoveRequiredFlag();
@@ -83,7 +83,7 @@ void Bulltricker::ProcessConditionalMove(const coord_t coord)
 
 void Bulltricker::ApplyCapture(const coord_t coord)
 {
-     const auto piece = GetPiece(GetSelectedPiece());
+    const auto piece = GetPiece(GetSelectedPiece());
     auto [x, y, captx, capty] = GetCoordAndDirFromPossibleCapture(coord, piece);
 
     m_board->MovePiece(GetSelectedPiece(), coord);
@@ -128,7 +128,6 @@ void Bulltricker::HandlePieceCaptureAndReplay(const coord_t coord)
 
 bool Bulltricker::CanPromotePiece(coord_t coord) const
 {  
-    
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Bulltricker::CanPromotePiece() : coord are invalid");
 
@@ -140,8 +139,10 @@ bool Bulltricker::CanPromotePiece(coord_t coord) const
     
     const auto x = piece->GetX();
 
-    if (piece->GetSymbol() == GameConstants::BulltrickerConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
-    else return (x == GameConstants::BOARD_LOWER_LIMIT);
+    if (piece->GetSymbol() == GameConstants::BulltrickerConstants::WHITE) 
+        return (x == GameConstants::BulltrickerConstants::BOARD_UPPER_LIMIT);
+    else 
+        return (x == GameConstants::BulltrickerConstants::BOARD_LOWER_LIMIT);
 }
 
 void Bulltricker::PromotePiece(coord_t coord)
@@ -160,7 +161,7 @@ void Bulltricker::PromotePiece(coord_t coord)
 
 bool Bulltricker::IsCapturingMove(const coord_t coord) const
 {
-    auto piece = GetPiece(GetSelectedPiece());
+    const auto& piece = GetPiece(GetSelectedPiece());
     if (!piece) return false;
 
     auto possibleMoves = piece->GetPossibleMoves();
@@ -172,6 +173,8 @@ void Bulltricker::PerformCapturingMove(coord_t coord)
 {
     ApplyCapture(coord);
 
+    HandlePieceOrientation(coord);
+
     HandlePieceDeselectionAndUpdate(m_flags);
 
     HandlePieceCaptureAndReplay(coord);
@@ -179,16 +182,30 @@ void Bulltricker::PerformCapturingMove(coord_t coord)
 
 void Bulltricker::PerformNonCapturingMove(coord_t coord)
 {
-    const auto piece = m_board->GetPiece(m_status.GetSelectedPiece());
+    const auto& piece = m_board->GetPiece(m_status.GetSelectedPiece());
     ValidatePieceAndMoves(coord, piece);
 
     m_board->MovePiece(GetSelectedPiece(), coord);
+
+    HandlePieceOrientation(coord);
 
     if (CanPromotePiece(coord)) PromotePiece(coord);
 
     HandlePieceDeselectionAndUpdate(m_flags);
 }
 
+void Bulltricker::HandlePieceOrientation(const coord_t coord) const
+{
+    auto piece = GetPiece(coord);
+    if (!piece) return;
+
+    auto bulltrickerPiece = dynamic_cast<BulltrickerPiece*>(piece);
+    auto bulltrickerBoard = dynamic_cast<BulltrickerBoard*>(m_board.get());
+    if (bulltrickerBoard->DetermineOrientation(coord.first) && !bulltrickerPiece->IsHorizontal()) 
+        bulltrickerPiece->OrientationHorizontal();
+    else if (!bulltrickerBoard->DetermineOrientation(coord.first) && bulltrickerPiece->IsHorizontal()) 
+        bulltrickerPiece->OrientationVertical();
+}
 
 bool Bulltricker::HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const
 {

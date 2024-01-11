@@ -2,7 +2,7 @@
 #include "../../../include/exception/AssetNotFoundException.hpp"
 
 using namespace GameConstants;
-using namespace CheckersConstants;
+using namespace SameBoardSize::CheckersConstants;
 using namespace UIConstants;
 
 CheckersView::CheckersView() {}
@@ -29,18 +29,18 @@ void CheckersView::UpdateBoard(const Board& board)
     UpdateBoardBase(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
-void CheckersView::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
+void CheckersView::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize, const sf::Vector2f position)
 {
-    View::SetupBoardPiece(coord, board, piecesize, cellsize);
+    View::SetupBoardPiece(coord, board, piecesize, cellsize, position);
 
     const auto piece = dynamic_cast<const CheckersBoard&>(board).GetPiece(coord);
     const auto checkersPiece = dynamic_cast<const CheckersPiece*>(piece);
     if (checkersPiece != nullptr)
         SetPieceTexture(m_boardPiece[coord.first][coord.second], checkersPiece->GetSymbol(), checkersPiece->IsPromoted());
-    else SetPieceTexture(m_boardPiece[coord.first][coord.second], EMPTY_ID, false);
+    else SetPieceTexture(m_boardPiece[coord.first][coord.second], EMPTY_ID);
 }
 
-void CheckersView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted)
+void CheckersView::SetPieceTexture(sf::RectangleShape &piece, const char color, const bool promoted, const bool isHorizontal)
 {
     int textureID;
     if (color == BLACK)

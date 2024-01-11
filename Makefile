@@ -1,7 +1,7 @@
 #Compiler
 CC := g++
 #Compiler flags
-CFLAGS := -Wall -std=c++17
+CFLAGS := -Wall -std=c++17 -MMD -MP
 #SFML flags
 SFMLFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
 #Directories
@@ -22,6 +22,8 @@ SRC := $(wildcard $(SRC_DIR)/*.cpp) \
 OBJ_DIR := obj
 #Object files
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
+#Dependency files
+DEP := $(OBJ:.o=.d)
 #Executable name
 EXE := boardgame
 
@@ -36,5 +38,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 clean:
 	rm -rf $(OBJ_DIR) $(EXE)
+
+-include $(DEP)
 
 .PHONY: all clean

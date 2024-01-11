@@ -21,5 +21,5 @@ class BulltrickerController : public Controller
         explicit BulltrickerController(std::shared_ptr<Context> context);
         ~BulltrickerController() override = default;
 
-         void Update() override;    
+        void Update() override;    
 };

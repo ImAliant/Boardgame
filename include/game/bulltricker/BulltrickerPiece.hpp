@@ -29,8 +29,9 @@ class BulltrickerPiece: public Piece
 
         void FindPossibleMoves(const Board& board) override;
       
-
         void Promote();
+        void OrientationHorizontal();
+        void OrientationVertical();
 
         bool IsPawn() const;
         bool IsQueen() const;

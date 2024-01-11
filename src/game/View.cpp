@@ -81,7 +81,7 @@ void View::InitBoardPiece(const Board& board, const sf::Vector2f piecesize, cons
         for (int j = 0; j < cols; j++)
         {
             const auto coord = std::make_pair(i, j);
-            SetupBoardPiece(coord, board, piecesize, cellsize);
+            SetupBoardPiece(coord, board, piecesize, cellsize, CalculatePosition(15.f, coord, cellsize));
         }
     }
 }
@@ -118,13 +118,14 @@ void View::InitButtons(std::shared_ptr<Context> context)
     InitButton(GameContext::MENUBUTTONID, "Menu", GameContext::MENUBUTTON_POSITION, *font, functions[GameContext::MENUBUTTONID]);
 }
 
-void View::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
+void View::SetupBoardPiece(const coord_t coord, const Board &board, 
+                        const sf::Vector2f piecesize, const sf::Vector2f cellsize, const sf::Vector2f position)
 {
     const auto [i, j] = coord;
     InitRectangleShape(
         m_boardPiece[i][j],
         piecesize,
-        CalculatePosition(15.f, coord, cellsize)
+        position
     );
 }
 
@@ -192,7 +193,7 @@ void View::UpdateBoardBase(const Board& board, const sf::Vector2f piecesize, con
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols ; j++) {
             const auto coord = std::make_pair(i, j);
-            SetupBoardPiece(coord, board, piecesize, cellsize);
+            SetupBoardPiece(coord, board, piecesize, cellsize, CalculatePosition(15.f, coord, cellsize));
         }
     }
 }

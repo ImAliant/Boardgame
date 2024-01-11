@@ -26,6 +26,7 @@ class Bulltricker: public Model
         void PerformCapturingMove(coord_t coord);
         void PerformNonCapturingMove(coord_t coord);
 
+        void HandlePieceOrientation(const coord_t coord) const;
 
         bool CanPromotePiece(coord_t coord) const;
         void PromotePiece(coord_t coord);

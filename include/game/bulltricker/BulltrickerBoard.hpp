@@ -16,7 +16,6 @@ class BulltrickerBoard: public Board, public CommonGameType
         std::unique_ptr<BulltrickerPiece> CreateWhitePiece(const coord_t coord, const int type, const bool isHorizontal) const;
 
         void PlacePieces(const int startRow, const int endRow, const char color);
-        bool DetermineOrientation(const int row) const;
     public:
         explicit BulltrickerBoard(std::vector<std::shared_ptr<Player>> players);
         ~BulltrickerBoard() override = default;
@@ -24,4 +23,5 @@ class BulltrickerBoard: public Board, public CommonGameType
         friend std::ostream& operator<<(std::ostream& os, const BulltrickerBoard& board);
 
         void FillBoard() override;
+        bool DetermineOrientation(const int row) const;
 };

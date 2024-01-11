@@ -10,8 +10,9 @@
 class ButinView: public View
 {
     private:
-        void SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize) override;
-        void SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted) override;
+        void SetupBoardPiece(const coord_t coord, const Board &board, 
+                            const sf::Vector2f piecesize, const sf::Vector2f cellsize, const sf::Vector2f position) override;
+        void SetPieceTexture(sf::RectangleShape &piece, const char color, const bool promoted = false, const bool isHorizontal = false) override;
     public:
         ButinView();
         ~ButinView() override;

@@ -26,7 +26,6 @@ void BulltrickerView::Init(std::shared_ptr<Context> context, const Board& board)
     InitBase(context, textureIDs);
     InitBoardDiffCellSize(board);
     InitBoardDiffPieceSize(board);
-    
 }
 
 void BulltrickerView::InitBoardDiffCellSize(const Board& board)
@@ -65,43 +64,22 @@ void BulltrickerView::InitBoardDiffPieceSize(const Board& board)
 
     ResizeVector(m_boardPiece, rows, cols);
 
-    const float offset = 15.f;
-    float currentX = offset;
-    float currentY = offset;
-
-    for (int i = 0; i < rows; i++)
-    {
-        currentX = offset;
-
-        for (int j = 0; j < cols; j++)
-        {
-            const auto& coord = std::make_pair(i, j);
-            const auto& piecesize = CalculatePieceSize(coord);
-            const auto& cellsize = CalculateCellSize(coord);
-            sf::Vector2f position(currentX, currentY);
-
-            InitPiece(board, i, j, piecesize, position);
-
-            currentX = UpdateCurrentXPosition(currentX, cellsize.x);
-        }
-        currentY = UpdateCurrentYPosition(currentY, i);
-    }
+    LoopUpdateBoard(board, rows, cols);
 }
 
-void BulltrickerView::InitPiece(const Board& board, const int row, const int col, const sf::Vector2f piecesize, const sf::Vector2f position)
+void BulltrickerView::SetupBoardPiece(const coord_t coord, const Board &board, 
+                            const sf::Vector2f piecesize, const sf::Vector2f cellsize, const sf::Vector2f position)
 {
-    InitRectangleShape(
-        m_boardPiece[row][col],
-        piecesize,
-        position
-    );
+    View::SetupBoardPiece(coord, board, piecesize, cellsize, position);
 
-    const auto coord = std::make_pair(row, col);
-    const auto piece = dynamic_cast<const BulltrickerBoard&>(board).GetPiece(coord);
-    const auto bulltrickerPiece = dynamic_cast<const BulltrickerPiece*>(piece);
+    const auto& [i, j] = coord;
+    const auto& piece = dynamic_cast<const BulltrickerBoard&>(board).GetPiece(coord);
+    const auto& bulltrickerPiece = dynamic_cast<BulltrickerPiece*>(piece);
 
-    if (bulltrickerPiece) ChoosePieceTexture(m_boardPiece[row][col], *bulltrickerPiece);
-    else SetPieceTexture(m_boardPiece[row][col], EMPTY_ID, false, false);
+    if (bulltrickerPiece)
+        ChoosePieceTexture(m_boardPiece[i][j], *bulltrickerPiece);
+    else 
+        SetPieceTexture(m_boardPiece[i][j], EMPTY_ID);
 }
 
 void BulltrickerView::ChoosePieceTexture(sf::RectangleShape &piece, const BulltrickerPiece& bulltrickerPiece)
@@ -145,10 +123,36 @@ sf::Vector2f BulltrickerView::CalculatePieceSize(const coord_t coord) const
 
 void BulltrickerView::UpdateBoard(const Board& board)
 {
-    InitBoardDiffPieceSize(board);
+    const auto rows = board.GetRows();
+    const auto cols = board.GetRows();
+
+    LoopUpdateBoard(board, rows, cols);
 }
 
-void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted){}
+void BulltrickerView::LoopUpdateBoard(const Board& board, const int rows, const int cols)
+{
+    const float offset = 15.f;
+    float currentX = offset;
+    float currentY = offset;
+
+    for (int i = 0; i < rows; i++) 
+    {
+        currentX = offset;
+
+        for (int j = 0; j < cols; j++)
+        {
+            const auto& coord = std::make_pair(i, j);
+            const auto& piecesize = CalculatePieceSize(coord);
+            const auto& cellsize = CalculateCellSize(coord);
+            sf::Vector2f position(currentX, currentY);
+
+            SetupBoardPiece(coord, board, piecesize, cellsize, position);
+
+            currentX = UpdateCurrentXPosition(currentX, cellsize.x);
+        }
+        currentY = UpdateCurrentYPosition(currentY, i);
+    }
+}
 
 void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, const char color, const bool promoted, const bool isHorizontal)
 {
@@ -156,7 +160,7 @@ void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, const char colo
     if (color == BLACK)
     {
         if (isHorizontal)
-            textureID = promoted ? BLACKHORIZQUEEN_ID : BLACKHORIZPAWN_ID;
+            textureID = promoted ? BLACKHORIZQUEEN_ID : BLACKHORIZPAWN_ID;  
         else textureID = promoted ? BLACKVERTQUEEN_ID : BLACKVERTPAWN_ID;
     }
     else if (color == WHITE)
@@ -166,6 +170,7 @@ void BulltrickerView::SetPieceTexture(sf::RectangleShape &piece, const char colo
         else textureID = promoted ? WHITEVERTQUEEN_ID : WHITEVERTPAWN_ID;
     }
     else textureID = EMPTY_ID;
+
     piece.setTexture(&m_pieceTexture[textureID]);
 }
 

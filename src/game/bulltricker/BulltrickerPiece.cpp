@@ -2,10 +2,9 @@
 
 BulltrickerPiece::BulltrickerPiece(const coord_t coord, const std::shared_ptr<Player> owner, 
                                    const char symbol, const int type, const bool isHorizontal):
-    Piece{coord, owner, symbol}
+    Piece{coord, owner, symbol}, m_isHorizontal{isHorizontal}
 {
     m_state.m_type = type;
-    m_isHorizontal = isHorizontal;
 }
 BulltrickerPiece::~BulltrickerPiece(){}
 
@@ -99,6 +98,15 @@ void BulltrickerPiece::Promote()
     m_state.m_type = BT_QUEEN;
 }
 
+void BulltrickerPiece::OrientationHorizontal()
+{
+    m_isHorizontal = true;
+}
+
+void BulltrickerPiece::OrientationVertical()
+{
+    m_isHorizontal = false;
+}
 
 // Helper functions to determine if the piece is a pawn or a queen
 bool BulltrickerPiece::IsPawn() const {

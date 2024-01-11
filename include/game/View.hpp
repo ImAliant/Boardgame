@@ -34,7 +34,8 @@ class View: public UIHandler
         void InitBoardCell(const Board& board, const sf::Vector2f cellsize);
         void InitBoardPiece(const Board& board, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
         void InitCell(const int row, const int col, const sf::Vector2f cellsize, const sf::Vector2f position);
-        virtual void SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
+        virtual void SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, 
+                                    const sf::Vector2f cellsize, const sf::Vector2f position);
         sf::Vector2f CalculatePosition(const float offset, const coord_t coord, const sf::Vector2f cellsize) const;
         
         template <typename T>
@@ -45,8 +46,8 @@ class View: public UIHandler
 
         void UpdateBoardBase(const Board& board, const sf::Vector2f piecesize, const sf::Vector2f cellsize);
 
-        virtual void SetPieceTexture(sf::RectangleShape &piece, const char color, const bool promoted) = 0;
-
+        virtual void SetPieceTexture(sf::RectangleShape &piece, const char color, const bool promoted = false, const bool isHorizontal = false) = 0;
+        
         coord_t GetBoardCoordBase(const int x, const int y, const sf::Vector2f cellsize) const;
     public:
         View();
