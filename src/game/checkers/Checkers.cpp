@@ -26,12 +26,12 @@ void Checkers::Turn(const coord_t coord) {
 
 bool Checkers::IsPieceOfCurrentPlayer(coord_t coord) const
 {
-    auto piece = GetPiece(coord);
+    auto piece{GetPiece(coord)};
     if (!piece) return false;
     
-    auto pieceOwner = piece->GetOwner();
-    auto idPieceOwner = pieceOwner->GetId();
-    auto idCurrentPlayer = GetCurrentPlayer()->GetId();
+    auto pieceOwner{piece->GetOwner()};
+    auto idPieceOwner{pieceOwner->GetId()};
+    auto idCurrentPlayer{GetCurrentPlayer()->GetId()};
 
     return idCurrentPlayer == idPieceOwner;
 }
@@ -42,8 +42,8 @@ bool Checkers::IsMovePossible(const coord_t coord) const
 }
 
 void Checkers::CheckForWin() {
-    int nbWhitePieces = 0;
-    int nbBlackPieces = 0;
+    int nbWhitePieces{0};
+    int nbBlackPieces{0};
 
     CountPieces(nbWhitePieces, nbBlackPieces);
 
@@ -54,13 +54,14 @@ void Checkers::CheckForWin() {
 
 void Checkers::CountPieces(int& whitePieces, int& blackPieces) const
 {
-    auto rows = m_board->GetRows();
-    auto cols = m_board->GetCols();
+    const auto& rows{m_board->GetRows()};
+    const auto& cols{m_board->GetCols()};
 
-    for (int i = 0; i < rows; i++)
+    for (int i{0}; i < rows; i++)
     {
-        for (int j = 0; j < cols; j++) {
-            auto piece = GetPiece(std::make_pair(i, j));
+        for (int j{0}; j < cols; j++) {
+            const auto& piece{GetPiece(std::make_pair(i, j))};
+            
             if (!piece) continue;
             if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) whitePieces++;
             else if (piece->GetSymbol() == GameConstants::CheckersConstants::BLACK) blackPieces++;
@@ -77,7 +78,7 @@ void Checkers::EndGameIfNoPieces(int whitePieces, int blackPieces)
 }
 void Checkers::EndGameIfNoMoves()
 {
-    bool otherPlayerCanMove = HavePieceWithCapturingMoves(false) || HavePieceWithNonCapturingMoves(false);
+    bool otherPlayerCanMove{HavePieceWithCapturingMoves(false) || HavePieceWithNonCapturingMoves(false)};
     if (!otherPlayerCanMove)
     {
         m_status.SetWinner((GetCurrentPlayer()->GetId()%2 == GameConstants::PLAYER_ONEID) ?
@@ -123,19 +124,19 @@ void Checkers::ProcessConditionalMove(const coord_t coord)
 
 void Checkers::ApplyCapture(const coord_t coord)
 {
-    const auto piece = GetPiece(GetSelectedPiece());
-    auto [x, y, captx, capty] = GetCoordAndDirFromPossibleCapture(coord, piece);
+    const auto& piece{GetPiece(GetSelectedPiece())};
+    auto [x, y, captx, capty]{GetCoordAndDirFromPossibleCapture(coord, piece)};
 
     m_board->MovePiece(GetSelectedPiece(), coord);
 
-    bool capt = false;
+    bool capt{false};
     while (!capt)
     {
-        const auto& captureCoord = std::make_pair(x, y);
+        const auto& captureCoord{std::make_pair(x, y)};
         if (!AreCoordinatesValid(captureCoord)) 
             throw InvalidCoordinatesException("Checkers::PerformCapturingMove() : captureCoord are invalid");
 
-        const auto pieceCapture = GetPiece(captureCoord);
+        const auto& pieceCapture{GetPiece(captureCoord)};
         if (!pieceCapture)
         {
             x -= captx;
@@ -160,7 +161,6 @@ void Checkers::HandlePieceCaptureAndReplay(const coord_t coord)
     {
         SelectPiece(coord);
         m_flags.NeedReplay();
-        //m_flags.CapturingMoveRequired();
     }
     else m_flags.ResetReplayFlag();
 
@@ -169,10 +169,10 @@ void Checkers::HandlePieceCaptureAndReplay(const coord_t coord)
 
 bool Checkers::IsCapturingMove(const coord_t coord) const
 {
-    auto piece = GetPiece(GetSelectedPiece());
+    const auto& piece{GetPiece(GetSelectedPiece())};
     if (!piece) return false;
 
-    auto possibleMoves = piece->GetPossibleMoves();
+    const auto& possibleMoves{piece->GetPossibleMoves()};
 
     return std::find(possibleMoves.begin(), possibleMoves.end(), coord) != possibleMoves.end();
 }
@@ -188,7 +188,7 @@ void Checkers::PerformCapturingMove(coord_t coord)
 
 void Checkers::PerformNonCapturingMove(coord_t coord)
 {
-    const auto piece = m_board->GetPiece(m_status.GetSelectedPiece());
+    const auto& piece{m_board->GetPiece(m_status.GetSelectedPiece())};
     ValidatePieceAndMoves(coord, piece);
 
     m_board->MovePiece(GetSelectedPiece(), coord);
@@ -200,20 +200,19 @@ void Checkers::PerformNonCapturingMove(coord_t coord)
 
 bool Checkers::HavePieceWithMoves(bool capturing, bool checkCurrentPlayer) const
 {
-    auto rows = m_board->GetRows();
-    auto cols = m_board->GetCols();
+    const auto& rows{m_board->GetRows()};
+    const auto& cols{m_board->GetCols()};
 
-    for (int i = 0; i < rows; i++)
+    for (int i{0}; i < rows; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j{0}; j < cols; j++)
         {
-            auto coord = std::make_pair(i, j);
-            auto piece = GetPiece(coord);
+            auto coord{std::make_pair(i, j)};
+            auto piece{GetPiece(coord)};
             if (!piece) continue;
-            //if (piece->GetOwner() != GetCurrentPlayer()) continue;
             if ((piece->GetOwner() == GetCurrentPlayer()) != checkCurrentPlayer) continue;
 
-            auto possibleMoves = capturing ? piece->GetPossibleCaptures() : piece->GetPossibleMoves();
+            auto possibleMoves{capturing ? piece->GetPossibleCaptures() : piece->GetPossibleMoves()};
             if (!possibleMoves.empty()) return true;
         }
     }
@@ -235,16 +234,16 @@ bool Checkers::CanPromotePiece(coord_t coord) const
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Checkers::CanPromotePiece() : coord are invalid");
 
-    const auto piece = GetPiece(coord);
+    const auto& piece{GetPiece(coord)};
     if (!piece) return false;
 
-    const auto checkersPiece = dynamic_cast<CheckersPiece*>(piece);
+    const auto& checkersPiece{dynamic_cast<CheckersPiece*>(piece)};
     if (checkersPiece->IsPromoted()) return false;
     
-    const auto x = piece->GetX();
+    const auto& x{piece->GetX()};
 
     if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
-    else return (x == GameConstants::BOARD_LOWER_LIMIT);
+    else return (x == GameConstants::CheckersConstants::BOARD_LOWER_LIMIT);
 }
 
 void Checkers::PromotePiece(coord_t coord)
@@ -252,10 +251,10 @@ void Checkers::PromotePiece(coord_t coord)
     if (!AreCoordinatesValid(coord))
         throw InvalidCoordinatesException("Checkers::PromotePiece() : coord are invalid");
 
-    auto piece = GetPiece(coord);
+    auto piece{GetPiece(coord)};
     if (!piece) return;
 
-    auto checkersPiece = dynamic_cast<CheckersPiece*>(piece);
+    auto checkersPiece{dynamic_cast<CheckersPiece*>(piece)};
     checkersPiece->Promote();
 
     m_flags.BoardNeedUpdate();
@@ -296,6 +295,25 @@ void Checkers::ResetSelectedPieceFlag()
 void Checkers::ResetBoardNeedUpdateFlag()
 {
     m_flags.ResetBoardNeedUpdateFlag();
+}
+
+void Checkers::SetWhiteWantsDraw(bool whiteWantsDraw)
+{
+    m_status.SetWhiteWantsDraw(whiteWantsDraw);
+}
+void Checkers::SetBlackWantsDraw(bool blackWantsDraw)
+{
+    m_status.SetBlackWantsDraw(blackWantsDraw);
+}
+
+bool Checkers::IsWhiteWantsDraw() const
+{
+    return m_status.IsWhiteWantsDraw();
+}
+
+bool Checkers::IsBlackWantsDraw() const
+{
+    return m_status.IsBlackWantsDraw();
 }
 
 std::shared_ptr<Player> Checkers::GetCurrentPlayer() const

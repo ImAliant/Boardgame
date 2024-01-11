@@ -10,14 +10,16 @@ ButinView::~ButinView() {}
 
 void ButinView::Init(std::shared_ptr<Context> context, const Board& board)
 {
-    const std::vector<int> textureIDs = {
+    const std::vector<int> textureIDs{
         BUTIN_YELLOW_PIECE,
         BUTIN_RED_PIECE,
         BUTIN_BLACK_PIECE,
         EMPTY_ASSET
     };
 
-    InitBase(context, board, textureIDs, BOARDPIECE_SIZE, BOARDCELL_SIZE);
+    InitBase(context, textureIDs);
+    InitBoardCell(board, BOARDCELL_SIZE);
+    InitBoardPiece(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
 void ButinView::UpdateBoard(const Board& board)
@@ -25,26 +27,27 @@ void ButinView::UpdateBoard(const Board& board)
     UpdateBoardBase(board, BOARDPIECE_SIZE, BOARDCELL_SIZE);
 }
 
-void ButinView::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
+void ButinView::SetupBoardPiece(const coord_t coord, const Board &board, 
+    const sf::Vector2f piecesize, const sf::Vector2f cellsize, const sf::Vector2f position)
 {
-    View::SetupBoardPiece(coord, board, piecesize, cellsize);
+    View::SetupBoardPiece(coord, board, piecesize, cellsize, position);
 
-    const auto piece = dynamic_cast<const ButinBoard&>(board).GetPiece(coord);
+    const auto& piece{dynamic_cast<const ButinBoard&>(board).GetPiece(coord)};
 
     if (piece != nullptr)
-        SetPieceTexture(m_boardPiece[coord.first][coord.second], piece->GetSymbol(), false);
-    else SetPieceTexture(m_boardPiece[coord.first][coord.second], EMPTY_ID, false);
+        SetPieceTexture(m_boardPiece[coord.first][coord.second], piece->GetSymbol());
+    else SetPieceTexture(m_boardPiece[coord.first][coord.second], EMPTY_ID);
 }
 
-void ButinView::SetPieceTexture(sf::RectangleShape &piece, char color, bool promoted)
+void ButinView::SetPieceTexture(sf::RectangleShape &piece, const char color, const bool promoted, const bool isHorizontal)
 {
-    if (color == BUTIN_YELLOW)
-        piece.setTexture(&m_pieceTexture[YELLOW_PAWN_ID]);
-    else if (color == BUTIN_RED)
-        piece.setTexture(&m_pieceTexture[RED_PAWN_ID]);
-    else if (color == BUTIN_BLACK)
-        piece.setTexture(&m_pieceTexture[BLACK_PAWN_ID]);
-    else piece.setTexture(&m_pieceTexture[EMPTY_ID]);
+    int textureID;
+    if (color == BUTIN_YELLOW) textureID = YELLOW_PAWN_ID;
+    else if (color == BUTIN_RED) textureID = RED_PAWN_ID;
+    else if (color == BUTIN_BLACK) textureID = BLACK_PAWN_ID;
+    else textureID = EMPTY_ID;
+
+    piece.setTexture(&m_pieceTexture[textureID]);
 }
 
 void ButinView::PrintTurn(const std::shared_ptr<Player> currentPlayer, const std::vector<std::shared_ptr<Player>>& players) const

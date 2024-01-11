@@ -16,10 +16,12 @@ void ButinController::HandleEvent(const sf::Event& event)
 
     if (event.type == sf::Event::KeyPressed)
     {
-        bool firstRound = dynamic_cast<Butin*>(m_model.get())->IsFirstRound();
+        bool firstRound{dynamic_cast<Butin*>(m_model.get())->IsFirstRound()};
         if (!firstRound && event.key.code == sf::Keyboard::Space)
         {
             dynamic_cast<Butin*>(m_model.get())->SwitchPlayer();
+            dynamic_cast<Butin*>(m_model.get())->DeselectPiece();
+            dynamic_cast<Butin*>(m_model.get())->ResetReplayFlag();
         }
     }
 }

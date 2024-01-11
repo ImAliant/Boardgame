@@ -7,23 +7,15 @@ View::View() {}
 View::~View() {}
 
 void View::InitBase(
-    std::shared_ptr<Context> context, const Board& board, 
-    const std::vector<int>& textureIDs, 
-    const sf::Vector2f piecesize, const sf::Vector2f cellsize)
+    std::shared_ptr<Context> context, 
+    const std::vector<int>& textureIDs)
 {
     InitPieceTexture(context, textureIDs);
     InitBoardBackground();
-    InitBoardCell(board, cellsize);
-    InitBoardPiece(board, piecesize, cellsize);
-
-    sf::Font const* font = &context->m_assets->GetFont(MAIN_FONT);
-    if (font == nullptr)
-        throw std::runtime_error("View::InitBase() : font is nullptr");
 
     InitRectangleShape(m_lineSeparator, GameContext::LINESEPARATOR_SIZE, GameContext::LINESEPARATOR_POSITION);
 
-    InitText(m_lauchgameButton, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, CHARACTER_SIZE);
-    InitText(m_menuButton, "Menu", GameContext::MENUBUTTON_POSITION, *font, CHARACTER_SIZE);
+    InitButtons(context);
 }
 
 void View::InitPieceTexture(const std::shared_ptr<Context> context, const std::vector<int>& textureIDs)
@@ -64,24 +56,15 @@ void View::InitBoardCell(const Board& board, const sf::Vector2f cellsize)
     const auto rows = board.GetRows();
     const auto cols = board.GetCols();
 
-    m_boardCell.resize(rows);
-    for (int i = 0; i < rows; i++) {
-        m_boardCell[i].resize(cols);
-    }
+    ResizeVector(m_boardCell, rows, cols);
 
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++)
         {
-            const auto coord = std::make_pair(i, j);
-            InitRectangleShape(
-                m_boardCell[i][j],
-                cellsize,
-                CalculatePosition(10.f, coord, cellsize)
-            );
+            const auto& coord = std::make_pair(i, j);
 
-            if ((i + j) % 2 == 0) m_boardCell[i][j].setFillColor(GameConstants::WHITECELL_COLOR);
-            else m_boardCell[i][j].setFillColor(GameConstants::BLACKCELL_COLOR);
+            InitCell(i, j, cellsize, CalculatePosition(10.f, coord, cellsize));
         }
     } 
 }
@@ -91,28 +74,58 @@ void View::InitBoardPiece(const Board& board, const sf::Vector2f piecesize, cons
     const auto rows = board.GetRows();
     const auto cols = board.GetCols();
 
-    m_boardPiece.resize(rows);
-    for (int i = 0; i < rows; i++) {
-        m_boardPiece[i].resize(cols);
-    }
+    ResizeVector(m_boardPiece, rows, cols);
 
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++)
         {
             const auto coord = std::make_pair(i, j);
-            SetupBoardPiece(coord, board, piecesize, cellsize);
+            SetupBoardPiece(coord, board, piecesize, cellsize, CalculatePosition(15.f, coord, cellsize));
         }
     }
 }
 
-void View::SetupBoardPiece(const coord_t coord, const Board &board, const sf::Vector2f piecesize, const sf::Vector2f cellsize)
+void View::InitCell(const int row, const int col, const sf::Vector2f cellsize, const sf::Vector2f position)
+{
+    InitRectangleShape(
+        m_boardCell[row][col],
+        cellsize,
+        position
+    );
+
+    m_boardCell[row][col].setFillColor((row + col) % 2 == 0 ? GameConstants::WHITECELL_COLOR : GameConstants::BLACKCELL_COLOR);
+}
+
+void View::InitButtons(std::shared_ptr<Context> context)
+{
+    sf::Font const* font = &context->m_assets->GetFont(MAIN_FONT);
+    if (font == nullptr)
+        throw std::runtime_error("View::InitBase() : font is nullptr");
+
+    std::array<std::function<void()>, GameContext::NUMBER_OF_BUTTONS> functions =
+    {
+        [this]() { Launch(); },
+        [this]() { SetButtonPressed(GameContext::MENUBUTTONID, true); }
+    };
+
+    for (int i = 0; i < GameContext::NUMBER_OF_TEXTS; i++)
+    {
+        m_texts.emplace_back();
+    }
+
+    InitButton(GameContext::LAUNCHBUTTONID, "Lancer la partie", GameContext::LAUNCHBUTTON_POSITION, *font, functions[GameContext::LAUNCHBUTTONID]);
+    InitButton(GameContext::MENUBUTTONID, "Menu", GameContext::MENUBUTTON_POSITION, *font, functions[GameContext::MENUBUTTONID]);
+}
+
+void View::SetupBoardPiece(const coord_t coord, const Board &board, 
+                        const sf::Vector2f piecesize, const sf::Vector2f cellsize, const sf::Vector2f position)
 {
     const auto [i, j] = coord;
     InitRectangleShape(
         m_boardPiece[i][j],
         piecesize,
-        CalculatePosition(15.f, coord, cellsize)
+        position
     );
 }
 
@@ -125,6 +138,14 @@ sf::Vector2f View::CalculatePosition(const float offset, const coord_t coord, co
     );
 }
 
+template <typename T>
+void View::ResizeVector(std::vector<std::vector<T>>& vector, const int rows, const int cols) const
+{
+    vector.resize(rows);
+    for (auto& row : vector)
+        row.resize(cols);
+}
+
 void View::Draw(sf::RenderWindow& window)
 {
     window.clear();
@@ -133,9 +154,12 @@ void View::Draw(sf::RenderWindow& window)
     DrawBoardCells(window);
     DrawBoardPiece(window);
     window.draw(m_lineSeparator);
-    window.draw(m_menuButton);
-    if (IsLaunchgameButtonVisible())
-        window.draw(m_lauchgameButton);
+
+    for (const auto& button : m_buttons)
+    {
+        if (button->m_isVisible)
+            window.draw(button->m_button);
+    }
     window.display();
 }
 void View::DrawBoardCells(sf::RenderWindow& window)
@@ -169,7 +193,7 @@ void View::UpdateBoardBase(const Board& board, const sf::Vector2f piecesize, con
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols ; j++) {
             const auto coord = std::make_pair(i, j);
-            SetupBoardPiece(coord, board, piecesize, cellsize);
+            SetupBoardPiece(coord, board, piecesize, cellsize, CalculatePosition(15.f, coord, cellsize));
         }
     }
 }
@@ -196,55 +220,20 @@ void View::RemoveHighlightPossibleMoves(const std::vector<coord_t>& possibleMove
         RemoveHighlightCell(move);
 }
 
-void View::Render()
+void View::Render() const
 {
-    UpdateButtonState(m_menuButton, m_flags.m_isMenuButtonSelected, m_flags.m_isMenuButtonHovered, m_flags.m_wasMenuButtonHovered);
-
-    if (IsLaunchgameButtonVisible())
-        UpdateButtonState(m_lauchgameButton, m_flags.m_isLaunchgameButtonSelected, m_flags.m_isLaunchgameButtonHovered, m_flags.m_wasLaunchgameButtonHovered);
+    for (const auto& button : m_buttons)
+    {
+        if (button->m_isVisible)
+            UpdateButtonState(button->m_button, button->m_isSelected, button->m_isHovered, button->m_wasHovered);
+    }
 }
 
-void View::UpdateMenuSelectedFlag(const bool newValue)
+void View::Launch()
 {
-    m_flags.m_isMenuButtonSelected = newValue;
-}
-void View::UpdateLaunchSelectedFlag(const bool newValue)
-{
-    m_flags.m_isLaunchgameButtonSelected = newValue;
-}
-void View::UpdateMenuHoveredFlag(const bool newValue)
-{
-    m_flags.m_isMenuButtonHovered = newValue;
-}
-void View::UpdateLaunchHoveredFlag(const bool newValue)
-{
-    m_flags.m_isLaunchgameButtonHovered = newValue;
-}
+    SetButtonPressed(GameContext::LAUNCHBUTTONID, true);
 
-void View::HideLaunchgameButton()
-{
-    m_flags.m_isLaunchgameButtonVisible = false;
-}
-void View::NeedHighlight()
-{
-    m_flags.m_hasHighLightedCell = true;
-}
-void View::RemoveHighlight()
-{
-    m_flags.m_hasHighLightedCell = false;
-}
-void View::LauchButtonPressed()
-{
-    m_flags.m_isLaunchgameButtonPressed = true;
-}
-void View::MenuButtonPressed()
-{
-    m_flags.m_isMenuButtonPressed = true;
-}
-
-void View::ResetLaunchPressedFlag()
-{
-    m_flags.m_isLaunchgameButtonPressed = false;
+    m_buttons[GameContext::MENUBUTTONID]->m_button.setPosition(GameContext::MENUBUTTON_POSITION_LAUNCHED);
 }
 
 coord_t View::GetBoardCoordBase(const int x, const int y, const sf::Vector2f cellsize) const
@@ -254,34 +243,50 @@ coord_t View::GetBoardCoordBase(const int x, const int y, const sf::Vector2f cel
 
     return std::make_pair(i, j);
 }
-sf::Text& View::GetLaunchgameButton()
+
+void View::UpdateButtonSelectedFlag(const int buttonID, const bool newValue)
 {
-    return m_lauchgameButton;
+    m_buttons[buttonID]->m_isSelected = newValue;
 }
-sf::Text& View::GetMenuButton()
+void View::UpdateButtonHoveredFlag(const int buttonID, const bool newValue)
 {
-    return m_menuButton;
+    m_buttons[buttonID]->m_isHovered = newValue;
 }
 
-bool View::IsLaunchgameButtonVisible() const
+void View::SetButtonVisibility(const int buttonID, const bool isVisible)
 {
-    return m_flags.m_isLaunchgameButtonVisible;
+    m_buttons[buttonID]->m_isVisible = isVisible;
 }
-bool View::IsLaunchgameButtonSelected() const
+void View::SetButtonPressed(const int buttonID, const bool isPressed)
 {
-    return m_flags.m_isLaunchgameButtonSelected;
+    m_buttons[buttonID]->m_isPressed = isPressed;
 }
-bool View::IsLaunchgameButtonPressed() const
+
+bool View::IsButtonSelected(const int buttonID) const
 {
-    return m_flags.m_isLaunchgameButtonPressed;
+    return m_buttons[buttonID]->m_isSelected;
 }
-bool View::IsMenuButtonSelected() const
+bool View::IsButtonPressed(const int buttonID) const
 {
-    return m_flags.m_isMenuButtonSelected;
+    return m_buttons[buttonID]->m_isPressed;
 }
-bool View::IsMenuButtonPressed() const
+bool View::IsButtonVisible(const int buttonID) const
 {
-    return m_flags.m_isMenuButtonPressed;
+    return m_buttons[buttonID]->m_isVisible;
+}
+
+std::unique_ptr<Button>& View::GetButton(const int buttonID)
+{
+    return m_buttons[buttonID];
+}
+
+void View::NeedHighlight()
+{
+    m_flags.m_hasHighLightedCell = true;
+}
+void View::RemoveHighlight()
+{
+    m_flags.m_hasHighLightedCell = false;
 }
 bool View::HasHighLightedCell() const
 {

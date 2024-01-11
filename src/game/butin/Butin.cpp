@@ -51,16 +51,16 @@ void Butin::ProcessConditionalMove(const coord_t coord)
 }
 void Butin::ApplyCapture(const coord_t coord)
 {
-    const auto piece = GetPiece(GetSelectedPiece());
-    const auto [x, y, captx, capty] = GetCoordAndDirFromPossibleCapture(coord, piece);
+    const auto& piece{GetPiece(GetSelectedPiece())};
+    const auto& [x, y, captx, capty]{GetCoordAndDirFromPossibleCapture(coord, piece)};
 
     m_board->MovePiece(GetSelectedPiece(), coord);
 
-    const auto& captureCoord = std::make_pair(x, y);
+    const auto& captureCoord{std::make_pair(x, y)};
     if (!AreCoordinatesValid(captureCoord)) 
         throw InvalidCoordinatesException("Butin::PerformMove() : captureCoord are invalid");
     
-    const auto pieceCapture = GetPiece(captureCoord);
+    const auto pieceCapture{GetPiece(captureCoord)};
     if (pieceCapture == nullptr) 
         throw InvalidUsageException("Butin::PerformMove() : pieceCapture is null");
 
@@ -96,7 +96,7 @@ void Butin::CheckBoardDimensions(const int row, const int col) const
 
 void Butin::UpdatePlayerScore(const char color) const
 {
-    int scoreIncrement = 0;
+    int scoreIncrement{0};
     if (color == GameConstants::ButinConstants::BUTIN_YELLOW) scoreIncrement = 1;
     else if (color == GameConstants::ButinConstants::BUTIN_RED) scoreIncrement = 2;
     else if (color == GameConstants::ButinConstants::BUTIN_BLACK) scoreIncrement = 3;
@@ -107,7 +107,7 @@ void Butin::UpdatePlayerScore(const char color) const
 
 void Butin::HandleFirstRoundSelection(const coord_t coord)
 {
-    const auto piece = GetPiece(coord);
+    const auto& piece{GetPiece(coord)};
     if (!piece) return;
     
     if (IsYellowPiece(coord))
@@ -130,15 +130,15 @@ void Butin::EndFirstRoundIfNeeded()
 
 void Butin::EndGameIfNoMoves()
 {
-    const auto rows = m_board->GetRows();
-    const auto cols = m_board->GetCols();
+    const auto& rows{m_board->GetRows()};
+    const auto& cols{m_board->GetCols()};
 
-    for (int i = 0; i < rows; i++)
+    for (int i{0}; i < rows; i++)
     {
-        for (int j = 0; j < cols; j++)
+        for (int j{0}; j < cols; j++)
         {
-            const auto coord = std::make_pair(i, j);
-            const auto piece = GetPiece(coord);
+            const auto coord{std::make_pair(i, j)};
+            const auto piece{GetPiece(coord)};
             if (!piece) continue;
 
             if (IsYellowPiece(coord) && HasCapturingMoves(coord))
@@ -153,9 +153,9 @@ void Butin::EndGameIfNoMoves()
 }
 void Butin::DetermineWinner()
 {
-    Player* winner = nullptr;
-    const auto& playerOneScore = m_players[GameConstants::PLAYER_ONEID]->GetScore();
-    const auto& playerTwoScore = m_players[GameConstants::PLAYER_TWOID]->GetScore();
+    Player* winner{nullptr};
+    const auto& playerOneScore{m_players[GameConstants::PLAYER_ONEID]->GetScore()};
+    const auto& playerTwoScore{m_players[GameConstants::PLAYER_TWOID]->GetScore()};
 
     if (playerOneScore > playerTwoScore) winner = m_players[GameConstants::PLAYER_ONEID].get();
     else if (playerOneScore < playerTwoScore) winner = m_players[GameConstants::PLAYER_TWOID].get();
@@ -172,7 +172,7 @@ void Butin::SwitchPlayer()
 
 bool Butin::IsYellowPiece(const coord_t coord) const
 {
-    const auto piece = GetPiece(coord);
+    const auto piece{GetPiece(coord)};
     if (!piece) return false;
 
     return piece->GetSymbol() == GameConstants::ButinConstants::BUTIN_YELLOW;
@@ -227,6 +227,10 @@ void Butin::ResetBoardNeedUpdateFlag()
 void Butin::ResetCurrentPlayerChangedFlag()
 {
     return m_flags.ResetCurrentPlayerChangedFlag();
+}
+void Butin::ResetReplayFlag()
+{
+    return m_flags.ResetReplayFlag();
 }
 
 std::shared_ptr<Player> Butin::GetCurrentPlayer() const

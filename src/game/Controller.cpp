@@ -1,5 +1,8 @@
 #include "../../include/game/Controller.hpp"
 #include "../../include/GameChoice.hpp"
+#include "../../include/Constants.hpp"
+
+using namespace UIConstants::GameContext;
 
 Controller::Controller(std::shared_ptr<Context> context, std::unique_ptr<Model> model, std::unique_ptr<View> view): 
     m_context{context},
@@ -80,9 +83,9 @@ void Controller::UpdateCurrentPlayer() const
 }
 void Controller::UpdateButtonPushed()
 {
-    if (m_view->IsLaunchgameButtonPressed()) Start();
+    if (m_view->IsButtonPressed(LAUNCHBUTTONID)) Start();
 
-    if (m_view->IsMenuButtonPressed()) End();
+    if (m_view->IsButtonPressed(MENUBUTTONID)) End();
 }
 
 void Controller::HighlightSelectedPiece() const
@@ -112,28 +115,28 @@ void Controller::Draw()
 
 void Controller::UpdateButtonHoverState(const sf::Event& event)
 {
-    bool isMenuHovered = IsButtonHovered(m_view->GetMenuButton(), event);
-    bool isLaunchgameHovered = IsButtonHovered(m_view->GetLaunchgameButton(), event);
+    bool isMenuHovered = IsButtonHovered(m_view->GetButton(MENUBUTTONID)->m_button, event);
+    bool isLaunchgameHovered = IsButtonHovered(m_view->GetButton(LAUNCHBUTTONID)->m_button, event);
 
-    m_view->UpdateMenuHoveredFlag(isMenuHovered);
-    m_view->UpdateLaunchHoveredFlag(isLaunchgameHovered);
+    m_view->UpdateButtonHoveredFlag(MENUBUTTONID, isMenuHovered);
+    m_view->UpdateButtonHoveredFlag(LAUNCHBUTTONID, isLaunchgameHovered);
 }
 void Controller::UpdateButtonSelectionState() {
-    bool isMenuSelected = IsButtonSelected(m_view->GetMenuButton(), *m_context->m_window);
-    bool isLaunchgameSelected = IsButtonSelected(m_view->GetLaunchgameButton(), *m_context->m_window);
+    bool isMenuSelected = IsButtonSelected(m_view->GetButton(MENUBUTTONID)->m_button, *m_context->m_window);
+    bool isLaunchgameSelected = IsButtonSelected(m_view->GetButton(LAUNCHBUTTONID)->m_button, *m_context->m_window);
 
-    m_view->UpdateMenuSelectedFlag(isMenuSelected);
-    m_view->UpdateLaunchSelectedFlag(isLaunchgameSelected);
+    m_view->UpdateButtonSelectedFlag(MENUBUTTONID, isMenuSelected);
+    m_view->UpdateButtonSelectedFlag(LAUNCHBUTTONID, isLaunchgameSelected);
 }
 void Controller::HandleMousePressed(const sf::Event& event) {
     bool isMousePressed = event.mouseButton.button == sf::Mouse::Left;
 
     if (isMousePressed)
     {
-        if (m_view->IsLaunchgameButtonSelected())
-            m_view->LauchButtonPressed();
-        if (m_view->IsMenuButtonSelected())
-            m_view->MenuButtonPressed();
+        if (m_view->IsButtonSelected(LAUNCHBUTTONID))
+            m_view->GetButton(LAUNCHBUTTONID)->m_action();
+        if (m_view->IsButtonSelected(MENUBUTTONID))
+            m_view->GetButton(MENUBUTTONID)->m_action();
         if (m_model->IsGameStarted())
         {
             auto x = event.mouseButton.x;
@@ -157,10 +160,10 @@ void Controller::HandleMousePressed(const sf::Event& event) {
 
 void Controller::Start()
 {
-    m_view->HideLaunchgameButton();
+    m_view->SetButtonVisibility(LAUNCHBUTTONID, false);
     m_model->GameStart();
     m_view->PrintCurrentPlayer(m_model->GetCurrentPlayer());
-    m_view->ResetLaunchPressedFlag();
+    m_view->SetButtonPressed(LAUNCHBUTTONID, false);
 }
 
 void Controller::End()

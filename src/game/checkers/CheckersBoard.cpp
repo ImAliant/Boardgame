@@ -10,11 +10,11 @@ CheckersBoard::CheckersBoard(std::vector<std::shared_ptr<Player>> players):
 
 void CheckersBoard::FillBoard()
 {
-    for (int i = 0; i < m_rows; i++)
+    for (int i{0}; i < m_rows; i++)
     {
-        for (int j = 0; j < m_cols; j++)
+        for (int j{0}; j < m_cols; j++)
         {
-            const auto& coord = std::make_pair(i, j);
+            const auto& coord{std::make_pair(i, j)};
             if (i < 4 && (i + j) % 2 != 0)
             {
                 m_board[i][j] = CreatePiece(coord, BLACK);
@@ -25,21 +25,6 @@ void CheckersBoard::FillBoard()
             }
         }
     }
-}
-
-bool CheckersBoard::IsOpponentPiece(coord_t srcCoord, coord_t dstCoord) const
-{
-    CheckBounds(srcCoord);
-    CheckBounds(dstCoord);
-
-    if (IsEmptyCell(srcCoord) || IsEmptyCell(dstCoord))
-        return false;
-    const auto srcPiece = GetPiece(srcCoord);
-    const auto dstPiece = GetPiece(dstCoord);
-    if (srcPiece->GetSymbol() == dstPiece->GetSymbol())
-        return false;
-    
-    return true;
 }
 
 std::unique_ptr<Piece> CheckersBoard::CreatePiece(coord_t coord, char color) const
@@ -61,9 +46,9 @@ std::unique_ptr<CheckersPiece> CheckersBoard::CreateWhitePiece(coord_t coord) co
 
 std::ostream &operator<<(std::ostream &os, const CheckersBoard &board)
 {
-    for (int i = 0; i < board.m_rows; i++)
+    for (int i{0}; i < board.m_rows; i++)
     {
-        for (int j = 0; j < board.m_cols; j++)
+        for (int j{0}; j < board.m_cols; j++)
         {
             if (board.m_board[i][j] == nullptr)
                 os << " ";

@@ -6,14 +6,6 @@
 
 class ButinBoard;
 
-enum Butin_PieceType
-{
-    BUTIN_EMPTY,
-    YELLOW,
-    RED,
-    BLACK
-};
-
 class ButinPiece: public Piece
 {
     private:

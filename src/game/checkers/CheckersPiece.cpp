@@ -3,7 +3,7 @@
 CheckersPiece::CheckersPiece(const coord_t coord, const std::shared_ptr<Player> owner, const char symbol): 
     Piece{coord, owner, symbol}
 {
-    m_state.type = PieceType::PAWN;
+    m_state.m_type = PieceType::PAWN;
 }
 
 CheckersPiece::~CheckersPiece() {}
@@ -18,13 +18,13 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
 
 void CheckersPiece::SimpleMoves(const Board& board) 
 {
-    const auto white = GameConstants::CheckersConstants::WHITE;
-    const auto black = GameConstants::CheckersConstants::BLACK;
-    const auto& wdir = GameConstants::CheckersConstants::WHITE_DIRECTION;
-    const auto& bdir = GameConstants::CheckersConstants::BLACK_DIRECTION;
+    const auto white{GameConstants::CheckersConstants::WHITE};
+    const auto black{GameConstants::CheckersConstants::BLACK};
+    const auto& wdir{GameConstants::CheckersConstants::WHITE_DIRECTION};
+    const auto& bdir{GameConstants::CheckersConstants::BLACK_DIRECTION};
 
     std::vector<direction_t> const* directions;
-    if (m_state.type == PieceType::PAWN)
+    if (m_state.m_type == PieceType::PAWN)
     {
         if (m_state.m_symbol == white)
             directions = &wdir;
@@ -45,13 +45,13 @@ void CheckersPiece::AddPossibleMoves(const std::vector<direction_t>& directions,
 {
     for (const auto& [dx, dy]: directions)
     {
-        int x = GetX() + dx;
-        int y = GetY() + dy;
+        int x{GetX() + dx};
+        int y{GetY() + dy};
 
-        auto coord = std::make_pair(x, y);
+        auto coord{std::make_pair(x, y)};
         while (IsWithinBoard(coord, board) && IsEmptyCell(coord, board))
         {
-            const auto& move = std::make_pair(x, y);
+            const auto& move{std::make_pair(x, y)};
             m_possibleMoves.push_back(move);
             
             if (!IsPromoted()) break;
@@ -66,20 +66,20 @@ void CheckersPiece::AddPossibleMoves(const std::vector<direction_t>& directions,
 
 void CheckersPiece::CaptureMoves(const Board& board)
 {
-    std::vector<direction_t> const* directions = &GameConstants::CheckersConstants::ALL_DIRECTION;
+    std::vector<direction_t> const* directions{&GameConstants::CheckersConstants::ALL_DIRECTION};
 
-    if (m_state.type == PieceType::PAWN)
+    if (m_state.m_type == PieceType::PAWN)
     {
         for (const auto& [dx, dy]: *directions)
         {
-            int x = GetX() + 2*dx;
-            int y = GetY() + 2*dy;
+            int x{GetX() + 2*dx};
+            int y{GetY() + 2*dy};
 
-            const auto& coord = std::make_pair(x, y);
-            const auto& coord1 = std::make_pair(GetX() + dx, GetY() + dy);
-            if (IsWithinBoard(coord, board) && IsOpponentPiece(coord1, board) && IsEmptyCell(coord, board))
+            const auto& coord{std::make_pair(x, y)};
+            const auto& opponentCoord{std::make_pair(GetX() + dx, GetY() + dy)};
+            if (IsWithinBoard(coord, board) && IsOpponentPiece(opponentCoord, board) && IsEmptyCell(coord, board))
             {
-                const auto& direction = std::make_pair(dx, dy);
+                const auto& direction{std::make_pair(dx, dy)};
                 m_possibleMoves.push_back(coord);
                 m_possibleCaptures.push_back(direction);
             }
@@ -96,11 +96,11 @@ void CheckersPiece::CaptureMoves(const Board& board)
 
 void CheckersPiece::QueenCaptureDirections(const direction_t dir, const Board& board)
 {
-    const auto& [dx, dy] = dir;
-    int x = GetX() + dx;
-    int y = GetY() + dy;
+    const auto& [dx, dy]{dir};
+    int x{GetX() + dx};
+    int y{GetY() + dy};
 
-    auto coord = std::make_pair(x, y);
+    auto coord{std::make_pair(x, y)};
     while (IsWithinBoard(coord, board) && IsEmptyCell(coord, board))
     {
         x += dx;
@@ -111,10 +111,10 @@ void CheckersPiece::QueenCaptureDirections(const direction_t dir, const Board& b
 
     if (IsWithinBoard(coord, board) && IsOpponentPiece(coord, board))
     {
-        int captX = x + dx;
-        int captY = y + dy;
+        int captX{x + dx};
+        int captY{y + dy};
 
-        auto captCoord = std::make_pair(captX, captY);
+        auto captCoord{std::make_pair(captX, captY)};
         while (IsWithinBoard(captCoord, board) && IsEmptyCell(captCoord, board))
         {
             m_possibleMoves.push_back(captCoord);
@@ -143,12 +143,12 @@ bool CheckersPiece::IsOpponentPiece(const coord_t coord, const Board& board) con
 
 void CheckersPiece::Promote()
 {
-    m_state.type = PieceType::QUEEN;
+    m_state.m_type = PieceType::QUEEN;
 }
 
 bool CheckersPiece::IsPromoted() const
 {
-    return m_state.type == PieceType::QUEEN;
+    return m_state.m_type == PieceType::QUEEN;
 }
 
 std::ostream& operator<<(std::ostream& os, const CheckersPiece& piece)
