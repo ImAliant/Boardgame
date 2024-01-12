@@ -17,11 +17,11 @@ void CheckersBoard::FillBoard()
             const auto& coord{std::make_pair(i, j)};
             if (i < 4 && (i + j) % 2 != 0)
             {
-                m_board[i][j] = CreatePiece(coord, BLACK);
+                m_board[i][j] = CreatePiece(coord, GameConstants::BLACK);
             }
             else if (i > 5 && (i + j) % 2 != 0)
             {
-                m_board[i][j] = CreatePiece(coord, WHITE);
+                m_board[i][j] = CreatePiece(coord, GameConstants::WHITE);
             }
         }
     }
@@ -29,19 +29,19 @@ void CheckersBoard::FillBoard()
 
 std::unique_ptr<Piece> CheckersBoard::CreatePiece(coord_t coord, char color) const
 {
-    if (color == BLACK)
+    if (color == GameConstants::BLACK)
         return CreateBlackPiece(coord);
-    else if (color == WHITE)
+    else if (color == GameConstants::WHITE)
         return CreateWhitePiece(coord);
     else throw std::invalid_argument("Invalid color");
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateBlackPiece(coord_t coord) const
 {
-    return std::make_unique<CheckersPiece>(coord, m_players[GameConstants::PLAYER_TWOID], BLACK);
+    return std::make_unique<CheckersPiece>(coord, m_players[GameConstants::PLAYER_TWOID], GameConstants::BLACK);
 }
 std::unique_ptr<CheckersPiece> CheckersBoard::CreateWhitePiece(coord_t coord) const
 {
-    return std::make_unique<CheckersPiece>(coord, m_players[GameConstants::PLAYER_ONEID], WHITE);
+    return std::make_unique<CheckersPiece>(coord, m_players[GameConstants::PLAYER_ONEID], GameConstants::WHITE);
 }
 
 std::ostream &operator<<(std::ostream &os, const CheckersBoard &board)

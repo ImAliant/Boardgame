@@ -47,35 +47,11 @@ void Checkers::CheckForWin() {
 
     CountPieces(nbWhitePieces, nbBlackPieces);
 
-    EndGameIfNoPieces(nbWhitePieces, nbBlackPieces);
+    EndGameIfNoPieces(nbWhitePieces, nbBlackPieces, m_status, m_flags);
     
     Model::CheckForWin();
 }
 
-void Checkers::CountPieces(int& whitePieces, int& blackPieces) const
-{
-    const auto& rows{m_board->GetRows()};
-    const auto& cols{m_board->GetCols()};
-
-    for (int i{0}; i < rows; i++)
-    {
-        for (int j{0}; j < cols; j++) {
-            const auto& piece{GetPiece(std::make_pair(i, j))};
-            
-            if (!piece) continue;
-            if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) whitePieces++;
-            else if (piece->GetSymbol() == GameConstants::CheckersConstants::BLACK) blackPieces++;
-        }
-    }
-}
-void Checkers::EndGameIfNoPieces(int whitePieces, int blackPieces)
-{
-    if (whitePieces == 0 || blackPieces == 0)
-    {
-        m_status.SetWinner((whitePieces == 0) ? m_players[GameConstants::PLAYER_TWOID].get() : m_players[GameConstants::PLAYER_ONEID].get());
-        m_flags.GameFinished();
-    }
-}
 void Checkers::EndGameIfNoMoves()
 {
     bool otherPlayerCanMove{HavePieceWithCapturingMoves(false) || HavePieceWithNonCapturingMoves(false)};
@@ -242,7 +218,7 @@ bool Checkers::CanPromotePiece(coord_t coord) const
     
     const auto& x{piece->GetX()};
 
-    if (piece->GetSymbol() == GameConstants::CheckersConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
+    if (piece->GetSymbol() == GameConstants::WHITE) return (x == GameConstants::BOARD_UPPER_LIMIT);
     else return (x == GameConstants::CheckersConstants::BOARD_LOWER_LIMIT);
 }
 

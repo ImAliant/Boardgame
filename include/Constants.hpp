@@ -156,6 +156,9 @@ namespace GameConstants
     const int PLAYER_TWOID = 1;
     const int NONEID = 2;
 
+    const char BLACK = 'B';
+    const char WHITE = 'W';
+
     const sf::Color BOARDBACKGROUND_COLOR = sf::Color{46, 24, 3};
     const sf::Vector2f BOARDBACKGROUND_SIZE = sf::Vector2f{
         static_cast<float>(WindowConstants::WINDOW_SIZE.x) - 10.f, 
@@ -178,9 +181,6 @@ namespace GameConstants
         const int BOARD_LOWER_LIMIT = 9;
 
         const char NOWINNER = -1;
-
-        const char BLACK = 'B';
-        const char WHITE = 'W';
 
         const std::vector<direction_t> WHITE_DIRECTION = {{-1, -1}, {-1, 1}};
         const std::vector<direction_t> BLACK_DIRECTION = {{1, -1}, {1, 1}};
@@ -230,9 +230,6 @@ namespace GameConstants
 
         const int BOARD_LOWER_LIMIT = 14;
 
-        const char BLACK = 'B';
-        const char WHITE = 'W';
-
         const int BLACKHORIZPAWN_ID = 0;
         const int BLACKVERTPAWN_ID = 1;
         const int WHITEHORIZPAWN_ID = 2;
@@ -244,6 +241,11 @@ namespace GameConstants
         const int BLACKKING_ID = 8;
         const int WHITEKING_ID = 9;
         const int EMPTY_ID = 10;
+
+        const direction_t NORTH = {-1, 0};
+        const direction_t SOUTH = {1, 0};
+        const direction_t EAST = {0, 1};
+        const direction_t WEST = {0, -1};
 
         const std::vector<direction_t> WHITE_PAWN_DIR = {
             {-1, -1}, // Move up and left
@@ -267,6 +269,7 @@ namespace GameConstants
             {-1, 1},  // Move up and right
             {-1, -1}, // Move up and left
         };
+
         const  std::vector<direction_t> KING_DIR = {
             {2,0},
             {-2,0},
@@ -274,8 +277,6 @@ namespace GameConstants
             {0,-2},
             
         };
-     
-
 
         const sf::Vector2f BUTEE_SIZE = sf::Vector2f{20.625f, 20.625f};
         const sf::Vector2f ROYAL_SIZE = sf::Vector2f{45.f, 45.f};

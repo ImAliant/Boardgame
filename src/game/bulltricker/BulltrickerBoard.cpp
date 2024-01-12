@@ -27,13 +27,13 @@ void BulltrickerBoard::PlacePieces(const int startRow, const int endRow, const c
 
 void BulltrickerBoard::FillBoard()
 {
-    PlacePieces(1, 4, BLACK);
+    PlacePieces(1, 4, GameConstants::BLACK);
 
-    PlacePieces(11, 14, WHITE);
+    PlacePieces(11, 14, GameConstants::WHITE);
 
     // Placement of the king
-    m_board[1][7] = CreatePiece(std::make_pair(1, 7), BLACK);
-    m_board[13][7] = CreatePiece(std::make_pair(13, 7), WHITE);
+    m_board[1][7] = CreatePiece(std::make_pair(1, 7), GameConstants::BLACK);
+    m_board[13][7] = CreatePiece(std::make_pair(13, 7), GameConstants::WHITE);
 }
 
 std::unique_ptr<Piece> BulltrickerBoard::CreatePiece(const coord_t coord, const char color) const
@@ -41,10 +41,10 @@ std::unique_ptr<Piece> BulltrickerBoard::CreatePiece(const coord_t coord, const 
     const auto& [x, y]{coord};
     bool isHorizontal{DetermineOrientation(x)};
     
-    if (color != BLACK && color != WHITE)
+    if (color != GameConstants::BLACK && color != GameConstants::WHITE)
         throw std::invalid_argument("Invalid color");
 
-    bool isKing{(color == BLACK && x == 1 && y == 7) || (color == WHITE && x == 13 && y == 7)};
+    bool isKing{(color == GameConstants::BLACK && x == 1 && y == 7) || (color == GameConstants::WHITE && x == 13 && y == 7)};
     bool isQueen{((x == 1 || x == 13) && y%2 == 0) && !isKing};
     bool isPawn{!isKing && !isQueen};
 
@@ -57,7 +57,7 @@ std::unique_ptr<Piece> BulltrickerBoard::CreatePiece(const coord_t coord, const 
         type = BT_PAWN;
     else throw std::invalid_argument("Invalid type");
 
-    if (color == BLACK)
+    if (color == GameConstants::BLACK)
         return CreateBlackPiece(coord, type, isHorizontal);
     else
         return CreateWhitePiece(coord, type, isHorizontal);
@@ -68,7 +68,7 @@ std::unique_ptr<BulltrickerPiece> BulltrickerBoard::CreateBlackPiece(
     const int type, 
     const bool isHorizontal) const
 {
-    return std::make_unique<BulltrickerPiece>(coord, m_players[GameConstants::PLAYER_TWOID], BLACK, type, isHorizontal);
+    return std::make_unique<BulltrickerPiece>(coord, m_players[GameConstants::PLAYER_TWOID], GameConstants::BLACK, type, isHorizontal);
 }
 
 std::unique_ptr<BulltrickerPiece> BulltrickerBoard::CreateWhitePiece(
@@ -76,7 +76,7 @@ std::unique_ptr<BulltrickerPiece> BulltrickerBoard::CreateWhitePiece(
     const int type, 
     const bool isHorizontal) const
 {
-    return std::make_unique<BulltrickerPiece>(coord, m_players[GameConstants::PLAYER_ONEID], WHITE, type, isHorizontal);
+    return std::make_unique<BulltrickerPiece>(coord, m_players[GameConstants::PLAYER_ONEID], GameConstants::WHITE, type, isHorizontal);
 }
 
 bool BulltrickerBoard::DetermineOrientation(const int row) const

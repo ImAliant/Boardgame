@@ -180,6 +180,32 @@ void Model::CheckForWin()
     EndGameIfNoMoves();
 }
 
+void Model::CountPieces(int& nbBlackPieces, int& nbWhitePieces) const
+{
+    const auto& rows{m_board->GetRows()};
+    const auto& cols{m_board->GetCols()};
+
+    for (int i{0}; i < rows; i++)
+    {
+        for (int j{0}; j < cols; j++) {
+            const auto& piece{GetPiece(std::make_pair(i, j))};
+            
+            if (!piece) continue;
+            if (piece->GetSymbol() == GameConstants::WHITE) nbWhitePieces++;
+            else if (piece->GetSymbol() == GameConstants::BLACK) nbBlackPieces++;
+        }
+    }
+}
+
+void Model::EndGameIfNoPieces(int nbWhitePieces, int nbBlackPieces, GameStatus& m_status, ModelFlags& m_flags)
+{
+    if (nbWhitePieces == 0 || nbBlackPieces == 0)
+    {
+        m_status.SetWinner((nbWhitePieces == 0) ? m_players[GameConstants::PLAYER_TWOID].get() : m_players[GameConstants::PLAYER_ONEID].get());
+        m_flags.GameFinished();
+    }
+}
+
 bool Model::AreCoordinatesValid(const coord_t coord) const
 {
     const auto rows = m_board->GetRows();

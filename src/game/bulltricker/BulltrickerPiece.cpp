@@ -17,8 +17,8 @@ void BulltrickerPiece::FindPossibleMoves(const Board& board)
 }
 
 void BulltrickerPiece::SimpleMoves(const Board& board) {
-    const auto white{GameConstants::BulltrickerConstants::WHITE};
-    const auto black{GameConstants::BulltrickerConstants::BLACK};
+    const auto white{GameConstants::WHITE};
+    const auto black{GameConstants::BLACK};
     const auto& wPawnDir{GameConstants::BulltrickerConstants::WHITE_PAWN_DIR};
     const auto& bPawnDir{GameConstants::BulltrickerConstants::BLACK_PAWN_DIR};
     const auto& queenDir{GameConstants::BulltrickerConstants::QUEEN_DIR};
@@ -58,13 +58,12 @@ void BulltrickerPiece::AddPossibleMoves(const std::vector<direction_t>& directio
         {   if (IsJumpingKing(coord, dx, board)) continue;
             while (IsWithinBoard(coord, board) && IsEmptyCell(coord, board) ) 
             {
-                
                 m_possibleMoves.push_back(coord);
-
-                if (dx == 1 || dx == -1 || dy == 1 || dy == -1) break; // Queen can move only one cell in diagonal
-
+                if (dx == 1 || dx == -1 || dy == 1 || dy == -1) break; 
+               
                 x += dx;
                 y += dy;
+
                 coord = std::make_pair(x, y);
             }
 
@@ -89,7 +88,7 @@ void BulltrickerPiece::CaptureMoves(const Board& board) {
     std::vector<direction_t> const* directions{&GameConstants::BulltrickerConstants::QUEEN_DIR};
 
     if (m_state.m_type == BT_PieceType::BT_PAWN && !IsPromoted()) {
-        int dx{(m_state.m_symbol == GameConstants::BulltrickerConstants::WHITE) ? -2 : 2}; // White pawns move up :-1, black pawns move down :+1
+        int dx{(m_state.m_symbol == GameConstants::WHITE) ? -2 : 2}; // White pawns move up :-1, black pawns move down :+1
         int x{GetX() + dx};
         int y{GetY()}; // Capture frontale
         const auto opponentCoord{std::make_pair(x, y)};

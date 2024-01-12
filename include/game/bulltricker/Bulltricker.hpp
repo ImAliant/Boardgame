@@ -40,6 +40,8 @@ class Bulltricker: public Model
         void SwitchPlayer() override;
 
         void CheckForWin() override;
+        void EndGameIfKingCaptured();
+        bool IsKingSurroundedByEnemies(const coord_t& coord, const char& kingColor) const;
         void EndGameIfNoMoves() override;
 
         void CreateGameBoard() override;

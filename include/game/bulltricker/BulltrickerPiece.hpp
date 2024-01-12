@@ -17,7 +17,7 @@ class BulltrickerPiece: public Piece
         bool m_isHorizontal;
 
         bool IsOpponentPiece(const coord_t coord, const Board& board) const;
-        bool IsLandingBehindKing(const coord_t coord, const int dx, const Board& board) const;
+        
 
         void SimpleMoves(const Board& board);
         void CaptureMoves(const Board& board) override;

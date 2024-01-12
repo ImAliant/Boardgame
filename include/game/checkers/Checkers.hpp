@@ -44,8 +44,6 @@ class Checkers: public Model
         void SwitchPlayer() override;
 
         void CheckForWin() override;
-        void CountPieces(int& whitePieces, int& blackPieces) const;
-        void EndGameIfNoPieces(int whitePieces, int blackPieces);
         void EndGameIfNoMoves() override;
 
         void CreateGameBoard() override;

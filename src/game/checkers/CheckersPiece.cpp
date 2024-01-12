@@ -18,8 +18,8 @@ void CheckersPiece::FindPossibleMoves(const Board& board)
 
 void CheckersPiece::SimpleMoves(const Board& board) 
 {
-    const auto white{GameConstants::CheckersConstants::WHITE};
-    const auto black{GameConstants::CheckersConstants::BLACK};
+    const auto white{GameConstants::WHITE};
+    const auto black{GameConstants::BLACK};
     const auto& wdir{GameConstants::CheckersConstants::WHITE_DIRECTION};
     const auto& bdir{GameConstants::CheckersConstants::BLACK_DIRECTION};
 

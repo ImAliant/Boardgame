@@ -45,6 +45,8 @@ class Model
 
         virtual void CheckForWin();
         virtual void EndGameIfNoMoves() = 0;
+        void EndGameIfNoPieces(int nbWhitePieces, int nbBlackPieces, GameStatus& m_status, ModelFlags& m_flags);
+        void CountPieces(int& nbBlackPieces, int& nbWhitePieces) const;
 
         bool AreCoordinatesValid(const coord_t coord) const;
     public:

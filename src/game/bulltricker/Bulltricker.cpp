@@ -139,7 +139,7 @@ bool Bulltricker::CanPromotePiece(coord_t coord) const
     
     const auto x{piece->GetX()};
 
-    if (piece->GetSymbol() == GameConstants::BulltrickerConstants::WHITE) 
+    if (piece->GetSymbol() == GameConstants::WHITE) 
         return (x == GameConstants::BOARD_UPPER_LIMIT);
     else 
         return (x == GameConstants::BulltrickerConstants::BOARD_LOWER_LIMIT);
@@ -262,12 +262,76 @@ void Bulltricker::SwitchPlayer()
 
 void Bulltricker::CheckForWin()
 {
-    // TODO
+    int nbBlackPieces{0};
+    int nbWhitePieces{0};
+
+  
+    EndGameIfKingCaptured();
+
+    Model::CheckForWin();
+}
+
+void Bulltricker::EndGameIfKingCaptured()
+{
+    const auto& rows{m_board->GetRows()};
+    const auto& cols{m_board->GetCols()};
+
+    const std::vector<direction_t> directions{
+        GameConstants::BulltrickerConstants::NORTH, 
+        GameConstants::BulltrickerConstants::SOUTH, 
+        GameConstants::BulltrickerConstants::EAST, 
+        GameConstants::BulltrickerConstants::WEST
+    };
+
+    for (int i{0}; i < rows; i++)
+    {
+        for (int j{0}; j < cols; j++)
+        {
+            const auto& coord{std::make_pair(i, j)};
+            const auto& piece{GetPiece(coord)};
+
+            if (!piece || piece->GetState().m_type != BT_KING) continue;
+
+            const auto& kingColor{piece->GetSymbol()};
+
+            if (IsKingSurroundedByEnemies(coord, kingColor))
+            {
+                m_status.SetWinner(kingColor == GameConstants::WHITE ? m_players[GameConstants::PLAYER_TWOID].get() : m_players[GameConstants::PLAYER_ONEID].get());
+                m_flags.GameFinished();
+                return;
+            }
+        }
+    }
+}
+
+bool Bulltricker::IsKingSurroundedByEnemies(const coord_t& coord, const char& kingColor) const
+{
+    const std::vector<direction_t> directions{
+        GameConstants::BulltrickerConstants::NORTH, 
+        GameConstants::BulltrickerConstants::SOUTH, 
+        GameConstants::BulltrickerConstants::EAST, 
+        GameConstants::BulltrickerConstants::WEST
+    };
+
+    return std::all_of(directions.begin(), directions.end(), [&](const direction_t& dir) 
+    {
+        const auto& coordToTest{std::make_pair(coord.first + dir.first, coord.second + dir.second)};
+        if (!AreCoordinatesValid(coordToTest)) return true;
+
+        const auto& pieceToTest{GetPiece(coordToTest)};
+        return pieceToTest && pieceToTest->GetSymbol() != kingColor;
+    });
 }
 
 void Bulltricker::EndGameIfNoMoves()
 {
-    // TODO
+    bool otherPlayerCanMove{HavePieceWithCapturingMoves(false) || HavePieceWithNonCapturingMoves(false)};
+    if (!otherPlayerCanMove)
+    {
+        m_status.SetWinner((GetCurrentPlayer()->GetId()%2 == GameConstants::PLAYER_ONEID) ?
+            m_players[GameConstants::PLAYER_ONEID].get() : m_players[GameConstants::PLAYER_TWOID].get());
+        m_flags.GameFinished();
+    }
 }
 
 void Bulltricker::GameStart()
