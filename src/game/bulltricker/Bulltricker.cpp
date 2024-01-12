@@ -93,7 +93,7 @@ void Bulltricker::ApplyCapture(const coord_t coord)
     {
         const auto& captureCoord{std::make_pair(x, y)};
         if (!AreCoordinatesValid(captureCoord)) 
-            throw InvalidCoordinatesException("Checkers::PerformCapturingMove() : captureCoord are invalid");
+            throw InvalidCoordinatesException("Bulltricker::PerformCapturingMove() : captureCoord are invalid");
 
         const auto pieceCapture{GetPiece(captureCoord)};
         if (!pieceCapture)

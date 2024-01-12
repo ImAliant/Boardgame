@@ -34,8 +34,12 @@ class BulltrickerPiece: public Piece
         void OrientationHorizontal();
         void OrientationVertical();
 
+       bool IsJumpingKing(const coord_t& destination, int dx,const Board& board) const ;
+       bool IsJumpingKingBeyond(const coord_t& destination, int dx, const Board& board) const;
+
         bool IsPawn() const;
         bool IsQueen() const;
+        bool IsKing() const;
         bool IsPromoted() const;
         bool IsHorizontal() const;
 };

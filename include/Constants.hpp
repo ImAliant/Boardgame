@@ -267,6 +267,14 @@ namespace GameConstants
             {-1, 1},  // Move up and right
             {-1, -1}, // Move up and left
         };
+        const  std::vector<direction_t> KING_DIR = {
+            {2,0},
+            {-2,0},
+            {0,2},
+            {0,-2},
+            
+        };
+     
 
 
         const sf::Vector2f BUTEE_SIZE = sf::Vector2f{20.625f, 20.625f};
