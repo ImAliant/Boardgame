@@ -1,4 +1,5 @@
 #include "game/butin/ButinBoard.hpp"
+#include "game/butin/ButinPiece.hpp"
 #include "constants/Constants.hpp"
 
 #include <algorithm>
@@ -50,4 +51,9 @@ void ButinBoard::ShuffleSymbols(std::vector<char>& symbols) const
     std::mt19937 g(rd());
 
     std::shuffle(symbols.begin(), symbols.end(), g);
+}
+
+void ButinBoard::CreatePiece(const int i, const int j, const char symbol)
+{
+    SetPiece(i, j, std::make_shared<ButinPiece>(coord_t{i, j}, symbol));
 }

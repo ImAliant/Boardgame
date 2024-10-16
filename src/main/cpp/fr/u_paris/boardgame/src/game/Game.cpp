@@ -1,5 +1,5 @@
 #include "game/Game.hpp"
-#include "game/butin/ButinBoard.hpp"
+#include "game/bulltricker/BulltrickerBoard.hpp"
 
 Game::Game()
 {
@@ -8,7 +8,7 @@ Game::Game()
 
 void Game::Init()
 {
-    board = std::make_shared<ButinBoard>();
+    board = std::make_shared<BulltrickerBoard>();
 }
 
 std::shared_ptr<Board> Game::GetBoard() const

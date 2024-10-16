@@ -1,4 +1,5 @@
 #include "game/checkers/CheckersBoard.hpp"
+#include "game/checkers/CheckersPiece.hpp"
 #include "constants/Constants.hpp"
 
 using namespace Constants::Game::Checkers;
@@ -37,4 +38,9 @@ void CheckersBoard::CreateBlackPiece(const int i, const int j)
 void CheckersBoard::CreateWhitePiece(const int i, const int j)
 {
     CreatePiece(i, j, WHITE_PIECE_SYMBOL);
+}
+
+void CheckersBoard::CreatePiece(const int i, const int j, const char symbol)
+{
+    SetPiece(i, j, std::make_shared<CheckersPiece>(coord_t{i, j}, symbol));
 }
