@@ -13,10 +13,25 @@ BulltrickerBoard::BulltrickerBoard(): Board(BOARD_WIDTH, BOARD_HEIGHT)
 
 void BulltrickerBoard::FillBoard()
 {
-    // Create the two kings
+    CreateKings();
+    CreateQueens();
+    CreateHorizontalPawns();
+    CreateVerticalPawns();
+}
+
+void BulltrickerBoard::CreatePiece(const int i, const int j, const char symbol)
+{
+    SetPiece(i, j, std::make_shared<BulltrickerPiece>(coord_t{i, j}, symbol));
+}
+
+void BulltrickerBoard::CreateKings()
+{
     CreatePiece(BLACK_KING_COORD.first, BLACK_KING_COORD.second, BLACK_KING_SYMBOL);
     CreatePiece(WHITE_KING_COORD.first, WHITE_KING_COORD.second, WHITE_KING_SYMBOL);
-    // Create the two queens
+}
+
+void BulltrickerBoard::CreateQueens()
+{
     for (int i{0}; i < GetHeight(); i++)
     {
         for (int j{0}; j < GetWidth(); j++)
@@ -38,7 +53,10 @@ void BulltrickerBoard::FillBoard()
             }
         }
     }
-    // Create the horizontal pawns
+}
+
+void BulltrickerBoard::CreateHorizontalPawns()
+{
     for (int i{0}; i < GetHeight(); i++)
     {
         for (int j{0}; j < GetWidth(); j++)
@@ -59,8 +77,10 @@ void BulltrickerBoard::FillBoard()
             }
         }
     }
+}
 
-    // Create the vertical pawns
+void BulltrickerBoard::CreateVerticalPawns()
+{
     for (int i{0}; i < GetHeight(); i++)
     {
         for (int j{0}; j < GetWidth(); j++)
@@ -80,11 +100,6 @@ void BulltrickerBoard::FillBoard()
             }
         }
     }
-}
-
-void BulltrickerBoard::CreatePiece(const int i, const int j, const char symbol)
-{
-    SetPiece(i, j, std::make_shared<BulltrickerPiece>(coord_t{i, j}, symbol));
 }
 
 void BulltrickerBoard::SetHorizontal(const int i, const int j, const bool h) const
