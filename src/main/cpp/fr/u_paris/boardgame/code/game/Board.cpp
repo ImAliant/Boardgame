@@ -1,0 +1,102 @@
+#include "Board.hpp"
+
+Board::Board(const int w, const int h): width{w}, height{h}
+{
+    Init();
+    FillBoard();
+}
+
+Board::~Board() {}
+
+void Board::Init()
+{
+    pieces.resize(height);
+    for (int i = 0; i < height; i++)
+    {
+        pieces[i].resize(width);
+    }
+}
+
+void Board::MovePiece(const coord_t from, const coord_t to)
+{
+    if (IsEmpty(from) || IsEmpty(to) 
+    || !IsInBoard(from) || !IsInBoard(to))
+    {
+        return;
+    }
+
+    SetPiece(to.first, to.second, GetPiece(from));
+    RemovePiece(from);
+}
+
+void Board::RemovePiece(const coord_t coord) 
+{
+    if (IsEmpty(coord) || !IsInBoard(coord))
+    {
+        return;
+    }
+
+    SetPiece(coord.first, coord.second, nullptr);
+}
+
+void Board::SetPiece(const int x, const int y, std::shared_ptr<Piece> p)
+{
+    pieces[y][x] = p;
+}
+
+std::shared_ptr<Piece> Board::GetPiece(const coord_t coord) const
+{
+    if (!IsInBoard(coord))
+    {
+        return nullptr;
+    }
+
+    return pieces[coord.second][coord.first];
+}
+
+bool Board::IsEmpty(const coord_t coord) const
+{
+    return GetPiece(coord) == nullptr;
+}
+
+bool Board::IsInBoard(const coord_t coord) const
+{
+    return coord.first >= 0 && coord.first < width
+        && coord.second >= 0 && coord.second < height;
+}
+
+int Board::GetWidth() const
+{
+    return width;
+}
+
+int Board::GetHeight() const
+{
+    return height;
+}
+
+std::vector<std::vector<std::shared_ptr<Piece>>> Board::GetPieces() const
+{
+    return pieces;
+}
+
+std::ostream& operator<<(std::ostream& os, const Board& b)
+{
+    for (int i = 0; i < b.GetHeight(); i++)
+    {
+        for (int j = 0; j < b.GetWidth(); j++)
+        {
+            if (b.IsEmpty({j, i}))
+            {
+                os << " ";
+            }
+            else
+            {
+                os << b.GetPiece({j, i})->GetSymbol();
+            }
+        }
+        os << std::endl;
+    }
+
+    return os;
+}
