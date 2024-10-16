@@ -4,6 +4,13 @@
 
 namespace Constants::Game
 {
+    namespace types
+    {
+        const int CHECKERS{0};
+        const int BUTIN{1};
+        const int BULLTRICKER{2};
+    }
+
     namespace Checkers
     {
         const int BOARD_WIDTH{10};

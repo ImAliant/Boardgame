@@ -6,18 +6,12 @@
 
 class Game
 {
-    private:
-        std::shared_ptr<Board> board;
-
     protected: 
-        void Init();
+        std::shared_ptr<Board> board;
+        virtual void Init() = 0;
     public:
         explicit Game();
         virtual ~Game() = default;
-
-        /* virtual void Start() = 0;
-        virtual void Play() = 0;
-        virtual void End() = 0; */
 
         std::shared_ptr<Board> GetBoard() const;
 };
