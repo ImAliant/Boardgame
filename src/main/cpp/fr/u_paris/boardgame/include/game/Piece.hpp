@@ -11,7 +11,7 @@ class Piece
         const char symbol;
     public:
         explicit Piece(const coord_t c, const char s = 'O');
-        ~Piece();
+        virtual ~Piece() = default;
 
         void SetCoord(const coord_t c);
 

@@ -18,7 +18,7 @@ class Board
         virtual void FillBoard() = 0;
     public:
         explicit Board(const int w, const int h);
-        ~Board();
+        virtual ~Board() = default;
 
         void MovePiece(const coord_t from, const coord_t to);
         void RemovePiece(const coord_t coord);
