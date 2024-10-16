@@ -11,6 +11,8 @@ class ButinBoard: public Board
         void ShuffleSymbols(std::vector<char>& symbols) const;
 
         void CreatePiece(const int i, const int j, const char symbol) override;
+        void CreatePieces(const std::vector<char>& symbols);
+        void GenerateSymbols(std::vector<char>& symbols);
     public:
         explicit ButinBoard();
         ~ButinBoard() override = default;

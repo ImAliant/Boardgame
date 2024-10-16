@@ -47,11 +47,6 @@ void Board::RemovePiece(const coord_t coord)
     SetPiece(coord.first, coord.second, nullptr);
 }
 
-/* void Board::CreatePiece(const int i, const int j, const char symbol)
-{
-    SetPiece(i, j, std::make_shared<Piece>(coord_t{i, j}, symbol));
-} */
-
 void Board::SetPiece(const int x, const int y, std::shared_ptr<Piece> p)
 {
     pieces[x][y] = p;

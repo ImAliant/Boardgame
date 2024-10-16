@@ -19,23 +19,22 @@ void ButinBoard::FillBoard()
         return;
     }
 
-    const to_fill_t to_fill = {
-        {RED_PIECE_SYMBOL, RED_PIECE_NUMBER},
-        {YELLOW_PIECE_SYMBOL, YELLOW_PIECE_NUMBER},
-        {BLACK_PIECE_SYMBOL, BLACK_PIECE_NUMBER}
-    };
-
     std::vector<char> symbols;
-    for (const auto& [symbol, number]: to_fill)
-    {
-        for (int i = 0; i < number; i++)
-        {
-            symbols.push_back(symbol);
-        }
-    }
-
+    GenerateSymbols(symbols);
     ShuffleSymbols(symbols);
+    CreatePieces(symbols);
+}
 
+void ButinBoard::ShuffleSymbols(std::vector<char>& symbols) const
+{
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    std::shuffle(symbols.begin(), symbols.end(), g);
+}
+
+void ButinBoard::CreatePieces(const std::vector<char>& symbols)
+{
     for (int i = 0; i < GetHeight(); i++)
     {
         for (int j = 0; j < GetWidth(); j++)
@@ -45,12 +44,21 @@ void ButinBoard::FillBoard()
     }
 }
 
-void ButinBoard::ShuffleSymbols(std::vector<char>& symbols) const
+void ButinBoard::GenerateSymbols(std::vector<char>& symbols)
 {
-    std::random_device rd;
-    std::mt19937 g(rd());
+    const to_fill_t to_fill = {
+        {RED_PIECE_SYMBOL, RED_PIECE_NUMBER},
+        {YELLOW_PIECE_SYMBOL, YELLOW_PIECE_NUMBER},
+        {BLACK_PIECE_SYMBOL, BLACK_PIECE_NUMBER}
+    };
 
-    std::shuffle(symbols.begin(), symbols.end(), g);
+    for (const auto& [symbol, number]: to_fill)
+    {
+        for (int i = 0; i < number; i++)
+        {
+            symbols.push_back(symbol);
+        }
+    }
 }
 
 void ButinBoard::CreatePiece(const int i, const int j, const char symbol)
