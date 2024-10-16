@@ -1,6 +1,9 @@
 #include "game/checkers/CheckersBoard.hpp"
+#include "constants/Constants.hpp"
 
-CheckersBoard::CheckersBoard(): Board(10, 10) {
+using namespace Constants::Game::Checkers;
+
+CheckersBoard::CheckersBoard(): Board(BOARD_WIDTH, BOARD_HEIGHT) {
     FillBoard();
 }
 
@@ -10,13 +13,13 @@ void CheckersBoard::FillBoard()
     {
         for (int j{0}; j < GetWidth(); j++)
         {
-            if (i < 4 && (i + j) % 2 != 0)
+            if (i < BLACK_PIECE_ROW && (i + j) % 2 != 0)
             {
-                SetPiece(i, j, std::make_shared<Piece>(coord_t{i, j}, 'O'));
+                CreateBlackPiece(i, j);
             }
-            else if (i > 5 && (i + j) % 2 != 0)
+            else if (i > WHITE_PIECE_ROW && (i + j) % 2 != 0)
             {
-                SetPiece(i, j, std::make_shared<Piece>(coord_t{i, j}, 'X'));
+                CreateWhitePiece(i, j);
             }
             else
             {
@@ -24,4 +27,14 @@ void CheckersBoard::FillBoard()
             }
         }
     }
+}
+
+void CheckersBoard::CreateBlackPiece(const int i, const int j)
+{
+    CreatePiece(i, j, BLACK_PIECE_SYMBOL);
+}
+
+void CheckersBoard::CreateWhitePiece(const int i, const int j)
+{
+    CreatePiece(i, j, WHITE_PIECE_SYMBOL);
 }

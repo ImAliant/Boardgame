@@ -16,6 +16,8 @@ class Board
         void Init();
     protected:
         virtual void FillBoard() = 0;
+
+        void CreatePiece(const int i, const int j, const char symbol);
     public:
         explicit Board(const int w, const int h);
         virtual ~Board() = default;
