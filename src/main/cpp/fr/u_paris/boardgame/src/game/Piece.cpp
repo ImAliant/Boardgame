@@ -1,8 +1,6 @@
-#include "Piece.hpp"
+#include "game/Piece.hpp"
 
 Piece::Piece(const coord_t c, const char s): coord{c}, symbol{s} {}
-
-Piece::~Piece() {}
 
 void Piece::SetCoord(const coord_t c)
 {

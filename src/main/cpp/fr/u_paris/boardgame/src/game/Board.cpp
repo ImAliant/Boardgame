@@ -1,12 +1,9 @@
-#include "Board.hpp"
+#include "game/Board.hpp"
 
 Board::Board(const int w, const int h): width{w}, height{h}
 {
     Init();
-    FillBoard();
 }
-
-Board::~Board() {}
 
 void Board::Init()
 {
@@ -14,6 +11,17 @@ void Board::Init()
     for (int i = 0; i < height; i++)
     {
         pieces[i].resize(width);
+    }
+}
+
+void Board::FillBoard()
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            pieces[i][j] = nullptr;
+        }
     }
 }
 
@@ -41,7 +49,7 @@ void Board::RemovePiece(const coord_t coord)
 
 void Board::SetPiece(const int x, const int y, std::shared_ptr<Piece> p)
 {
-    pieces[y][x] = p;
+    pieces[x][y] = p;
 }
 
 std::shared_ptr<Piece> Board::GetPiece(const coord_t coord) const
@@ -51,7 +59,7 @@ std::shared_ptr<Piece> Board::GetPiece(const coord_t coord) const
         return nullptr;
     }
 
-    return pieces[coord.second][coord.first];
+    return pieces[coord.first][coord.second];
 }
 
 bool Board::IsEmpty(const coord_t coord) const
@@ -61,8 +69,8 @@ bool Board::IsEmpty(const coord_t coord) const
 
 bool Board::IsInBoard(const coord_t coord) const
 {
-    return coord.first >= 0 && coord.first < width
-        && coord.second >= 0 && coord.second < height;
+    return coord.first >= 0 && coord.first < height
+        && coord.second >= 0 && coord.second < width;
 }
 
 int Board::GetWidth() const
@@ -86,13 +94,13 @@ std::ostream& operator<<(std::ostream& os, const Board& b)
     {
         for (int j = 0; j < b.GetWidth(); j++)
         {
-            if (b.IsEmpty({j, i}))
+            if (b.IsEmpty({i, j}))
             {
-                os << " ";
+                os << ".";
             }
             else
             {
-                os << b.GetPiece({j, i})->GetSymbol();
+                os << b.GetPiece({i, j})->GetSymbol();
             }
         }
         os << std::endl;
