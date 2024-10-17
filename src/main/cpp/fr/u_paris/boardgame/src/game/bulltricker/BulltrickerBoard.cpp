@@ -19,15 +19,15 @@ void BulltrickerBoard::FillBoard()
     CreateVerticalPawns();
 }
 
-void BulltrickerBoard::CreatePiece(const int i, const int j, const char symbol)
+void BulltrickerBoard::CreatePiece(const coord_t coord, const char symbol)
 {
-    SetPiece(i, j, std::make_shared<BulltrickerPiece>(coord_t{i, j}, symbol));
+    SetPiece(coord, std::make_shared<BulltrickerPiece>(coord, symbol));
 }
 
 void BulltrickerBoard::CreateKings()
 {
-    CreatePiece(BLACK_KING_COORD.first, BLACK_KING_COORD.second, BLACK_KING_SYMBOL);
-    CreatePiece(WHITE_KING_COORD.first, WHITE_KING_COORD.second, WHITE_KING_SYMBOL);
+    CreatePiece(BLACK_KING_COORD, BLACK_KING_SYMBOL);
+    CreatePiece(WHITE_KING_COORD, WHITE_KING_SYMBOL);
 }
 
 void BulltrickerBoard::CreateQueens()
@@ -43,14 +43,16 @@ void BulltrickerBoard::CreateQueens()
                 continue;
             }
 
+            const coord_t coord{i, j};
+
             if (i == BLACK_QUEEN_X)
             {
-                CreatePiece(i, j, BLACK_QUEEN_SYMBOL);
-                SetBlack(i, j, true);
+                CreatePiece(coord, BLACK_QUEEN_SYMBOL);
+                SetBlack(coord, true);
             }
             else if (i == WHITE_QUEEN_X)
             {
-                CreatePiece(i, j, WHITE_QUEEN_SYMBOL);
+                CreatePiece(coord, WHITE_QUEEN_SYMBOL);
             }
         }
     }
@@ -67,15 +69,17 @@ void BulltrickerBoard::CreateHorizontalPawns()
                 continue;
             }
 
+            const coord_t coord{i, j};
+
             if (i == BLACK_HORIZONTAL_PAWN_X)
             {
-                CreatePiece(i, j, BLACK_PAWN_SYMBOL);
-                SetHorizontal(i, j, true);
-                SetBlack(i, j, true);
+                CreatePiece(coord, BLACK_PAWN_SYMBOL);
+                SetHorizontal(coord, true);
+                SetBlack(coord, true);
             }
             else if (i == WHITE_HORIZONTAL_PAWN_X)
             {
-                CreatePiece(i, j, WHITE_PAWN_SYMBOL);
+                CreatePiece(coord, WHITE_PAWN_SYMBOL);
             }
         }
     }
@@ -92,25 +96,27 @@ void BulltrickerBoard::CreateVerticalPawns()
                 continue;
             }
 
+            const coord_t coord{i, j};
+
             if (i == BLACK_VERTICAL_PAWN_X)
             {
-                CreatePiece(i, j, BLACK_PAWN_SYMBOL);
-                SetBlack(i, j, true);
+                CreatePiece(coord, BLACK_PAWN_SYMBOL);
+                SetBlack(coord, true);
             }
             else if (i == WHITE_VERTICAL_PAWN_X)
             {
-                CreatePiece(i, j, WHITE_PAWN_SYMBOL);
+                CreatePiece(coord, WHITE_PAWN_SYMBOL);
             }
         }
     }
 }
 
-void BulltrickerBoard::SetHorizontal(const int i, const int j, const bool h) const
+void BulltrickerBoard::SetHorizontal(const coord_t coord, const bool h) const
 {
-    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord_t{i, j}))->SetHorizontal(h);
+    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetHorizontal(h);
 }
 
-void BulltrickerBoard::SetBlack(const int i, const int j, const bool b) const
+void BulltrickerBoard::SetBlack(const coord_t coord, const bool b) const
 {
-    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord_t{i, j}))->SetBlack(b);
+    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetBlack(b);
 }

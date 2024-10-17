@@ -22,6 +22,11 @@ void Checkers::InitPlayers()
     DistributePieces();
 }
 
+void Checkers::Start()
+{
+    std::cout << "Starting Checkers" << std::endl;
+}
+
 void Checkers::DistributePieces()
 {   
     std::vector<std::shared_ptr<Player>> players = GetPlayers();

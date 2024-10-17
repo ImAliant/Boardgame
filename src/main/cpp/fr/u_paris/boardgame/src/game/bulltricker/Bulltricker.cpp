@@ -22,6 +22,11 @@ void Bulltricker::InitPlayers()
     DistributePieces();
 }
 
+void Bulltricker::Start()
+{
+    std::cout << "Starting Bulltricker" << std::endl;
+}
+
 void Bulltricker::DistributePieces()
 {   
     std::vector<std::shared_ptr<Player>> players = GetPlayers();

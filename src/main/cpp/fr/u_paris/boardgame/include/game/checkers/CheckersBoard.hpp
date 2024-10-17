@@ -6,10 +6,10 @@ class CheckersBoard: public Board
 {
     private:
         void FillBoard() override;
-        void CreateBlackPiece(const int i, const int j);
-        void CreateWhitePiece(const int i, const int j);
+        void CreateBlackPiece(const coord_t coord);
+        void CreateWhitePiece(const coord_t coord);
 
-        void CreatePiece(const int i, const int j, const char symbol) override;
+        void CreatePiece(const coord_t coord, const char symbol) override;
     public:
         explicit CheckersBoard();
         ~CheckersBoard() override = default;

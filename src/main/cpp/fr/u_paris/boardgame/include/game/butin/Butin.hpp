@@ -9,4 +9,6 @@ class Butin: public Game
         ~Butin() override = default;
 
         void Init() override;
+
+        void Start() override;
 };

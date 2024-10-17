@@ -18,6 +18,10 @@ class Game
         explicit Game();
         virtual ~Game() = default;
 
+        virtual void Start() = 0;
+
+        void MovePiece(const coord_t from, const coord_t to) const;
+
         std::shared_ptr<Board> GetBoard() const;
         std::vector<std::shared_ptr<Player>> GetPlayers() const;
         std::shared_ptr<Player> GetPlayer(const int id) const;

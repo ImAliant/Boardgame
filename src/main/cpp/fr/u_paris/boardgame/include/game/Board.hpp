@@ -17,7 +17,7 @@ class Board
     protected:
         virtual void FillBoard() = 0;
 
-        virtual void CreatePiece(const int i, const int j, const char symbol) = 0;
+        virtual void CreatePiece(const coord_t coord, const char symbol) = 0;
     public:
         explicit Board(const int w, const int h);
         virtual ~Board() = default;
@@ -25,7 +25,7 @@ class Board
         void MovePiece(const coord_t from, const coord_t to);
         void RemovePiece(const coord_t coord);
 
-        void SetPiece(const int x, const int y, std::shared_ptr<Piece> p);
+        void SetPiece(const coord_t coord, std::shared_ptr<Piece> p);
         std::shared_ptr<Piece> GetPiece(const coord_t coord) const;
 
         bool IsEmpty(const coord_t coord) const;

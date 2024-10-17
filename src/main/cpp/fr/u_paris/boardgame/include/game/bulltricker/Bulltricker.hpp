@@ -12,5 +12,7 @@ class Bulltricker: public Game, public PieceDistributor
         void Init() override;
         void InitPlayers() override;
 
+        void Start() override;
+
         void DistributePieces() override;
 };

@@ -10,3 +10,8 @@ void Butin::Init()
     board = std::make_shared<ButinBoard>();
     InitPlayers();
 }
+
+void Butin::Start()
+{
+    std::cout << "Starting Butin" << std::endl;
+}

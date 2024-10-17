@@ -27,13 +27,13 @@ void Board::FillBoard()
 
 void Board::MovePiece(const coord_t from, const coord_t to)
 {
-    if (IsEmpty(from) || IsEmpty(to) 
+    if (IsEmpty(from) && !IsEmpty(to) 
     || !IsInBoard(from) || !IsInBoard(to))
     {
         return;
     }
 
-    SetPiece(to.first, to.second, GetPiece(from));
+    SetPiece(to, GetPiece(from));
     RemovePiece(from);
 }
 
@@ -44,12 +44,12 @@ void Board::RemovePiece(const coord_t coord)
         return;
     }
 
-    SetPiece(coord.first, coord.second, nullptr);
+    SetPiece(coord, nullptr);
 }
 
-void Board::SetPiece(const int x, const int y, std::shared_ptr<Piece> p)
+void Board::SetPiece(const coord_t coord, std::shared_ptr<Piece> p)
 {
-    pieces[x][y] = p;
+    pieces[coord.first][coord.second] = p;
 }
 
 std::shared_ptr<Piece> Board::GetPiece(const coord_t coord) const

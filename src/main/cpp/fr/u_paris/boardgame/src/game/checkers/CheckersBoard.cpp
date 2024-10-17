@@ -14,33 +14,35 @@ void CheckersBoard::FillBoard()
     {
         for (int j{0}; j < GetWidth(); j++)
         {
+            const coord_t coord{i, j};
+
             if (i < BLACK_PIECE_ROW && (i + j) % 2 != 0)
             {
-                CreateBlackPiece(i, j);
+                CreateBlackPiece(coord);
             }
             else if (i > WHITE_PIECE_ROW && (i + j) % 2 != 0)
             {
-                CreateWhitePiece(i, j);
+                CreateWhitePiece(coord);
             }
             else
             {
-                SetPiece(i, j, nullptr);
+                SetPiece(coord, nullptr);
             }
         }
     }
 }
 
-void CheckersBoard::CreateBlackPiece(const int i, const int j)
+void CheckersBoard::CreateBlackPiece(const coord_t coord)
 {
-    CreatePiece(i, j, BLACK_PIECE_SYMBOL);
+    CreatePiece(coord, BLACK_PIECE_SYMBOL);
 }
 
-void CheckersBoard::CreateWhitePiece(const int i, const int j)
+void CheckersBoard::CreateWhitePiece(const coord_t coord)
 {
-    CreatePiece(i, j, WHITE_PIECE_SYMBOL);
+    CreatePiece(coord, WHITE_PIECE_SYMBOL);
 }
 
-void CheckersBoard::CreatePiece(const int i, const int j, const char symbol)
+void CheckersBoard::CreatePiece(const coord_t coord, const char symbol)
 {
-    SetPiece(i, j, std::make_shared<CheckersPiece>(coord_t{i, j}, symbol));
+    SetPiece(coord, std::make_shared<CheckersPiece>(coord, symbol));
 }

@@ -20,6 +20,7 @@ class Player
         virtual ~Player() = default;
 
         void AddPiece(std::shared_ptr<Piece> piece);
+        void AddScore(int s);
 
         int GetId() const;
         int GetScore() const;

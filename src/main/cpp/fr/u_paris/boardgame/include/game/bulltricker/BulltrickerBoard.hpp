@@ -7,7 +7,7 @@ class BulltrickerBoard: public Board
     private:
         void FillBoard() override;
 
-        void CreatePiece(const int i, const int j, const char symbol) override;
+        void CreatePiece(const coord_t coord, const char symbol) override;
         void CreateKings();
         void CreateQueens();
         void CreateHorizontalPawns();
@@ -16,6 +16,6 @@ class BulltrickerBoard: public Board
         explicit BulltrickerBoard();
         ~BulltrickerBoard() override = default;
 
-        void SetHorizontal(const int i, const int j, const bool h) const;
-        void SetBlack(const int i, const int j, const bool b) const;
+        void SetHorizontal(const coord_t coord, const bool h) const;
+        void SetBlack(const coord_t coord, const bool b) const;
 };

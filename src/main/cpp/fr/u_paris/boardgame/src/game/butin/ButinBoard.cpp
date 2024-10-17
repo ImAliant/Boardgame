@@ -39,7 +39,7 @@ void ButinBoard::CreatePieces(const std::vector<char>& symbols)
     {
         for (int j = 0; j < GetWidth(); j++)
         {
-            CreatePiece(i, j, symbols[i*GetWidth() + j]);
+            CreatePiece(coord_t{i,j}, symbols[i*GetWidth() + j]);
         }
     }
 }
@@ -61,7 +61,7 @@ void ButinBoard::GenerateSymbols(std::vector<char>& symbols)
     }
 }
 
-void ButinBoard::CreatePiece(const int i, const int j, const char symbol)
+void ButinBoard::CreatePiece(const coord_t coord, const char symbol)
 {
-    SetPiece(i, j, std::make_shared<ButinPiece>(coord_t{i, j}, symbol));
+    SetPiece(coord, std::make_shared<ButinPiece>(coord, symbol));
 }

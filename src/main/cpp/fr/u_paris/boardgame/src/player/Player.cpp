@@ -13,6 +13,16 @@ void Player::AddPiece(std::shared_ptr<Piece> piece)
     pieces.push_back(piece);
 }
 
+void Player::AddScore(int s)
+{
+    if (s < 0)
+    {
+        return;
+    }
+
+    score += s;
+}
+
 int Player::GetId() const
 {
     return id;

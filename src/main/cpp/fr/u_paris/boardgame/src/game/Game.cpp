@@ -19,6 +19,11 @@ void Game::AddPlayer(std::shared_ptr<Player> player)
     players.push_back(player);
 }
 
+void Game::MovePiece(const coord_t from, const coord_t to) const
+{
+    board->MovePiece(from, to);
+}
+
 std::vector<std::shared_ptr<Player>> Game::GetPlayers() const
 {
     return players;
