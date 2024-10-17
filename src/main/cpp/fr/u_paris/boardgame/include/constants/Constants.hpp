@@ -11,6 +11,12 @@ namespace Constants::Game
         const int BULLTRICKER{2};
     }
 
+    namespace Player
+    {
+        const int PLAYER_ONE{0};
+        const int PLAYER_TWO{1};
+    }
+
     namespace Checkers
     {
         const int BOARD_WIDTH{10};

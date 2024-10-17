@@ -46,6 +46,7 @@ void BulltrickerBoard::CreateQueens()
             if (i == BLACK_QUEEN_X)
             {
                 CreatePiece(i, j, BLACK_QUEEN_SYMBOL);
+                SetBlack(i, j, true);
             }
             else if (i == WHITE_QUEEN_X)
             {
@@ -70,6 +71,7 @@ void BulltrickerBoard::CreateHorizontalPawns()
             {
                 CreatePiece(i, j, BLACK_PAWN_SYMBOL);
                 SetHorizontal(i, j, true);
+                SetBlack(i, j, true);
             }
             else if (i == WHITE_HORIZONTAL_PAWN_X)
             {
@@ -93,6 +95,7 @@ void BulltrickerBoard::CreateVerticalPawns()
             if (i == BLACK_VERTICAL_PAWN_X)
             {
                 CreatePiece(i, j, BLACK_PAWN_SYMBOL);
+                SetBlack(i, j, true);
             }
             else if (i == WHITE_VERTICAL_PAWN_X)
             {
@@ -105,4 +108,9 @@ void BulltrickerBoard::CreateVerticalPawns()
 void BulltrickerBoard::SetHorizontal(const int i, const int j, const bool h) const
 {
     std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord_t{i, j}))->SetHorizontal(h);
+}
+
+void BulltrickerBoard::SetBlack(const int i, const int j, const bool b) const
+{
+    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord_t{i, j}))->SetBlack(b);
 }

@@ -8,4 +8,5 @@ Butin::Butin(): Game() {
 void Butin::Init()
 {
     board = std::make_shared<ButinBoard>();
+    InitPlayers();
 }

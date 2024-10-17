@@ -17,4 +17,5 @@ class BulltrickerBoard: public Board
         ~BulltrickerBoard() override = default;
 
         void SetHorizontal(const int i, const int j, const bool h) const;
+        void SetBlack(const int i, const int j, const bool b) const;
 };

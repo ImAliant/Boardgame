@@ -9,7 +9,17 @@ bool BulltrickerPiece::IsHorizontal() const
     return is_horizontal;
 }
 
+bool BulltrickerPiece::IsBlack() const
+{
+    return is_black;
+}
+
 void BulltrickerPiece::SetHorizontal(const bool h)
 {
     is_horizontal = h;
+}
+
+void BulltrickerPiece::SetBlack(const bool b)
+{
+    is_black = b;
 }
