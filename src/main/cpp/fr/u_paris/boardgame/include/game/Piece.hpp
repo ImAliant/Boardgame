@@ -15,6 +15,9 @@ class Piece
         coord_t coord;
         const char symbol;
         std::vector<coord_t> possible_moves;
+    protected:
+        virtual void FindSimpleMoves(std::shared_ptr<Board> board) = 0;
+        virtual void FindJumpMoves(std::shared_ptr<Board> board) = 0;
     public:
         explicit Piece(const coord_t c, const char s = 'O');
         virtual ~Piece() = default;

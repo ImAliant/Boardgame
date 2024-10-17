@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "../Types.hpp"
 
 namespace Constants::Game
@@ -26,6 +28,10 @@ namespace Constants::Game
 
         const char BLACK_PIECE_SYMBOL{'B'};
         const char WHITE_PIECE_SYMBOL{'W'};
+
+        const std::vector<dir_t> WHITE_PIECE_DIRECTIONS{{-1, -1}, {-1, 1}};
+        const std::vector<dir_t> BLACK_PIECE_DIRECTIONS{{1, -1}, {1, 1}};
+        const std::vector<dir_t> QUEEN_PIECE_DIRECTIONS{{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
     }
     namespace Butin
     {
@@ -45,8 +51,6 @@ namespace Constants::Game
         const int BOARD_WIDTH{15};
         const int BOARD_HEIGHT{15};
 
-        /* const char BLACK_PIECE_SYMBOL{'B'};
-        const char WHITE_PIECE_SYMBOL{'W'}; */
         const char BLACK_PAWN_SYMBOL{'P'};
         const char BLACK_QUEEN_SYMBOL{'Q'};
         const char BLACK_KING_SYMBOL{'K'};

@@ -2,6 +2,14 @@
 
 Piece::Piece(const coord_t c, const char s): coord{c}, symbol{s} {}
 
+void Piece::SetPossibleMoves(std::shared_ptr<Board> board)
+{
+    ClearPossibleMoves();
+
+    FindSimpleMoves(board);
+    FindJumpMoves(board);
+}
+
 void Piece::AddPossibleMove(const coord_t c)
 {
     possible_moves.push_back(c);
