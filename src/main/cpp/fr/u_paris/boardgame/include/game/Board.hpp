@@ -6,6 +6,8 @@
 #include "Piece.hpp"
 #include "Types.hpp"
 
+class Piece;
+
 class Board
 {
     private:

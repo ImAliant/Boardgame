@@ -11,6 +11,8 @@ class BulltrickerPiece: public Piece
         explicit BulltrickerPiece(const coord_t c, const char s);
         ~BulltrickerPiece() override = default;
 
+        void SetPossibleMoves(std::shared_ptr<Board> board) override;
+
         bool IsHorizontal() const;
         bool IsBlack() const;
 

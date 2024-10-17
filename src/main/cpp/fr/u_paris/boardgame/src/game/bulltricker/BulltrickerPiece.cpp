@@ -2,7 +2,12 @@
 
 BulltrickerPiece::BulltrickerPiece(
     const coord_t c, 
-    const char s): Piece(c, s) {}
+    const char s): Piece{c, s} {}
+
+void BulltrickerPiece::SetPossibleMoves(std::shared_ptr<Board> board)
+{
+    
+}
 
 bool BulltrickerPiece::IsHorizontal() const
 {
