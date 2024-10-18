@@ -5,45 +5,77 @@
 using namespace Constants::Game::Checkers;
 
 CheckersPiece::CheckersPiece(
-    const coord_t c, 
-    const char s): Piece{c, s} {}
+    const coord_t c,
+    const char s) : Piece{c, s} {}
 
 void CheckersPiece::FindMoves(std::shared_ptr<Board> board)
 {
-    std::vector<dir_t> directions;
-    if (IsQueen()) directions = QUEEN_PIECE_DIRECTIONS;
-    else if (IsBlack()) directions = BLACK_PIECE_DIRECTIONS;
-    else directions = WHITE_PIECE_DIRECTIONS;
-
-    for (const auto& dir: directions)
+    if (IsQueen()) FindQueenMoves(board); 
+    
+    else
     {
-        coord_t new_coord = CoordUtils::CalculateNewCoord(GetCoord(), dir);
-        if (!board->IsInBoard(new_coord)) continue;
+        std::vector<dir_t> directions;
+        if (IsBlack())
+            directions = BLACK_PIECE_DIRECTIONS;
+        else
+            directions = WHITE_PIECE_DIRECTIONS;
 
-        // Find if the new coord has a piece
-        if (board->IsEmpty(new_coord))
+        for (const auto &dir : directions)
         {
-            AddPossibleMoveForEmptySpace(new_coord);
-        }
-        else {
-            HandlePieceEncounter(new_coord, dir, board);
+            coord_t new_coord = CoordUtils::CalculateNewCoord(GetCoord(), dir);
+            if (!board->IsInBoard(new_coord))
+                continue;
+
+            // Find if the new coord has a piece
+            if (board->IsEmpty(new_coord))
+            {
+                AddPossibleMoveForEmptySpace(new_coord);
+            }
+            else
+            {
+                HandlePieceEncounter(new_coord, dir, board);
+            }
         }
     }
 }
 
-void CheckersPiece::AddPossibleMoveForEmptySpace(const coord_t& to)
+void CheckersPiece::FindQueenMoves(std::shared_ptr<Board> board)
+{
+    for (const auto &dir : QUEEN_PIECE_DIRECTIONS)
+    {
+        coord_t new_coord = CoordUtils::CalculateNewCoord(GetCoord(), dir);
+        while (board->IsInBoard(new_coord))
+        {
+            if (board->IsEmpty(new_coord))
+            {
+                AddPossibleMoveForEmptySpace(new_coord);
+            }
+            else
+            {
+                HandlePieceEncounter(new_coord, dir, board);
+                break;
+            }
+
+            new_coord = CoordUtils::CalculateNewCoord(new_coord, dir);
+        }
+    }
+}
+
+void CheckersPiece::AddPossibleMoveForEmptySpace(const coord_t &to)
 {
     AddPossibleMove(std::make_shared<Move>(to));
 }
 
-void CheckersPiece::HandlePieceEncounter(const coord_t& to, const dir_t& dir, std::shared_ptr<Board> board)
+void CheckersPiece::HandlePieceEncounter(const coord_t &to, const dir_t &dir, std::shared_ptr<Board> board)
 {
     const std::shared_ptr<CheckersPiece> piece = std::dynamic_pointer_cast<CheckersPiece>(board->GetPiece(to));
 
-    if (piece->IsBlack() == IsBlack()) return;
+    if (piece->IsBlack() == IsBlack())
+        return;
 
     coord_t jump_coord = CoordUtils::CalculateNewCoord(to, dir);
-    if (!board->IsMoveValid(to, jump_coord)) return;
+    if (!board->IsMoveValid(to, jump_coord))
+        return;
 
     AddPossibleMove(std::make_shared<Move>(jump_coord, piece));
 }
@@ -60,11 +92,12 @@ bool CheckersPiece::IsQueen() const
 
 void CheckersPiece::Upgrade()
 {
-    if (type != PAWN) return;
+    if (type != PAWN)
+        return;
     type = QUEEN;
 }
 
 PieceType CheckersPiece::GetType() const
 {
     return type;
-}   
+}
