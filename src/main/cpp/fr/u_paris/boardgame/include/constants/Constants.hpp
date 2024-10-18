@@ -12,13 +12,11 @@ namespace Constants::Game
         const int BUTIN{1};
         const int BULLTRICKER{2};
     }
-
     namespace Player
     {
         const int PLAYER_ONE{0};
         const int PLAYER_TWO{1};
     }
-
     namespace Checkers
     {
         const int BOARD_WIDTH{10};
@@ -45,6 +43,11 @@ namespace Constants::Game
         const char RED_PIECE_SYMBOL{'R'};
         const char YELLOW_PIECE_SYMBOL{'Y'};
         const char BLACK_PIECE_SYMBOL{'B'};
+
+        const std::vector<dir_t> PIECE_DIRECTIONS{
+            {-1, 0}, {1, 0}, {0, -1}, {0, 1}, 
+            {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+        };
     }
     namespace Bulltricker
     {

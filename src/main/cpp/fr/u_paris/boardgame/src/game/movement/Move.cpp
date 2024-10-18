@@ -19,7 +19,11 @@ std::shared_ptr<Piece> Move::GetPiece() const {
 
 std::ostream& operator<<(std::ostream& os, const Move& m) {
     os << "Move to " << m.GetTo().first << ", " << m.GetTo().second;
-    if (m.IsJump()) os << " with jump on " << m.GetPiece() << std::endl;
+    if (m.IsJump()) {
+        std::shared_ptr<Piece> p = m.GetPiece();
+        os << " jump over piece at " << *p;
+    }
     else os << std::endl;
+
     return os;
 }

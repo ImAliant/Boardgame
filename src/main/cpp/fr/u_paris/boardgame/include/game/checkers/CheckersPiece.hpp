@@ -16,7 +16,7 @@ class CheckersPiece: public Piece
         void FindMoves(std::shared_ptr<Board> board) override;
 
         void AddPossibleMoveForEmptySpace(const coord_t& to);
-        void HandlePieceEncounter(const coord_t& to, const dir_t& dir, std::shared_ptr<Board> board);
+        void HandlePieceEncounter(const coord_t& to, const dir_t& dir, std::shared_ptr<Board> board) override;
 
         bool IsBlack() const;
         bool IsQueen() const;

@@ -38,3 +38,9 @@ std::vector<std::shared_ptr<Move>> Piece::GetPossibleMoves() const
 {
     return possible_moves;
 }
+
+std::ostream& operator<<(std::ostream& os, const Piece& p)
+{
+    os << "Piece at " << p.GetCoord().first << ", " << p.GetCoord().second << " with symbol " << p.GetSymbol() << std::endl;
+    return os;
+}
