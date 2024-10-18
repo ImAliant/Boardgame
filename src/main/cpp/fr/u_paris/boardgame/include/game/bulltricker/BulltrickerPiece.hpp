@@ -8,8 +8,7 @@ class BulltrickerPiece: public Piece
         bool is_horizontal = false;
         bool is_black = false;
 
-        void FindSimpleMoves(std::shared_ptr<Board> board) override;
-        void FindJumpMoves(std::shared_ptr<Board> board) override;
+        void FindMoves(std::shared_ptr<Board> board) override;
     public:
         explicit BulltrickerPiece(const coord_t c, const char s);
         ~BulltrickerPiece() override = default;

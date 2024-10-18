@@ -1,9 +1,12 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
 
 #include "Types.hpp"
 #include "game/Piece.hpp"
+
+class Piece;
 
 class Move
 {
@@ -22,4 +25,6 @@ class Move
         coord_t GetFrom() const;
         coord_t GetTo() const;
         std::shared_ptr<Piece> GetPiece() const;
+
+        friend std::ostream& operator<<(std::ostream& os, const Move& m);
 };

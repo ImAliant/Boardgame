@@ -4,6 +4,9 @@ BulltrickerPiece::BulltrickerPiece(
     const coord_t c, 
     const char s): Piece{c, s} {}
 
+void BulltrickerPiece::FindMoves(std::shared_ptr<Board> board)
+{}
+
 bool BulltrickerPiece::IsHorizontal() const
 {
     return is_horizontal;

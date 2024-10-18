@@ -3,6 +3,7 @@
 #include "game/Game.hpp"
 #include "game/GameFactory.hpp"
 #include "constants/Constants.hpp"
+#include "game/checkers/CheckersPiece.hpp"
 
 using namespace Constants::Game::types;
 using namespace Constants::Game::Player;
@@ -11,9 +12,18 @@ int main() {
     std::shared_ptr<Game> g = GameFactory::CreateGame(CHECKERS);
     std::cout << *(g.get()->GetBoard()) << std::endl;
 
-    g->MovePiece(coord_t{3,0}, coord_t{4,1});
+    std::shared_ptr<CheckersPiece> p = std::dynamic_pointer_cast<CheckersPiece>(g.get()->GetBoard()->GetPiece({6, 1}));
+    p->SetPossibleMoves(g.get()->GetBoard());
 
-    std::cout << *(g.get()->GetBoard()) << std::endl;
+    std::vector<std::shared_ptr<Move>> moves = p->GetPossibleMoves();
+    for (auto move: moves)
+    {
+        std::cout << *move << std::endl;
+    }
+
+    /* g->MovePiece(coord_t{3,0}, coord_t{4,1});
+
+    std::cout << *(g.get()->GetBoard()) << std::endl; */
 
     /* std::shared_ptr<Player> p1 = g->GetPlayer(PLAYER_ONE);
     std::cout << *p1 << std::endl;

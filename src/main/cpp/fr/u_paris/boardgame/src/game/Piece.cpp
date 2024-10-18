@@ -6,13 +6,12 @@ void Piece::SetPossibleMoves(std::shared_ptr<Board> board)
 {
     ClearPossibleMoves();
 
-    FindSimpleMoves(board);
-    FindJumpMoves(board);
+    FindMoves(board);
 }
 
-void Piece::AddPossibleMove(const coord_t c)
+void Piece::AddPossibleMove(const std::shared_ptr<Move> m)
 {
-    possible_moves.push_back(c);
+    possible_moves.push_back(m);
 }
 
 void Piece::ClearPossibleMoves()
@@ -33,4 +32,9 @@ coord_t Piece::GetCoord() const
 char Piece::GetSymbol() const
 {
     return symbol;
+}
+
+std::vector<std::shared_ptr<Move>> Piece::GetPossibleMoves() const
+{
+    return possible_moves;
 }
