@@ -23,20 +23,20 @@ void CheckersPiece::FindMoves(std::shared_ptr<Board> board)
         // Find if the new coord has a piece
         if (board->IsEmpty(new_coord))
         {
-            AddPossibleMoveForEmptySpace(GetCoord(), new_coord);
+            AddPossibleMoveForEmptySpace(new_coord);
         }
         else {
-            HandlePieceEncounter(GetCoord(), new_coord, dir, board);
+            HandlePieceEncounter(new_coord, dir, board);
         }
     }
 }
 
-void CheckersPiece::AddPossibleMoveForEmptySpace(const coord_t& from, const coord_t& to)
+void CheckersPiece::AddPossibleMoveForEmptySpace(const coord_t& to)
 {
-    AddPossibleMove(std::make_shared<Move>(from, to));
+    AddPossibleMove(std::make_shared<Move>(to));
 }
 
-void CheckersPiece::HandlePieceEncounter(const coord_t& from, const coord_t& to, const dir_t& dir, std::shared_ptr<Board> board)
+void CheckersPiece::HandlePieceEncounter(const coord_t& to, const dir_t& dir, std::shared_ptr<Board> board)
 {
     const std::shared_ptr<CheckersPiece> piece = std::dynamic_pointer_cast<CheckersPiece>(board->GetPiece(to));
 
@@ -45,7 +45,7 @@ void CheckersPiece::HandlePieceEncounter(const coord_t& from, const coord_t& to,
     coord_t jump_coord = CoordUtils::CalculateNewCoord(to, dir);
     if (!board->IsMoveValid(to, jump_coord)) return;
 
-    AddPossibleMove(std::make_shared<Move>(from, jump_coord, piece));
+    AddPossibleMove(std::make_shared<Move>(jump_coord, piece));
 }
 
 bool CheckersPiece::IsBlack() const

@@ -16,6 +16,7 @@ int main() {
     p->SetPossibleMoves(g.get()->GetBoard());
 
     std::vector<std::shared_ptr<Move>> moves = p->GetPossibleMoves();
+    std::cout << "Possible moves for " << p.get()->GetCoord().first << ", " << p.get()->GetCoord().second << std::endl;
     for (auto move: moves)
     {
         std::cout << *move << std::endl;
