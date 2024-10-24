@@ -28,6 +28,7 @@ class Board
         void RemovePiece(const coord_t coord);
 
         bool IsMoveValid(const coord_t from, const coord_t to) const;
+        bool IsCoordValid(const coord_t coord) const;
 
         void SetPiece(const coord_t coord, std::shared_ptr<Piece> p);
         std::shared_ptr<Piece> GetPiece(const coord_t coord) const;

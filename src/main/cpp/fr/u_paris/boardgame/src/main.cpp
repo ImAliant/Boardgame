@@ -3,18 +3,29 @@
 #include "game/Game.hpp"
 #include "game/GameFactory.hpp"
 #include "constants/Constants.hpp"
-#include "game/butin/ButinPiece.hpp"
-#include "game/butin/ButinBoard.hpp"
+#include "game/checkers/CheckersPiece.hpp"
+#include "game/checkers/CheckersBoard.hpp"
 
 using namespace Constants::Game::types;
 using namespace Constants::Game::Player;
 
 int main() {
-    std::shared_ptr<Game> g = GameFactory::CreateGame(BUTIN);
-    std::shared_ptr<ButinBoard> board = std::dynamic_pointer_cast<ButinBoard>(g.get()->GetBoard());
+    std::shared_ptr<Game> g = GameFactory::CreateGame(CHECKERS);
+    std::shared_ptr<CheckersBoard> board = std::dynamic_pointer_cast<CheckersBoard>(g.get()->GetBoard());
     std::cout << *board << std::endl;
 
-    int x = 0;
+    std::shared_ptr<CheckersPiece> p = std::dynamic_pointer_cast<CheckersPiece>(board->GetPiece(coord_t{3, 0}));
+    p->Upgrade();
+    p->SetPossibleMoves(board);
+
+    std::vector<std::shared_ptr<Move>> moves = p->GetPossibleMoves();
+    std::cout << "Possible moves for " << *p << std::endl;
+    for (auto move: moves)
+    {
+        std::cout << *move << std::endl;
+    }
+
+    /* int x = 0;
     int y = 0;
 
     std::cin >> x >> y;
@@ -39,7 +50,7 @@ int main() {
     for (auto move: moves)
     {
         std::cout << *move << std::endl;
-    }
+    } */
 
     /* const coord_t coordB{4, 2};
     const coord_t coordW(5, 3);

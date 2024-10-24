@@ -19,6 +19,12 @@ namespace Constants::Game
     }
     namespace Checkers
     {
+        enum PieceType
+        {
+            PAWN,
+            QUEEN
+        };
+
         const int BOARD_WIDTH{10};
         const int BOARD_HEIGHT{10};
         const int BLACK_PIECE_ROW{4};
@@ -45,12 +51,27 @@ namespace Constants::Game
         const char BLACK_PIECE_SYMBOL{'B'};
 
         const std::vector<dir_t> PIECE_DIRECTIONS{
-            {-1, 0}, {1, 0}, {0, -1}, {0, 1}, 
-            {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-        };
+            {-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
     }
     namespace Bulltricker
     {
+        enum Orientation
+        {
+            HORIZONTAL,
+            VERTICAL
+        };
+        enum PieceType
+        {
+            PAWN,
+            QUEEN,
+            KING
+        };
+        enum Color
+        {
+            BLACK,
+            WHITE
+        };
+
         const int BOARD_WIDTH{15};
         const int BOARD_HEIGHT{15};
 
@@ -74,5 +95,13 @@ namespace Constants::Game
         const int BLACK_VERTICAL_PAWN_X{3};
         const int WHITE_HORIZONTAL_PAWN_X{12};
         const int WHITE_VERTICAL_PAWN_X{11};
+
+        const std::vector<dir_t> KING_DIRECTIONS{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+        const std::vector<dir_t> LIMITED_QUEEN_DIRECTIONS{{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        const std::vector<dir_t> UNLIMITED_QUEEN_DIRECTIONS{{-2, 0}, {2, 0}, {0, -2}, {0, 2}};
+
+        const std::vector<dir_t> BLACK_PAWN_DIRECTIONS{{1, -1}, {1, 1}, {2, 0}};
+        const std::vector<dir_t> WHITE_PAWN_DIRECTIONS{{-1, -1}, {-1, 1}, {-2, 0}};
     }
 }

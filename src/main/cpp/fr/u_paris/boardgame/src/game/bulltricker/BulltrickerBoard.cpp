@@ -27,7 +27,12 @@ void BulltrickerBoard::CreatePiece(const coord_t coord, const char symbol)
 void BulltrickerBoard::CreateKings()
 {
     CreatePiece(BLACK_KING_COORD, BLACK_KING_SYMBOL);
+    SetColor(BLACK_KING_COORD, BLACK);
+    SetKing(BLACK_KING_COORD);
+
     CreatePiece(WHITE_KING_COORD, WHITE_KING_SYMBOL);
+    SetColor(WHITE_KING_COORD, WHITE);
+    SetKing(WHITE_KING_COORD);
 }
 
 void BulltrickerBoard::CreateQueens()
@@ -48,12 +53,14 @@ void BulltrickerBoard::CreateQueens()
             if (i == BLACK_QUEEN_X)
             {
                 CreatePiece(coord, BLACK_QUEEN_SYMBOL);
-                SetBlack(coord, true);
+                SetColor(coord, BLACK);
             }
             else if (i == WHITE_QUEEN_X)
             {
                 CreatePiece(coord, WHITE_QUEEN_SYMBOL);
+                SetColor(coord, WHITE);
             }
+            SetQueen(coord);
         }
     }
 }
@@ -74,13 +81,14 @@ void BulltrickerBoard::CreateHorizontalPawns()
             if (i == BLACK_HORIZONTAL_PAWN_X)
             {
                 CreatePiece(coord, BLACK_PAWN_SYMBOL);
-                SetHorizontal(coord, true);
-                SetBlack(coord, true);
+                SetColor(coord, BLACK);
             }
             else if (i == WHITE_HORIZONTAL_PAWN_X)
             {
                 CreatePiece(coord, WHITE_PAWN_SYMBOL);
+                SetColor(coord, WHITE);
             }
+            SetOrientation(coord, HORIZONTAL);
         }
     }
 }
@@ -101,22 +109,53 @@ void BulltrickerBoard::CreateVerticalPawns()
             if (i == BLACK_VERTICAL_PAWN_X)
             {
                 CreatePiece(coord, BLACK_PAWN_SYMBOL);
-                SetBlack(coord, true);
+                SetColor(coord, BLACK);
             }
             else if (i == WHITE_VERTICAL_PAWN_X)
             {
                 CreatePiece(coord, WHITE_PAWN_SYMBOL);
+                SetColor(coord, WHITE);
             }
+            SetOrientation(coord, VERTICAL);
         }
     }
 }
 
-void BulltrickerBoard::SetHorizontal(const coord_t coord, const bool h) const
+std::shared_ptr<BulltrickerPiece> BulltrickerBoard::GetSpecificKing(const Color c) const
 {
-    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetHorizontal(h);
+    for (int i{0}; i < GetHeight(); i++)
+    {
+        for (int j{0}; j < GetWidth(); j++)
+        {
+            const coord_t coord{i, j};
+
+            if (std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->IsKing()
+            && std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->GetColor() == c)
+            {
+                return std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord));
+            }
+        }
+    }
+
+    return nullptr;
 }
 
-void BulltrickerBoard::SetBlack(const coord_t coord, const bool b) const
+void BulltrickerBoard::SetOrientation(const coord_t coord, const Orientation o) const
 {
-    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetBlack(b);
+    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetOrientation(o);
+}
+
+void BulltrickerBoard::SetColor(const coord_t coord, const Color c) const
+{
+    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetColor(c);
+}
+
+void BulltrickerBoard::SetKing(const coord_t coord) const
+{
+    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetType(KING);
+}
+
+void BulltrickerBoard::SetQueen(const coord_t coord) const
+{
+    std::dynamic_pointer_cast<BulltrickerPiece>(GetPiece(coord))->SetType(QUEEN);
 }

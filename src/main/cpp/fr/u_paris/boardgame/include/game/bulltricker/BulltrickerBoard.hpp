@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../Board.hpp"
+#include "constants/Constants.hpp"
+
+using namespace Constants::Game::Bulltricker;
 
 class BulltrickerBoard: public Board
 {
@@ -16,6 +19,10 @@ class BulltrickerBoard: public Board
         explicit BulltrickerBoard();
         ~BulltrickerBoard() override = default;
 
-        void SetHorizontal(const coord_t coord, const bool h) const;
-        void SetBlack(const coord_t coord, const bool b) const;
+        std::shared_ptr<BulltrickerPiece> GetSpecificKing(const Color c) const;
+
+        void SetOrientation(const coord_t coord, const Orientation o) const;
+        void SetColor(const coord_t coord, const Color c) const;
+        void SetKing(const coord_t coord) const;
+        void SetQueen(const coord_t coord) const;
 };
