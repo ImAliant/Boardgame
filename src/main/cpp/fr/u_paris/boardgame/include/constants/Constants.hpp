@@ -10,7 +10,7 @@ namespace Constants::Game
     {
         const int CHECKERS{0};
         const int BUTIN{1};
-        const int BULLTRICKER{2};
+        /* const int BULLTRICKER{2}; */
     }
     namespace Player
     {

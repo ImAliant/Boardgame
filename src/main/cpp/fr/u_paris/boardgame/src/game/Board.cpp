@@ -52,11 +52,6 @@ bool Board::IsMoveValid(const coord_t from, const coord_t to) const
         && !IsEmpty(from) && IsEmpty(to);
 }
 
-bool Board::IsCoordValid(const coord_t coord) const
-{
-    return IsInBoard(coord) && !IsEmpty(coord);
-}
-
 void Board::SetPiece(const coord_t coord, std::shared_ptr<Piece> p)
 {
     pieces[coord.first][coord.second] = p;

@@ -11,4 +11,7 @@ class Butin: public Game
         void Init() override;
 
         void Start() override;
+        void Turn() override;
+
+        bool IsGameFinished() override;
 };

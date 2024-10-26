@@ -11,7 +11,53 @@ using namespace Constants::Game::Player;
 
 int main() {
     std::shared_ptr<Game> g = GameFactory::CreateGame(CHECKERS);
+    g->Start();
+
     std::shared_ptr<CheckersBoard> board = std::dynamic_pointer_cast<CheckersBoard>(g.get()->GetBoard());
+    std::cout << *board << std::endl;
+
+    g->SelectPiece(coord_t{3,2});
+    
+    auto state = g->GetState();
+    std::cout << *state << std::endl;
+
+    auto moves = state->GetMovesToDisplay();
+    for (auto move: moves)
+    {
+        std::cout << *move << std::endl;
+    }
+
+    int x;
+    int y;
+    std::cin >> x >> y;
+
+    g->MovePiece(coord_t{x, y});
+
+    std::cout << *board << std::endl;
+
+    /* std::shared_ptr<CheckersBoard> board = std::dynamic_pointer_cast<CheckersBoard>(g.get()->GetBoard());
+    std::cout << *board << std::endl;
+
+    g->SelectPiece(coord_t{3, 2});
+    auto state = g->GetState();
+
+    std::cout << *state << std::endl;
+    
+    auto moves = state->GetMovesToDisplay();
+    for (auto move: moves)
+    {
+        std::cout << *move << std::endl;
+    }
+
+    g->DeselectPiece();
+    std::cout << *state << std::endl;
+    auto moves2 = state->GetMovesToDisplay();
+    for (auto move: moves2)
+    {
+        std::cout << *move << std::endl;
+    } */
+    
+    /* std::shared_ptr<CheckersBoard> board = std::dynamic_pointer_cast<CheckersBoard>(g.get()->GetBoard());
     std::cout << *board << std::endl;
 
     std::shared_ptr<CheckersPiece> p = std::dynamic_pointer_cast<CheckersPiece>(board->GetPiece(coord_t{3, 0}));
@@ -23,7 +69,7 @@ int main() {
     for (auto move: moves)
     {
         std::cout << *move << std::endl;
-    }
+    } */
 
     /* int x = 0;
     int y = 0;

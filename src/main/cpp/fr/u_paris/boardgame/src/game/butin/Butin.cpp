@@ -15,3 +15,13 @@ void Butin::Start()
 {
     std::cout << "Starting Butin" << std::endl;
 }
+
+void Butin::Turn()
+{
+    std::cout << "Turn" << std::endl;
+}
+
+bool Butin::IsGameFinished()
+{
+    return false;
+}

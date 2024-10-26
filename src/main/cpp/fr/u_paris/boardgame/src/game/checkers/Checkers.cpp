@@ -24,7 +24,19 @@ void Checkers::InitPlayers()
 
 void Checkers::Start()
 {
+    Game::Start();
+
     std::cout << "Starting Checkers" << std::endl;
+}
+
+void Checkers::Turn()
+{
+    std::cout << "Turn" << std::endl;
+}
+
+bool Checkers::IsGameFinished()
+{
+    return false;
 }
 
 void Checkers::DistributePieces()

@@ -13,6 +13,9 @@ class Checkers: public Game, public PieceDistributor
         void InitPlayers() override;
 
         void Start() override;
+        void Turn() override;
+
+        bool IsGameFinished() override;
 
         void DistributePieces() override;
 };
